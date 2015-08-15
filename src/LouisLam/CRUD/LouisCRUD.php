@@ -189,15 +189,32 @@ class LouisCRUD
         $this->fieldsInfoFromDatabase = R::inspect($this->tableName);
     }
 
+    public function createTable() {
+        $bean = R::xdispense($this->tableName);
+        R::store($bean);
+        R::trash($bean);
+    }
 
     public function renderListView($echo = true)
     {
 
-        if ($this->findClause != null) {
-            $list = R::find($this->tableName, $this->findClause, $this->bindingData);
-        } else {
-            $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+        try {
+            if ($this->findClause != null) {
+                $list = R::find($this->tableName, $this->findClause, $this->bindingData);
+            } else {
+                $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+            }
+        } catch(\RedBeanPHP\RedException\SQL $ex) {
+
+            // If the table is not existing create one
+            $this->createTable();
+
+            $this->renderListView($echo);
+
+            return null;
+
         }
+
 
 
         $html = $this->template->render($this->theme . "::listing", [
@@ -342,6 +359,8 @@ class LouisCRUD
         $bean = R::xdispense($this->tableName);
 
         $fields = $this->getShowFields();
+
+        $fieldNameList = [];
 
         foreach ($fields as $field) {
             $fieldNameList[] = $field->getName();

@@ -1,7 +1,7 @@
 <?php
 use LouisLam\CRUD\LouisCRUD;
 use LouisLam\CRUD\Field;
-use LouisLam\CRUD\Util;
+use LouisLam\Util;
 
 /** @var Field[] $fields */
 /** @var array $list */

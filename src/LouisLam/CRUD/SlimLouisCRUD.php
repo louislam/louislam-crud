@@ -1,7 +1,7 @@
 <?php
 namespace LouisLam\CRUD;
 
-use RedBeanPHP\R;
+use LouisLam\Util;
 use Slim\Slim;
 
 /**
@@ -53,6 +53,18 @@ class SlimLouisCRUD extends LouisCRUD
 
     }
 
+    private function init($tableName, $routeName) {
+        // Table Name set this time ONLY.
+        $this->setTable($tableName);
+
+        // Link
+        $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create"));
+        $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
+        $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id"));
+        $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
+        $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
+    }
+
     /**
      * @param string $tableName
      * @param callable $customCRUDFunction
@@ -67,18 +79,11 @@ class SlimLouisCRUD extends LouisCRUD
         // Page Group
         $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
 
-            // Table Name set this time ONLY.
-            $this->setTable($tableName);
-
-            // Link
-            $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create"));
-            $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
-            $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id"));
-            $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
-            $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
-
             // ListView
-            $this->slim->get("/", function () use ($customCRUDFunction) {
+            $this->slim->get("/", function () use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
 
                 $result = $customCRUDFunction();
 
@@ -100,8 +105,10 @@ class SlimLouisCRUD extends LouisCRUD
             });
 
             // Create
-            $this->slim->get("/create", function () use ($customCRUDFunction) {
+            $this->slim->get("/create", function () use ($routeName, $customCRUDFunction, $tableName) {
 
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
 
                 $result = $customCRUDFunction();
 
@@ -125,7 +132,10 @@ class SlimLouisCRUD extends LouisCRUD
             });
 
             // Edit
-            $this->slim->get("/edit/:id", function ($id) use ($customCRUDFunction) {
+            $this->slim->get("/edit/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
 
                 // Load Bean first
                 $this->loadBean($id);
@@ -165,7 +175,11 @@ class SlimLouisCRUD extends LouisCRUD
              * Insert a bean
              * POST /crud/<tableName>
              */
-            $this->slim->post("/", function () use ($customCRUDFunction) {
+            $this->slim->post("/", function () use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
+
 
                 // Custom Global Function
                 $result = $customCRUDFunction();
@@ -189,13 +203,17 @@ class SlimLouisCRUD extends LouisCRUD
 
                 // Insert into database
                 $this->insertBean($_POST);
+
             });
 
             /*
              * Update a bean
              * POST /crud/<tableName>
              */
-            $this->slim->put("/:id", function ($id) use ($customCRUDFunction) {
+            $this->slim->put("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
 
                 // Load Bean first
                 $this->loadBean($id);
@@ -225,7 +243,11 @@ class SlimLouisCRUD extends LouisCRUD
             });
 
             // Delete a bean
-            $this->slim->delete("/:id", function ($id) use ($customCRUDFunction) {
+            $this->slim->delete("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName);
+
                 $this->slim->response->header('Content-Type', 'application/json');
 
                 $this->loadBean($id);
