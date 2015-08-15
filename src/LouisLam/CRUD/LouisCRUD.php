@@ -72,20 +72,6 @@ class LouisCRUD
         $this->setCurrentTheme("raw");
     }
 
-    /**
-     * Load a bean.
-     * For Edit and Create only.
-     * Before rendering the edit or Create page, you have to load a bean first.
-     * @param $id
-     * @throws BeanNotNullException You can load one time only.
-     */
-    public function loadBean($id) {
-        if ($this->currentBean != null) {
-            throw new BeanNotNullException();
-        }
-
-        $this->currentBean = R::load($this->tableName, $id);
-    }
 
     public function field($name)
     {
@@ -348,6 +334,22 @@ class LouisCRUD
         $this->createSubmitLink = $createSubmitLink;
     }
 
+    /**
+     * Load a bean.
+     * For Edit and Create only.
+     * Before rendering the edit or Create page, you have to load a bean first.
+     * @param $id
+     * @throws BeanNotNullException You can load one time only.
+     */
+    public function loadBean($id)
+    {
+
+        if ($this->currentBean != null) {
+            throw new BeanNotNullException();
+        }
+
+        $this->currentBean = R::load($this->tableName, $id);
+    }
 
     /**
      * Store Data into Database
@@ -373,12 +375,15 @@ class LouisCRUD
         return R::store($bean);
     }
 
-    public function updateBean($data) {
+    public function updateBean($data)
+    {
+
         if ($this->currentBean ==null) {
             throw new NoBeanException();
         }
 
         $fields = $this->getShowFields();
+        $fieldNameList = [];
 
         foreach ($fields as $field) {
             $fieldNameList[] = $field->getName();
@@ -394,6 +399,7 @@ class LouisCRUD
      * @throws NoBeanException
      */
     public function deleteBean() {
+
         if ($this->currentBean == null) {
             throw new NoBeanException();
         }

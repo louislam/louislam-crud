@@ -180,7 +180,6 @@ class SlimLouisCRUD extends LouisCRUD
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
 
-
                 // Custom Global Function
                 $result = $customCRUDFunction();
 
@@ -215,8 +214,9 @@ class SlimLouisCRUD extends LouisCRUD
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
 
-                // Load Bean first
+                // Load Bean
                 $this->loadBean($id);
+
 
                 // Custom Global Function
                 $result = $customCRUDFunction();

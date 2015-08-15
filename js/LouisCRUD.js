@@ -17,6 +17,8 @@ var LouisCRUD = (function () {
                         type: "DELETE"
                     }).done(function (data) {
                         $("#row-" + btn.data("id")).remove();
+                    }).fail(function (data) {
+                        console.log(data);
                     });
                 }
             });
