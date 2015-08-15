@@ -58,6 +58,7 @@ class LouisCRUD
 
     public function __construct($tableName = null)
     {
+
         R::ext('xdispense', function ($type) {
             return R::getRedBean()->dispense($type);
         });
@@ -67,7 +68,7 @@ class LouisCRUD
         }
 
         $this->template = new Engine();
-        $this->addTheme("raw", "view/RawCRUDTheme");
+        $this->addTheme("raw", "vendor/louislam/louislam-crud-library/view/RawCRUDTheme");
         $this->setCurrentTheme("raw");
     }
 

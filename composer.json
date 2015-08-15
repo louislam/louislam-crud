@@ -20,5 +20,6 @@
         "psr-4": {
             "LouisLam\\" : "src/LouisLam"
         }
-    }
+    },
+    "minimum-stability": "dev"
 }
