@@ -1,0 +1,23 @@
+{
+    "name": "louislam/louislam-crud",
+    "description": "Another CRUD library.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Louis Lam",
+            "email": "louislam@live.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "league/plates": "3.1.1",
+        "gabordemooij/redbean": "4.2.1",
+        "ckeditor/ckeditor": "4.5.2",
+        "louislam/louislam-utilities": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "LouisLam\\" : "src/LouisLam"
+        }
+    }
+}
