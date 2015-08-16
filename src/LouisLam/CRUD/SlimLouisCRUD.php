@@ -225,7 +225,7 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->init($tableName, $routeName);
 
                 if ($this->configFunction != null) {
-                    $function = $this->listviewFunction;
+                    $function = $this->configFunction;
                     $result = $function();
 
                     if ($result === false) {
@@ -279,7 +279,7 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->loadBean($id);
 
                 if ($this->configFunction != null) {
-                    $function = $this->listviewFunction;
+                    $function = $this->configFunction;
                     $result = $function();
 
                     if ($result === false) {
@@ -331,7 +331,7 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->loadBean($id);
 
                 if ($this->configFunction != null) {
-                    $function = $this->listviewFunction;
+                    $function = $this->configFunction;
                     $result = $function();
 
                     if ($result === false) {
