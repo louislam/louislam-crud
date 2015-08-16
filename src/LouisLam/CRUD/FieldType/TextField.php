@@ -27,7 +27,6 @@ class TextField extends FieldType
         $readOnly = $this->getReadOnlyString();
 
         if ($this->field->isCreate()) {
-
             // Create Page
             // Use Default Value if not null
             if ($defaultValue != null) {

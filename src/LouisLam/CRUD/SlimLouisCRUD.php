@@ -58,6 +58,7 @@ class SlimLouisCRUD extends LouisCRUD
         $this->setTable($tableName);
 
         // Link
+        $this->setListViewLink(Util::url($this->groupName . "/" . $routeName));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create"));
         $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
         $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id"));
@@ -76,7 +77,9 @@ class SlimLouisCRUD extends LouisCRUD
             $routeName = $tableName;
         }
 
-        // Page Group
+        /*
+         * Page Group (ListView, CreateView, EditView)
+         */
         $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
 
             // ListView
@@ -174,7 +177,9 @@ class SlimLouisCRUD extends LouisCRUD
 
         });
 
-        // API Group, RESTful style.
+        /*
+         * API Group, RESTful style.
+         */
         $this->slim->group("/" . $this->apiGroupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
 
             /*
@@ -247,7 +252,11 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->field("id")->hide();
 
                 // Insert into database
-                $this->updateBean($_POST);
+
+                $jsonObject = $this->updateBean($this->slim->request()->params());
+
+                $this->enableJSONResponse();
+                echo json_encode($jsonObject);
             });
 
             // Delete a bean
@@ -256,7 +265,7 @@ class SlimLouisCRUD extends LouisCRUD
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
 
-                $this->slim->response->header('Content-Type', 'application/json');
+                $this->enableJSONResponse();
 
                 $this->loadBean($id);
 
@@ -338,5 +347,8 @@ class SlimLouisCRUD extends LouisCRUD
         $this->slim->run();
     }
 
+    public function enableJSONResponse() {
+        $this->slim->response->header('Content-Type', 'application/json');
+    }
 
 }

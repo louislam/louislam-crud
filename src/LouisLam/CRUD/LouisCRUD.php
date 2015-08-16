@@ -30,11 +30,12 @@ class LouisCRUD
     private $fieldsInfoFromDatabase = null;
 
 
-    private $deleteLink = "";
+    private $listViewLink = "";
     private $createLink = "";
     private $createSubmitLink = "";
     private $editLink = "";
     private $editSubmitLink = "";
+    private $deleteLink = "";
 
 
 
@@ -272,6 +273,22 @@ class LouisCRUD
     /**
      * @return string
      */
+    public function getListViewLink()
+    {
+        return $this->listViewLink;
+    }
+
+    /**
+     * @param string $listViewLink
+     */
+    public function setListViewLink($listViewLink)
+    {
+        $this->listViewLink = $listViewLink;
+    }
+
+    /**
+     * @return string
+     */
     public function getEditLink($id)
     {
         return str_replace(":id", $id, $this->editLink);
@@ -361,7 +378,6 @@ class LouisCRUD
      */
     public function loadBean($id)
     {
-
         if ($this->currentBean != null) {
             throw new BeanNotNullException();
         }
@@ -390,12 +406,18 @@ class LouisCRUD
         $fieldsString = implode(",", $fieldNameList);
         $bean->import($data, $fieldsString);
 
-        return R::store($bean);
+        $result = new Result();
+
+        // Store
+        $result->id = R::store($bean);
+
+        $result->msg = "The record has been created successfully.";
+
+        return $result;
     }
 
     public function updateBean($data)
     {
-
         if ($this->currentBean ==null) {
             throw new NoBeanException();
         }
@@ -408,8 +430,15 @@ class LouisCRUD
         }
 
         $fieldsString = implode(",", $fieldNameList);
+
         $this->currentBean->import($data, $fieldsString);
-        return R::store($this->currentBean);
+
+        $result = new Result();
+        // Store
+        $result->id = R::store($this->currentBean);
+        $result->msg = "Saved.";
+
+        return $result;
     }
 
     /**

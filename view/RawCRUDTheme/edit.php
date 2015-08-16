@@ -17,11 +17,17 @@ $this->layout($layoutName);
         <br />
     <?php endforeach; ?>
 
+    <div id="msg" style="color:red"></div>
 
     <input type="submit" value="Save" />
 
-    <div class="msg"></div>
-
-    <button onclick="history.back()">Back</button>
 
 </form>
+
+<button onclick="history.back()">Back</button>
+
+<script>
+    crud.setAjaxFormCallback(function (result) {
+        $("#msg").html(result.msg);
+    });
+</script>

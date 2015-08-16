@@ -20,6 +20,13 @@ $this->layout($layoutName);
 
     <input type="submit" value="Create" />
 
-    <button onclick="history.back()">Back</button>
 
 </form>
+
+<button onclick="history.back()">Back</button>
+
+<script>
+    crud.setAjaxFormCallback(function (result) {
+        location.href = "<?=$crud->getListViewLink() ?>";
+    });
+</script>
