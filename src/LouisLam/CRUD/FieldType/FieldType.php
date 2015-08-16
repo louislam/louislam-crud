@@ -41,4 +41,13 @@ abstract class FieldType
         }
     }
 
+    protected function getRequiredString()
+    {
+        if ($this->field->isRequired()) {
+            return "required";
+        } else {
+            return "";
+        }
+    }
+
 }

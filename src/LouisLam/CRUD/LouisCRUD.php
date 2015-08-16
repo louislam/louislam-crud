@@ -51,6 +51,11 @@ class LouisCRUD
     private $findAllClause = null;
     private $bindingData = [];
 
+
+    private $htmlHead = "";
+    private $layoutHeader = "";
+    private $layoutFooter = "";
+
     /**
      * Current Bean for edit or delete
      * @var
@@ -124,7 +129,8 @@ class LouisCRUD
         }
     }
 
-    public function hideFields() {
+    public function hideFields()
+    {
         $numargs = func_num_args();
 
         $fieldNames = func_get_args();
@@ -155,25 +161,35 @@ class LouisCRUD
         $this->initFields();
     }
 
+    /**
+     * @return string
+     */
+    public function getTableName() {
+        return $this->tableName;
+    }
+
     private function initFields()
     {
         $this->loadFieldsInfoFromDatabase();
 
-        foreach ($this->fieldsInfoFromDatabase as $showField => $dataType) {
+        foreach ($this->fieldsInfoFromDatabase as $showField => $dataType)
+        {
             if (!isset($this->fieldList[$showField])) {
                 $this->addField($showField, $dataType);
             }
         }
     }
 
-    public function find($clause, $data = []) {
+    public function find($clause, $data = [])
+    {
         $this->findAllClause = null;
 
         $this->findClause = $clause;
         $this->bindingData = $data;
     }
 
-    public function findAll($clause, $data = []) {
+    public function findAll($clause, $data = [])
+    {
         $this->findClause = null;
 
         $this->findAllClause = $clause;
@@ -186,14 +202,15 @@ class LouisCRUD
 
     }
 
-    public function createTable() {
+    public function createTable()
+    {
         $bean = R::xdispense($this->tableName);
         R::store($bean);
         R::trash($bean);
     }
 
-    private function beforeRender() {
-
+    private function beforeRender()
+    {
         // if there is a ID field only, no other fields, then throw an Exception
         if (count($this->fieldList) <= 1) {
             throw new NoFieldException();
@@ -387,6 +404,14 @@ class LouisCRUD
     }
 
     /**
+     * TODO: Validate Before INSERT/UPDATE
+     * @param $bean
+     */
+    public function validate($bean) {
+
+    }
+
+    /**
      * Store Data into Database
      * @param $data
      * @return int|string
@@ -480,5 +505,69 @@ class LouisCRUD
     {
         return $this->template->exists("layout") ? "layout" : "raw::layout";
     }
+
+    /**
+     * @return mixed
+     */
+    public function getHTMLHead()
+    {
+        return $this->htmlHead;
+    }
+
+    /**
+     * @param mixed $htmlHead
+     */
+    public function setHTMLHead($htmlHead)
+    {
+        $this->htmlHead = $htmlHead;
+    }
+
+    public function appendHTMLHead($htmlHead)
+    {
+        $this->htmlHead .= $htmlHead;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLayoutHeader()
+    {
+        return $this->layoutHeader;
+    }
+
+    /**
+     * @param mixed $layoutHeader
+     */
+    public function setLayoutHeader($layoutHeader)
+    {
+        $this->layoutHeader = $layoutHeader;
+    }
+
+    public function appendLayoutHeader($layoutHeader)
+    {
+        $this->layoutHeader .= $layoutHeader;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLayoutFooter()
+    {
+        return $this->layoutFooter;
+    }
+
+    public function appendLayoutFooter($layoutFooter)
+    {
+        $this->layoutFooter .= $layoutFooter;
+    }
+
+    /**
+     * @param mixed $layoutFooter
+     */
+    public function setLayoutFooter($layoutFooter)
+    {
+        $this->layoutFooter = $layoutFooter;
+    }
+
 
 }

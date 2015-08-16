@@ -7,7 +7,9 @@ use LouisLam\CRUD\Field;
 /** @var LouisCRUD $crud */
 /** @var string $layoutName*/
 
-$this->layout($layoutName);
+$this->layout($layoutName, [
+    "crud" => $crud
+]);
 ?>
 
 <form action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">

@@ -109,7 +109,15 @@ class Field
 
     public function isRequired()
     {
-        return $this->required = true;
+        return $this->required;
+    }
+
+    public function setRequired($bool) {
+        $this->required = $bool;
+    }
+
+    public function required() {
+        $this->required = true;
     }
 
     /**

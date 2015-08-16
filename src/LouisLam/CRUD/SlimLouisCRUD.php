@@ -21,6 +21,9 @@ class SlimLouisCRUD extends LouisCRUD
     private $slim;
 
     /** @var callable */
+    private $configFunction;
+
+    /** @var callable */
     protected $listviewFunction = null;
 
     /** @var callable */
@@ -31,6 +34,9 @@ class SlimLouisCRUD extends LouisCRUD
 
     /** @var callable */
     private $deleteFunction = null;
+
+    /** @var string[] */
+    private $tableList = [];
 
 
     /**
@@ -77,6 +83,8 @@ class SlimLouisCRUD extends LouisCRUD
             $routeName = $tableName;
         }
 
+        $this->tableList[] = $tableName;
+
         /*
          * Page Group (ListView, CreateView, EditView)
          */
@@ -87,6 +95,15 @@ class SlimLouisCRUD extends LouisCRUD
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 if ($customCRUDFunction != null) {
                     $result = $customCRUDFunction();
@@ -107,13 +124,22 @@ class SlimLouisCRUD extends LouisCRUD
 
                 $this->renderListView();
                 return;
-            });
+            })->name("_louisCRUD_" . $routeName);
 
             // Create
             $this->slim->get("/create", function () use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 if ($customCRUDFunction != null) {
                     $result = $customCRUDFunction();
@@ -150,6 +176,14 @@ class SlimLouisCRUD extends LouisCRUD
                 // ID must be hidden
                 $this->field("id")->hide();
 
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 if ($customCRUDFunction != null) {
                     $result = $customCRUDFunction();
@@ -174,7 +208,6 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->renderEditView();
             });
 
-
         });
 
         /*
@@ -184,12 +217,29 @@ class SlimLouisCRUD extends LouisCRUD
 
             /*
              * Insert a bean
-             * POST /crud/<tableName>
+             * POST /crud/{tableName}
              */
             $this->slim->post("/", function () use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
+
+                if ($this->configFunction != null) {
+                    $function = $this->listviewFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 // Custom Global Function
                 $result = $customCRUDFunction();
@@ -218,7 +268,7 @@ class SlimLouisCRUD extends LouisCRUD
 
             /*
              * Update a bean
-             * POST /crud/<tableName>
+             * PUT /crud/{tableName}/{id}
              */
             $this->slim->put("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
 
@@ -228,6 +278,14 @@ class SlimLouisCRUD extends LouisCRUD
                 // Load Bean
                 $this->loadBean($id);
 
+                if ($this->configFunction != null) {
+                    $function = $this->listviewFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 // Custom Global Function
                 if ($customCRUDFunction != null) {
@@ -259,7 +317,10 @@ class SlimLouisCRUD extends LouisCRUD
                 echo json_encode($jsonObject);
             });
 
-            // Delete a bean
+            /*
+             * Delete a bean
+             * DELETE /crud/{tableName}/{id}
+             */
             $this->slim->delete("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
@@ -268,6 +329,15 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->enableJSONResponse();
 
                 $this->loadBean($id);
+
+                if ($this->configFunction != null) {
+                    $function = $this->listviewFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
 
                 // Custom Global Function
                 if ($customCRUDFunction != null) {
@@ -298,6 +368,13 @@ class SlimLouisCRUD extends LouisCRUD
 
         });
 
+    }
+
+    /**
+     * @param callable $func
+     */
+    public function config($func) {
+        $this->configFunction = $func;
     }
 
     /**
@@ -340,15 +417,31 @@ class SlimLouisCRUD extends LouisCRUD
         return $this->slim;
     }
 
-
-
     public function run()
     {
         $this->slim->run();
     }
 
-    public function enableJSONResponse() {
+    public function enableJSONResponse()
+    {
         $this->slim->response->header('Content-Type', 'application/json');
     }
+
+    /**
+     * @return string
+     */
+    public function generateMenu() {
+        $temp = "<nav><ul>";
+
+        foreach ($this->tableList as $name) {
+            $url = $this->slim->urlFor("_louisCRUD_" . $name);
+            $temp .= "<li><a href='$url'>$name</a></li>";
+        }
+
+        $temp .= "</ul></nav>";
+        return $temp;
+    }
+
+
 
 }

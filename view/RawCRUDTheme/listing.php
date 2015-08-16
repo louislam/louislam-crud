@@ -7,7 +7,10 @@ use LouisLam\CRUD\Field;
 /** @var LouisCRUD $crud */
 /** @var string $layoutName*/
 
-$this->layout($layoutName);
+$this->layout($layoutName, [
+    "crud" => $crud
+]);
+
 ?>
 
 <a href="<?=$crud->getCreateLink() ?>">New</a>

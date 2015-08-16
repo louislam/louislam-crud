@@ -25,6 +25,7 @@ class TextField extends FieldType
         $bean = $this->field->getBean();
         $value = "";
         $readOnly = $this->getReadOnlyString();
+        $required = $this->getRequiredString();
 
         if ($this->field->isCreate()) {
 
@@ -43,7 +44,7 @@ class TextField extends FieldType
         }
 
         $html  = <<< EOF
-        <label>$display <input type="text" name="$name" value="$value" $readOnly /></label>
+        <label>$display <input type="text" name="$name" value="$value" $readOnly $required /></label>
 EOF;
 
         if ($echo)
@@ -51,4 +52,6 @@ EOF;
 
         return $html;
     }
+
+
 }
