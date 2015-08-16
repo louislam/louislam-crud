@@ -20,17 +20,15 @@ abstract class FieldType
     protected $field;
 
 
+    public abstract function render($echo = true);
+
     /**
-     * FieldType constructor.
      * @param Field $field
      */
-    public function __construct($field)
+    public function setField($field)
     {
         $this->field = $field;
     }
-
-    public abstract function render($echo = true);
-
 
 
     protected function getReadOnlyString() {

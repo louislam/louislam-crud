@@ -58,10 +58,12 @@ class Field
         $this->dataType = $dataType;
 
         if (String::contains($dataType, "varchar")) {
-            $this->fieldType = new TextField($this);
+            $this->fieldType = new TextField();
         } else {
-            $this->fieldType = new TextField($this);
+            $this->fieldType = new TextField();
         }
+
+        $this->fieldType->setField($this);
     }
 
     /**
@@ -113,7 +115,8 @@ class Field
         return $this->required;
     }
 
-    public function setRequired($bool) {
+    public function setRequired($bool)
+    {
         $this->required = $bool;
     }
 
@@ -146,15 +149,18 @@ class Field
         return $this->fieldType->render(true);
     }
 
-    public function getBean() {
+    public function getBean()
+    {
         return $this->crud->getBean();
     }
 
-    public function isEdit() {
+    public function isEdit()
+    {
         return $this->getBean() != null;
     }
 
-    public function isCreate() {
+    public function isCreate()
+    {
         return $this->getBean() == null;
     }
 
@@ -172,6 +178,7 @@ class Field
     public function setFieldType($fieldType)
     {
         $this->fieldType = $fieldType;
+        $this->fieldType->setField($this);
     }
 
     /**
@@ -183,7 +190,8 @@ class Field
         $this->fieldType->setHtml($html);
     }
 
-    public function setReadOnly($yes) {
+    public function setReadOnly($yes)
+    {
         $this->readOnly = $yes;
     }
 
