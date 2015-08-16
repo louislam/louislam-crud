@@ -67,19 +67,12 @@ class Field
     }
 
     /**
+     * Get Field Name
      * @return string
      */
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     public function getDataType()
@@ -90,11 +83,13 @@ class Field
     public function hide()
     {
         $this->hide = true;
+        return $this;
     }
 
     public function show()
     {
         $this->hide = false;
+        return $this;
     }
 
     public function isHidden()
@@ -118,10 +113,12 @@ class Field
     public function setRequired($bool)
     {
         $this->required = $bool;
+        return $this;
     }
 
     public function required() {
         $this->required = true;
+        return $this;
     }
 
     /**
@@ -138,6 +135,7 @@ class Field
     public function setDefaultValue($defaultValue)
     {
         $this->defaultValue = $defaultValue;
+        return $this;
     }
 
     /**
@@ -174,11 +172,13 @@ class Field
 
     /**
      * @param FieldType $fieldType
+     * @return $this
      */
     public function setFieldType($fieldType)
     {
         $this->fieldType = $fieldType;
         $this->fieldType->setField($this);
+        return $this;
     }
 
     /**
@@ -188,11 +188,13 @@ class Field
     {
         $this->fieldType = new CustomField($this);
         $this->fieldType->setHtml($html);
+        return $this;
     }
 
     public function setReadOnly($yes)
     {
         $this->readOnly = $yes;
+        return $this;
     }
 
     public function isReadOnly()
