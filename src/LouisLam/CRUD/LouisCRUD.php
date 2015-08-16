@@ -128,7 +128,7 @@ class LouisCRUD
         for ($i = 0; $i < $numargs; $i++) {
             $field = $this->field($fieldNames[$i]);
             $field->show();
-            $newOrderList[] = $field;
+            $newOrderList[$fieldNames[$i]] = $field;
 
             // Unset the field from the field list
             unset($this->fieldList[$fieldNames[$i]]);
