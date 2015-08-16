@@ -37,6 +37,9 @@ class SlimLouisCRUD extends LouisCRUD
 
     /** @var string[] */
     private $tableList = [];
+    private $routeNameList = [];
+
+    private $currentRouteName = "";
 
 
     /**
@@ -63,6 +66,8 @@ class SlimLouisCRUD extends LouisCRUD
         // Table Name set this time ONLY.
         $this->setTable($tableName);
 
+        $this->currentRouteName = $routeName;
+
         // Link
         $this->setListViewLink(Util::url($this->groupName . "/" . $routeName));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create"));
@@ -83,7 +88,8 @@ class SlimLouisCRUD extends LouisCRUD
             $routeName = $tableName;
         }
 
-        $this->tableList[] = $tableName;
+        $this->tableList[$routeName] = $tableName;
+        $this->routeNameList[] = $routeName;
 
         /*
          * Page Group (ListView, CreateView, EditView)
@@ -433,9 +439,10 @@ class SlimLouisCRUD extends LouisCRUD
     public function generateMenu() {
         $temp = "<nav><ul>";
 
-        foreach ($this->tableList as $name) {
+        foreach ($this->routeNameList as $routeName) {
+            $name = $this->tableList[$routeName];
             $url = $this->slim->urlFor("_louisCRUD_" . $name);
-            $temp .= "<li><a href='$url'>$name</a></li>";
+            $temp .= "<li><a href='$url'>$routeName</a></li>";
         }
 
         $temp .= "</ul></nav>";
