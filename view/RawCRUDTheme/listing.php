@@ -13,7 +13,10 @@ $this->layout($layoutName, [
 
 ?>
 
-<a href="<?=$crud->getCreateLink() ?>">New</a>
+<?php if ($crud->isEnabledCreate()) : ?>
+    <a href="<?=$crud->getCreateLink() ?>">New</a>
+<?php endif; ?>
+
 
 <table id="table" class="display">
     <thead>
@@ -30,8 +33,16 @@ $this->layout($layoutName, [
     <?php foreach ($list as $bean) : ?>
         <tr id="row-<?=$bean->id ?>">
             <td>
-                <a href="<?=$crud->getEditLink($bean->id) ?>">Edit</a>
-                <a class="btn-delete" href="javascript:void(0)" data-id="<?=$bean->id ?>" data-url="<?=$this->e($crud->getDeleteLink($bean->id)) ?>">Delete</a>
+
+                <?php if ($crud->isEnabledEdit()) : ?>
+                    <a href="<?=$crud->getEditLink($bean->id) ?>">Edit</a>
+                <?php endif; ?>
+
+
+               <?php if ($crud->isEnabledDelete()) : ?>
+                   <a class="btn-delete" href="javascript:void(0)" data-id="<?=$bean->id ?>" data-url="<?=$this->e($crud->getDeleteLink($bean->id)) ?>">Delete</a>
+               <?php endif; ?>
+
                 <?=$crud->getRowActionHTML(); ?>
             </td>
 

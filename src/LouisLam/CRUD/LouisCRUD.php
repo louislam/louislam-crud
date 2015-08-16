@@ -62,6 +62,11 @@ class LouisCRUD
      */
     private $currentBean = null;
 
+
+    private $enableEdit = true;
+    private $enableDelete = true;
+    private $enableCreate = true;
+
     public function __construct($tableName = null, $viewDir = "view")
     {
 
@@ -577,6 +582,52 @@ class LouisCRUD
     public function setLayoutFooter($layoutFooter)
     {
         $this->layoutFooter = $layoutFooter;
+    }
+
+
+    public function enableEdit($bool)
+    {
+        $this->enableEdit = $bool;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnabledEdit()
+    {
+        return $this->enableEdit;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnabledDelete()
+    {
+        return $this->enableDelete;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnabledCreate()
+    {
+        return $this->enableCreate;
+    }
+
+    /**
+     * @param boolean $showDelete
+     */
+    public function enableDelete($showDelete)
+    {
+        $this->enableDelete = $showDelete;
+    }
+
+    /**
+     * @param boolean $showCreate
+     */
+    public function enableCreate($showCreate)
+    {
+        $this->enableCreate = $showCreate;
     }
 
 
