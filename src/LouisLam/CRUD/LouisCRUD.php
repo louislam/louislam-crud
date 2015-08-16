@@ -120,13 +120,23 @@ class LouisCRUD
     public function showFields()
     {
         $numargs = func_num_args();
-        $this->showFields = [];
-
         $fieldNames = func_get_args();
 
+        $newOrderList = [];
+
+        // For each parameters (field name)
         for ($i = 0; $i < $numargs; $i++) {
-            $this->field($fieldNames[$i])->show();
+            $field = $this->field($fieldNames[$i]);
+            $field->show();
+            $newOrderList[] = $field;
+
+            // Unset the field from the field list
+            unset($this->fieldList[$fieldNames[$i]]);
         }
+
+        // now $this->fieldList remains fields that user do not input.
+        // Use user's order and append remaining fields to the back.
+        $this->fieldList = array_merge($newOrderList, $this->fieldList);
     }
 
     public function hideFields()
