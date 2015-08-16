@@ -8,8 +8,8 @@ use LouisLam\Util;
 /** @var LouisCRUD $crud */
 ?>
 
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script>
+<script src="<?=Util::res("vendor/components/jquery/jquery.min.js") ?>"></script>
+<script src="<?=Util::res("vendor/datatables/datatables/media/js/jquery.dataTables.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-crud-library/js/LouisCRUD.js") ?>"></script>
 <script>
     var crud = new LouisCRUD();

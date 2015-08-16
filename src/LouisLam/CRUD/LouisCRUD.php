@@ -4,6 +4,7 @@ namespace LouisLam\CRUD;
 
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
+use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\Exception\NoBeanException;
 use LouisLam\CRUD\Field;
@@ -56,7 +57,7 @@ class LouisCRUD
      */
     private $currentBean = null;
 
-    public function __construct($tableName = null)
+    public function __construct($tableName = null, $viewDir = "view")
     {
 
         R::ext('xdispense', function ($type) {
@@ -67,11 +68,15 @@ class LouisCRUD
             $this->setTable($tableName);
         }
 
-        $this->template = new Engine();
+        $this->template = new Engine($viewDir);
         $this->addTheme("raw", "vendor/louislam/louislam-crud-library/view/RawCRUDTheme");
         $this->setCurrentTheme("raw");
     }
 
+    public function setViewDirectory($viewDir)
+    {
+        $this->template->setDirectory($viewDir);
+    }
 
     public function field($name)
     {
@@ -90,7 +95,8 @@ class LouisCRUD
     /**
      * @return Field[]
      */
-    public function getShowFields() {
+    public function getShowFields()
+    {
         $fields = [];
 
         foreach ($this->fieldList as $field) {
@@ -181,8 +187,17 @@ class LouisCRUD
         R::trash($bean);
     }
 
+    private function beforeRender() {
+
+        // if there is a ID field only, no other fields, then throw an Exception
+        if (count($this->fieldList) <= 1) {
+            throw new NoFieldException();
+        }
+    }
+
     public function renderListView($echo = true)
     {
+        $this->beforeRender();
 
         try {
             if ($this->findClause != null) {
@@ -191,22 +206,17 @@ class LouisCRUD
                 $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
             }
         } catch(\RedBeanPHP\RedException\SQL $ex) {
-
-            // If the table is not existing create one
+            // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
-
             $this->renderListView($echo);
-
             return null;
-
         }
-
-
 
         $html = $this->template->render($this->theme . "::listing", [
             "fields" => $this->getShowFields(),
             "list" => $list,
-            "crud" => $this
+            "crud" => $this,
+            "layoutName" => $this->getLayoutName()
         ]);
 
         if ($echo) {
@@ -222,9 +232,12 @@ class LouisCRUD
      */
     public function renderCreateView($echo = true)
     {
+        $this->beforeRender();
+
         $html = $this->template->render($this->theme . "::create", [
             "fields" => $this->getShowFields(),
-            "crud" => $this
+            "crud" => $this,
+            "layoutName" => $this->getLayoutName()
         ]);
 
         if ($echo) {
@@ -235,6 +248,7 @@ class LouisCRUD
 
     public function renderEditView($echo = true)
     {
+        $this->beforeRender();
 
         if ($this->currentBean == null) {
             throw new NoBeanException();
@@ -242,7 +256,8 @@ class LouisCRUD
 
         $html = $this->template->render($this->theme . "::edit", [
             "fields" => $this->getShowFields(),
-            "crud" => $this
+            "crud" => $this,
+            "layoutName" => $this->getLayoutName()
         ]);
 
         if ($echo) {
@@ -419,6 +434,18 @@ class LouisCRUD
 
     public function getBean() {
         return $this->currentBean;
+    }
+
+    /**
+     * Get Current Layout Name in Plates Template Engine style
+     * If user have created a layout.php in the default folder, use their layout.php.
+     * Or else use the raw one.
+     *
+     * @return string Layout Name
+     */
+    private function getLayoutName()
+    {
+        return $this->template->exists("layout") ? "layout" : "raw::layout";
     }
 
 }

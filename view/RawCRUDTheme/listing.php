@@ -5,8 +5,9 @@ use LouisLam\CRUD\Field;
 /** @var Field[] $fields */
 /** @var array $list */
 /** @var LouisCRUD $crud */
+/** @var string $layoutName*/
 
-$this->layout('raw::layout', ['title' => '']);
+$this->layout($layoutName);
 ?>
 
 <a href="<?=$crud->getCreateLink() ?>">New</a>

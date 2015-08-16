@@ -5,8 +5,9 @@ use LouisLam\CRUD\Field;
 /** @var Field[] $fields */
 /** @var array $list */
 /** @var LouisCRUD $crud */
+/** @var string $layoutName*/
 
-$this->layout('raw::layout', ['title' => '']);
+$this->layout($layoutName);
 ?>
 
 <form action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
@@ -18,5 +19,7 @@ $this->layout('raw::layout', ['title' => '']);
 
 
     <input type="submit" value="Create" />
+
+    <button onclick="history.back()">Back</button>
 
 </form>

@@ -70,7 +70,7 @@ class SlimLouisCRUD extends LouisCRUD
      * @param callable $customCRUDFunction
      * @param string $routeName
      */
-    public function add($tableName, $customCRUDFunction, $routeName = null)
+    public function add($tableName, $customCRUDFunction = null, $routeName = null)
     {
         if ($routeName == null) {
             $routeName = $tableName;
@@ -85,10 +85,12 @@ class SlimLouisCRUD extends LouisCRUD
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
 
-                $result = $customCRUDFunction();
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
 
-                if ($result === false) {
-                    return;
+                    if ($result === false) {
+                        return;
+                    }
                 }
 
                 if ($this->listviewFunction != null) {
@@ -110,10 +112,12 @@ class SlimLouisCRUD extends LouisCRUD
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
 
-                $result = $customCRUDFunction();
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
 
-                if ($result === false) {
+                    if ($result === false) {
                         return;
+                    }
                 }
 
                 if ($this->createFunction != null) {
@@ -144,10 +148,12 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->field("id")->hide();
 
 
-                $result = $customCRUDFunction();
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
 
-                if ($result === false) {
-                    return;
+                    if ($result === false) {
+                        return;
+                    }
                 }
 
                 if ($this->editFunction != null) {
@@ -219,20 +225,22 @@ class SlimLouisCRUD extends LouisCRUD
 
 
                 // Custom Global Function
-                $result = $customCRUDFunction();
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
 
-                if ($result === false) {
-                    return;
+                    if ($result === false) {
+                        return;
+                    }
                 }
 
                 // Custom Create Function
                 if ($this->editFunction != null) {
                     $editFunction = $this->editFunction;
                     $result = $editFunction($id);
-                }
 
-                if ($result === false) {
-                    return;
+                    if ($result === false) {
+                        return;
+                    }
                 }
 
                 // Force hide ID
@@ -253,10 +261,12 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->loadBean($id);
 
                 // Custom Global Function
-                $result = $customCRUDFunction();
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction();
 
-                if ($result === false) {
-                    return;
+                    if ($result === false) {
+                        return;
+                    }
                 }
 
                 // Custom Delete Function

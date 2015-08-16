@@ -5,8 +5,9 @@ use LouisLam\CRUD\Field;
 /** @var Field[] $fields */
 /** @var array $list */
 /** @var LouisCRUD $crud */
+/** @var string $layoutName*/
 
-$this->layout('raw::layout', ['title' => '']);
+$this->layout($layoutName);
 ?>
 
 <form action="<?=$crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="put" class="ajax">
@@ -17,6 +18,8 @@ $this->layout('raw::layout', ['title' => '']);
     <?php endforeach; ?>
 
 
-    <input type="submit" value="Edit" />
+    <input type="submit" value="Save" />
+
+    <button onclick="history.back()">Back</button>
 
 </form>
