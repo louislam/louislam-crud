@@ -183,6 +183,7 @@ class LouisCRUD
     private function loadFieldsInfoFromDatabase()
     {
         $this->fieldsInfoFromDatabase = R::inspect($this->tableName);
+
     }
 
     public function createTable() {
