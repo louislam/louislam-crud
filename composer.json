@@ -1,6 +1,6 @@
 {
     "name": "louislam/louislam-crud",
-    "description": "Another CRUD library.",
+    "description": "An easy-to-use CRUD library for you to create a back-end system or RESTful API in a few minutes.",
     "license": "MIT",
     "authors": [
         {
