@@ -2,6 +2,7 @@
 
 namespace LouisLam\CRUD;
 
+use LouisLam\CRUD\FieldType\CustomField;
 use LouisLam\CRUD\FieldType\FieldType;
 use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\String;
@@ -173,6 +174,14 @@ class Field
         $this->fieldType = $fieldType;
     }
 
+    /**
+     * @param $html
+     */
+    public function customHTML($html)
+    {
+        $this->fieldType = new CustomField($this);
+        $this->fieldType->setHtml($html);
+    }
 
     public function setReadOnly($yes) {
         $this->readOnly = $yes;
