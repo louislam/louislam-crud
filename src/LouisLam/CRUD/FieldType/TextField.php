@@ -12,6 +12,8 @@ namespace LouisLam\CRUD\FieldType;
 class TextField extends FieldType
 {
 
+    protected $type = "text";
+
     /**
      * Render Field for Create/Edit
      * @param bool|true $echo
@@ -26,6 +28,7 @@ class TextField extends FieldType
         $value = "";
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
+        $type = $this->type;
 
         if ($this->field->isCreate()) {
 
@@ -44,7 +47,7 @@ class TextField extends FieldType
         }
 
         $html  = <<< EOF
-        <label>$display <input type="text" name="$name" value="$value" $readOnly $required /></label>
+        <label>$display <input type="$type" name="$name" value="$value" $readOnly $required /></label>
 EOF;
 
         if ($echo)
