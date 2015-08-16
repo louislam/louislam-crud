@@ -200,4 +200,13 @@ class Field
         return $this->readOnly;
     }
 
+    /**
+     * @param $bean
+     * @return string
+     */
+    public function cellValue($bean)
+    {
+        return $this->fieldType->renderCell($bean->{$this->getName()});
+    }
+
 }

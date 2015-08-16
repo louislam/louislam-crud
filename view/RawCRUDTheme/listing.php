@@ -36,7 +36,7 @@ $this->layout($layoutName, [
             </td>
 
             <?php foreach ($fields as $field) : ?>
-                    <td><?=$bean->{$field->getName()} ?></td>
+                    <td><?=$field->cellValue($bean); ?></td>
             <?php endforeach; ?>
         </tr>
 

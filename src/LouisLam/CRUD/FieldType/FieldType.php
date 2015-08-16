@@ -30,6 +30,9 @@ abstract class FieldType
         $this->field = $field;
     }
 
+    public function renderCell($value) {
+        echo $value;
+    }
 
     protected function getReadOnlyString() {
         if ($this->field->isReadOnly()) {

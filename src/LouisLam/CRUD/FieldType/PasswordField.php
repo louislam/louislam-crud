@@ -53,5 +53,7 @@ EOF;
         return $html;
     }
 
-
+    public function renderCell($value) {
+        echo "***";
+    }
 }
