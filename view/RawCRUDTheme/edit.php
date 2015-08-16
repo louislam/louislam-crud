@@ -20,6 +20,8 @@ $this->layout($layoutName);
 
     <input type="submit" value="Save" />
 
+    <div class="msg"></div>
+
     <button onclick="history.back()">Back</button>
 
 </form>

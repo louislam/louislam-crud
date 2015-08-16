@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?=$this->e($title)?> | Louis CRUD</title>
+    <title>Louis CRUD</title>
     <?=$this->insert("raw::css") ?>
 
 </head>

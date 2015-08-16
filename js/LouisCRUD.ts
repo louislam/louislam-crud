@@ -3,13 +3,15 @@
  */
 class LouisCRUD {
 
-    private table;
+    private _table;
+
+    private ajaxFormCallback;
 
     constructor() {
         var self = this;
 
         $(document).ready(function() {
-            self.table = $('#table').DataTable();
+            self._table = $('#table').DataTable();
 
             // Delete Button
             $(".btn-delete").click(function () {
@@ -37,13 +39,20 @@ class LouisCRUD {
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
                     data: $(this).serialize()
-                }).done(function(data) {
-                    alert(data);
+                }).done(function(result) {
+                    if (self.ajaxFormCallback != null) {
+                        self.ajaxFormCallback(result);
+                    }
                 });
                 return false;
             });
 
         } );
+    }
+
+
+    public setAjaxFormCallback(callback) {
+        this.ajaxFormCallback = callback;
     }
 }
 

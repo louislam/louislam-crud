@@ -5,7 +5,7 @@ var LouisCRUD = (function () {
     function LouisCRUD() {
         var self = this;
         $(document).ready(function () {
-            self.table = $('#table').DataTable();
+            self._table = $('#table').DataTable();
             // Delete Button
             $(".btn-delete").click(function () {
                 var result = window.confirm("Are you sure?");
@@ -28,13 +28,18 @@ var LouisCRUD = (function () {
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
                     data: $(this).serialize()
-                }).done(function (data) {
-                    alert(data);
+                }).done(function (result) {
+                    if (self.ajaxFormCallback != null) {
+                        self.ajaxFormCallback(result);
+                    }
                 });
                 return false;
             });
         });
     }
+    LouisCRUD.prototype.setAjaxFormCallback = function (callback) {
+        this.ajaxFormCallback = callback;
+    };
     return LouisCRUD;
 })();
 //# sourceMappingURL=LouisCRUD.js.map

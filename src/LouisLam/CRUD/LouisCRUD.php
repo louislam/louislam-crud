@@ -7,7 +7,6 @@ use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\Exception\NoBeanException;
-use LouisLam\CRUD\Field;
 use RedBeanPHP\R;
 
 /**
@@ -69,7 +68,7 @@ class LouisCRUD
         }
 
         $this->template = new Engine($viewDir);
-        $this->addTheme("raw", "vendor/louislam/louislam-crud-library/view/RawCRUDTheme");
+        $this->addTheme("raw", "vendor/louislam/louislam-crud/view/RawCRUDTheme");
         $this->setCurrentTheme("raw");
     }
 
@@ -87,6 +86,10 @@ class LouisCRUD
         return $this->fieldList[$name];
     }
 
+    /**
+     * @param $name
+     * @param string $dataType
+     */
     public function addField($name, $dataType = "varchar(255)")
     {
         $this->fieldList[$name] = new Field($this, $name, $dataType);
