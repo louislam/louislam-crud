@@ -43,7 +43,14 @@ $this->layout($layoutName, [
                    <a class="btn-delete" href="javascript:void(0)" data-id="<?=$bean->id ?>" data-url="<?=$this->e($crud->getDeleteLink($bean->id)) ?>">Delete</a>
                <?php endif; ?>
 
-                <?=$crud->getRowActionHTML(); ?>
+                <!-- Action Closure -->
+                <?php if ($crud->getRowAction() != null) : ?>
+                    <?php
+                        $c = $crud->getRowAction();
+                        $c($bean);
+                    ?>
+                <?php endif; ?>
+
             </td>
 
             <?php foreach ($fields as $field) : ?>

@@ -43,9 +43,9 @@ class LouisCRUD
     private $fieldList = [];
 
     /**
-     * @var string
+     * @var callable
      */
-    private $rowActionHTML = "";
+    private $actionClosure = null;
 
     private $findClause = null;
     private $findAllClause = null;
@@ -507,16 +507,6 @@ class LouisCRUD
         R::trash($this->currentBean);
     }
 
-    public function getRowActionHTML()
-    {
-        return $this->rowActionHTML;
-    }
-
-    public function setRowActionHTML($html)
-    {
-        $this->rowActionHTML = $html;
-    }
-
     public function getBean() {
         return $this->currentBean;
     }
@@ -698,6 +688,23 @@ class LouisCRUD
     {
         $this->createTemplate = $createTemplate;
     }
+
+    /**
+     * @return callable
+     */
+    public function getRowAction()
+    {
+        return $this->actionClosure;
+    }
+
+    /**
+     * @param callable $actionClosure
+     */
+    public function rowAction($actionClosure)
+    {
+        $this->actionClosure = $actionClosure;
+    }
+
 
 
 }
