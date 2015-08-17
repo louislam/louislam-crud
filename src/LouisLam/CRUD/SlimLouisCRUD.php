@@ -452,6 +452,12 @@ class SlimLouisCRUD extends LouisCRUD
         return $temp;
     }
 
+    /**
+     * $crud->url("user", ["male", "1970"]);
+     * @param $routeName
+     * @param array $data
+     * @return string
+     */
     public function url($routeName, $data = []) {
         $data2 = [];
         $i = 1;
