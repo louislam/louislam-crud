@@ -17,6 +17,14 @@ use RedBeanPHP\R;
  */
 class LouisCRUD
 {
+
+    /**
+     * For those who would like to fork my project and re-publish on Packagist, please update the composer name.
+     * TODO: Read from composer.json?
+     * @var string Package Name
+     */
+    private $packageName = "louislam/louislam-crud";
+
     /**
      * @var string Table Name
      */
@@ -83,7 +91,7 @@ class LouisCRUD
         }
 
         $this->template = new Engine($viewDir);
-        $this->addTheme("raw", "vendor/louislam/louislam-crud/view/RawCRUDTheme");
+        $this->addTheme("raw", "vendor/$this->packageName/view/RawCRUDTheme");
         $this->setCurrentTheme("raw");
     }
 
