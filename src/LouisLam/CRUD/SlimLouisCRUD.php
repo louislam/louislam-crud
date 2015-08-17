@@ -453,7 +453,15 @@ class SlimLouisCRUD extends LouisCRUD
     }
 
     public function url($routeName, $data = []) {
-        return $this->slim->urlFor("_louisCRUD_" . $routeName, $data);
+        $data2 = [];
+        $i = 1;
+
+        // Map key (p1, p2, p3....)
+        foreach ($data as $value) {
+            $data2["p" . $i++] = $value;
+        }
+
+        return $this->slim->urlFor("_louisCRUD_" . $routeName, $data2);
     }
 
 }
