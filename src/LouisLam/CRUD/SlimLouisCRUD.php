@@ -96,8 +96,12 @@ class SlimLouisCRUD extends LouisCRUD
          */
         $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
 
+            $this->slim->get("/", function () use ($routeName)  {
+                $this->slim->redirectTo("_louisCRUD_" . $routeName);
+            });
+
             // ListView
-            $this->slim->get("/", function () use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/list(/:p1/(:p2/(:p3/(:p4/(:p5/)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
@@ -121,7 +125,7 @@ class SlimLouisCRUD extends LouisCRUD
 
                 if ($this->listviewFunction != null) {
                     $listviewFunction = $this->listviewFunction;
-                    $result = $listviewFunction();
+                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
