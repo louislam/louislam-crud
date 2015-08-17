@@ -444,8 +444,7 @@ class SlimLouisCRUD extends LouisCRUD
         $temp = "<nav><ul>";
 
         foreach ($this->routeNameList as $routeName) {
-            $name = $this->tableList[$routeName];
-            $url = $this->slim->urlFor("_louisCRUD_" . $name);
+            $url = $this->slim->urlFor("_louisCRUD_" . $routeName);
             $temp .= "<li><a href='$url'>$routeName</a></li>";
         }
 
@@ -453,6 +452,8 @@ class SlimLouisCRUD extends LouisCRUD
         return $temp;
     }
 
-
+    public function url($routeName) {
+        return $this->slim->urlFor("_louisCRUD_" . $routeName);
+    }
 
 }
