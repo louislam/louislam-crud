@@ -22,13 +22,7 @@ class LouisCRUD
      */
     private $tableName = null;
 
-    /** @var Engine */
-    private $template;
-
-    private $theme;
-
     private $fieldsInfoFromDatabase = null;
-
 
     private $listViewLink = "";
     private $createLink = "";
@@ -36,8 +30,6 @@ class LouisCRUD
     private $editLink = "";
     private $editSubmitLink = "";
     private $deleteLink = "";
-
-
 
     /** @var Field[] */
     private $fieldList = [];
@@ -66,6 +58,18 @@ class LouisCRUD
     private $enableEdit = true;
     private $enableDelete = true;
     private $enableCreate = true;
+
+    /** @var Engine */
+    private $template;
+    private $theme;
+
+    /*
+     *  Template (please use getter to get the template name)
+     */
+    private $listViewTemplate = null;
+    private $editTemplate = null;
+    private $createTemplate = null;
+
 
     public function __construct($tableName = null, $viewDir = "view")
     {
@@ -628,6 +632,63 @@ class LouisCRUD
     public function enableCreate($showCreate)
     {
         $this->enableCreate = $showCreate;
+    }
+
+    /**
+     * @return null
+     */
+    public function getListViewTemplate()
+    {
+        if ($this->listViewTemplate != null)
+            return $this->listViewTemplate;
+
+        return $this->theme . "::listing";
+    }
+
+    /**
+     * @param null $listViewTemplate
+     */
+    public function setListViewTemplate($listViewTemplate)
+    {
+        $this->listViewTemplate = $listViewTemplate;
+    }
+
+    /**
+     * @return null
+     */
+    public function getEditTemplate()
+    {
+        if ($this->editTemplate != null)
+            return $this->editTemplate;
+
+        return $this->theme . "::edit";
+    }
+
+    /**
+     * @param null $editTemplate
+     */
+    public function setEditTemplate($editTemplate)
+    {
+        $this->editTemplate = $editTemplate;
+    }
+
+    /**
+     * @return null
+     */
+    public function getCreateTemplate()
+    {
+        if ($this->createTemplate != null)
+            return $this->createTemplate;
+
+        return $this->theme . "::create";
+    }
+
+    /**
+     * @param null $createTemplate
+     */
+    public function setCreateTemplate($createTemplate)
+    {
+        $this->createTemplate = $createTemplate;
     }
 
 
