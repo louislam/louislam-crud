@@ -39,6 +39,7 @@ $this->layout($layoutName, [
                     </thead>
                     <tfoot>
                         <tr>
+                            <th></th>
                             <?php foreach ($fields as $field) : ?>
                                 <th></th>
                             <?php endforeach; ?>
