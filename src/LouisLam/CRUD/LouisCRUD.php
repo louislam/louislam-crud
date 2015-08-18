@@ -31,6 +31,7 @@ class LouisCRUD
      * @var string Table Name
      */
     private $tableName = null;
+    private $tableDisplayName = null;
 
     private $fieldsInfoFromDatabase = null;
 
@@ -99,6 +100,7 @@ class LouisCRUD
         }
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
+        $this->addTheme("raw", "vendor/$this->packageName/view/theme/RawCRUDTheme");
         $this->setCurrentTheme("adminlte");
     }
 
@@ -726,5 +728,22 @@ class LouisCRUD
         $fileUpload = new FileUpload($_FILES[$fieldName], $_SERVER);
         $fileUpload->processAll();
     }
+
+    /**
+     * @return null
+     */
+    public function getTableDisplayName()
+    {
+            return $this->tableDisplayName;
+    }
+
+    /**
+     * @param null $tableDisplayName
+     */
+    public function setTableDisplayName($tableDisplayName)
+    {
+        $this->tableDisplayName = $tableDisplayName;
+    }
+
 
 }

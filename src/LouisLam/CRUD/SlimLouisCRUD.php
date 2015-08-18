@@ -38,6 +38,7 @@ class SlimLouisCRUD extends LouisCRUD
     /** @var string[] */
     private $tableList = [];
     private $routeNameList = [];
+    private $tableDisplayName = [];
 
     private $currentRouteName = "";
 
@@ -82,13 +83,14 @@ class SlimLouisCRUD extends LouisCRUD
      * @param callable $customCRUDFunction
      * @param string $routeName
      */
-    public function add($tableName, $customCRUDFunction = null, $routeName = null)
+    public function add($tableName, $customCRUDFunction = null, $routeName = null, $displayName = null)
     {
         if ($routeName == null) {
             $routeName = $tableName;
         }
 
         $this->tableList[$routeName] = $tableName;
+        $this->tableDisplayName[$routeName] = $displayName;
         $this->routeNameList[] = $routeName;
 
         /*
@@ -458,7 +460,7 @@ class SlimLouisCRUD extends LouisCRUD
         foreach ($this->routeNameList as $routeName) {
             $item = [];
             $item["url"] = $this->slim->urlFor("_louisCRUD_" . $routeName);
-            $item["name"] = Util::displayName($routeName);
+            $item["name"] = $this->getTableDisplayName($routeName);
             $tempList[] = $item;
         }
         return $tempList;
@@ -480,6 +482,14 @@ class SlimLouisCRUD extends LouisCRUD
         }
 
         return $this->slim->urlFor("_louisCRUD_" . $routeName, $data2);
+    }
+
+    public function getTableDisplayName($routeName) {
+        if ($this->tableDisplayName[$routeName] != null) {
+            return $this->tableDisplayName[$routeName];
+        } else {
+            return Util::displayName($routeName);
+        }
     }
 
 }
