@@ -461,6 +461,7 @@ class SlimLouisCRUD extends LouisCRUD
             $item = [];
             $item["url"] = $this->slim->urlFor("_louisCRUD_" . $routeName);
             $item["name"] = $this->getTableDisplayName($routeName);
+            $item["routeName"] = $routeName;
             $tempList[] = $item;
         }
         return $tempList;
