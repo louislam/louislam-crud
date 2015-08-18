@@ -31,7 +31,6 @@ class LouisCRUD
      * @var string Table Name
      */
     private $tableName = null;
-    private $tableDisplayName = null;
 
     private $fieldsInfoFromDatabase = null;
 
@@ -729,21 +728,6 @@ class LouisCRUD
         $fileUpload->processAll();
     }
 
-    /**
-     * @return null
-     */
-    public function getTableDisplayName()
-    {
-            return $this->tableDisplayName;
-    }
-
-    /**
-     * @param null $tableDisplayName
-     */
-    public function setTableDisplayName($tableDisplayName)
-    {
-        $this->tableDisplayName = $tableDisplayName;
-    }
 
 
 }

@@ -484,7 +484,7 @@ class SlimLouisCRUD extends LouisCRUD
         return $this->slim->urlFor("_louisCRUD_" . $routeName, $data2);
     }
 
-    public function getTableDisplayName($routeName) {
+    public function getTableDisplayName($routeName = null) {
         if ($this->tableDisplayName[$routeName] != null) {
             return $this->tableDisplayName[$routeName];
         } else {
