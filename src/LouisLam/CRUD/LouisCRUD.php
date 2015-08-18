@@ -2,6 +2,7 @@
 
 namespace LouisLam\CRUD;
 
+use FileUpload\FileUpload;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoFieldException;
@@ -90,9 +91,14 @@ class LouisCRUD
             $this->setTable($tableName);
         }
 
-        $this->template = new Engine($viewDir);
-        $this->addTheme("raw", "vendor/$this->packageName/view/RawCRUDTheme");
-        $this->setCurrentTheme("raw");
+        try {
+            $this->template = new Engine($viewDir);
+        } catch(\LogicException $ex) {
+            $this->template = new Engine();
+        }
+
+        $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
+        $this->setCurrentTheme("adminlte");
     }
 
     public function setViewDirectory($viewDir)
@@ -514,13 +520,17 @@ class LouisCRUD
     /**
      * Get Current Layout Name in Plates Template Engine style
      * If user have created a layout.php in the default folder, use their layout.php.
-     * Or else use the raw one.
+     * Or else use the default layout.
      *
      * @return string Layout Name
      */
     private function getLayoutName()
     {
-        return $this->template->exists("layout") ? "layout" : "raw::layout";
+        try {
+            return $this->template->exists("layout") ? "layout" : $this->theme . "::layout";
+        } catch (\LogicException $ex) {
+            return $this->theme . "::layout";
+        }
     }
 
     /**
@@ -705,6 +715,9 @@ class LouisCRUD
         $this->actionClosure = $actionClosure;
     }
 
-
+    public function upload($fieldName) {
+        $fileUpload = new FileUpload($_FILES[$fieldName], $_SERVER);
+        $fileUpload->processAll();
+    }
 
 }

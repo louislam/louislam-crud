@@ -452,6 +452,18 @@ class SlimLouisCRUD extends LouisCRUD
         return $temp;
     }
 
+    public function getMenuItems() {
+        $tempList = [];
+
+        foreach ($this->routeNameList as $routeName) {
+            $item = [];
+            $item["url"] = $this->slim->urlFor("_louisCRUD_" . $routeName);
+            $item["name"] = Util::displayName($routeName);
+            $tempList[] = $item;
+        }
+        return $tempList;
+    }
+
     /**
      * $crud->url("user", ["male", "1970"]);
      * @param $routeName

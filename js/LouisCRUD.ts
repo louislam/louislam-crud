@@ -3,7 +3,7 @@
  */
 class LouisCRUD {
 
-    private _table;
+    private table;
 
     private ajaxFormCallback;
 
@@ -11,7 +11,31 @@ class LouisCRUD {
         var self = this;
 
         $(document).ready(function() {
-            self._table = $('#table').DataTable();
+            self.table = $('#table').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false
+            });
+
+            $('#table tfoot th').each( function () {
+                var title = $('#table thead th').eq( $(this).index() ).text();
+                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+            } );
+
+
+            // Apply the search
+            self.table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    that
+                        .search( this.value )
+                        .draw();
+
+                } );
+            } );
 
             // Delete Button
             $(".btn-delete").click(function () {
