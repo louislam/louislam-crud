@@ -17,7 +17,10 @@
         "ckeditor/ckeditor": "4.5.2",
         "louislam/louislam-utilities": "dev-master",
         "datatables/datatables": "1.10.7",
-        "components/jquery": "1.11.3"
+        "components/jquery": "1.11.3",
+        "gargron/fileupload": "1.0.2",
+        "blueimp/jquery-file-upload": "9.11.0",
+        "almasaeed2010/adminlte": "2.3.0"
     },
     "autoload": {
         "psr-4": {
