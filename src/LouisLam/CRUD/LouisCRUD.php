@@ -2,6 +2,7 @@
 
 namespace LouisLam\CRUD;
 
+use Exception;
 use FileUpload\FileUpload;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
@@ -231,8 +232,14 @@ class LouisCRUD
 
     private function loadFieldsInfoFromDatabase()
     {
-        $this->fieldsInfoFromDatabase = R::inspect($this->tableName);
+        try {
+            $this->fieldsInfoFromDatabase = R::inspect($this->tableName);
+        } catch (Exception $ex) {
+            $this->createTable();
 
+            // Load again
+            $this->loadFieldsInfoFromDatabase();
+        }
     }
 
     public function createTable()
