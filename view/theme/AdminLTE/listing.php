@@ -14,7 +14,7 @@ $this->layout($layoutName, [
 ?>
 
 <?php if ($crud->isEnabledCreate()) : ?>
-    <a href="<?=$crud->getCreateLink() ?>">New</a>
+    <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>">New</a>
 <?php endif; ?>
 
 <div class="row">
