@@ -28,8 +28,5 @@
             "LouisLam\\" : "src/LouisLam"
         }
     },
-    "minimum-stability": "dev",
-    "scripts": {
-        "post-update-cmd": "LouisLam\\CRUD\\CleanUp::cleanUp"
-    }
+    "minimum-stability": "dev"
 }
