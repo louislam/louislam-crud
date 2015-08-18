@@ -16,7 +16,7 @@
         "gabordemooij/redbean": "4.2.1",
         "ckeditor/ckeditor": "4.5.2",
         "louislam/louislam-utilities": "dev-master",
-        "datatables/datatables": "1.10.7",
+        "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
         "gargron/fileupload": "1.0.2",
         "blueimp/jquery-file-upload": "9.11.0",
