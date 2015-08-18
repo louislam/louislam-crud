@@ -105,6 +105,11 @@ class Field
         return $this->displayName;
     }
 
+    public function setDisplayName($name) {
+        $this->displayName = $name;
+        return $this;
+    }
+
     public function isRequired()
     {
         return $this->required;
