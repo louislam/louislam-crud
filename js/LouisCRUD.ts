@@ -47,7 +47,14 @@ class LouisCRUD {
                 return false;
             });
 
+            self.ckEditor();
         } );
+    }
+
+    // CKEditor
+    public ckEditor() {
+
+
     }
 
 

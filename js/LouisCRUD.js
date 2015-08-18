@@ -35,8 +35,12 @@ var LouisCRUD = (function () {
                 });
                 return false;
             });
+            self.ckEditor();
         });
     }
+    // CKEditor
+    LouisCRUD.prototype.ckEditor = function () {
+    };
     LouisCRUD.prototype.setAjaxFormCallback = function (callback) {
         this.ajaxFormCallback = callback;
     };
