@@ -25,7 +25,6 @@ class IntegerType extends FieldType
         $value = "";
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
-        $type = $this->type;
 
         if ($this->field->isCreate()) {
 
