@@ -19,6 +19,7 @@ class RadioButton extends FieldType
 
     /**
      * RadioButton constructor.
+     * @param string[] $options
      */
     public function __construct($options) {
         $this->options = $options;
@@ -59,7 +60,7 @@ class RadioButton extends FieldType
         $html = $display;
 
         foreach ($this->options as $value =>$optionName) {
-            $html  = <<< EOF
+            $html  .= <<< EOF
         <label><input type="radio" name="$name" value="$value" $readOnly $required /> $optionName</label>
 EOF;
         }
