@@ -20,12 +20,16 @@
         "components/jquery": "1.11.3",
         "gargron/fileupload": "1.0.2",
         "blueimp/jquery-file-upload": "9.11.0",
-        "almasaeed2010/adminlte": "2.3.0"
+        "almasaeed2010/adminlte": "2.3.0",
+        "fortawesome/font-awesome": "4.4.0"
     },
     "autoload": {
         "psr-4": {
             "LouisLam\\" : "src/LouisLam"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "scripts": {
+        "post-update-cmd": "LouisLam\\CRUD\\CleanUp::cleanUp"
+    }
 }
