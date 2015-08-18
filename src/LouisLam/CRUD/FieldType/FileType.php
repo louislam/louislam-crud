@@ -9,7 +9,7 @@
 namespace LouisLam\CRUD\FieldType;
 
 
-class File extends TextField
+class FileType extends TextField
 {
 
     public function __construct()
