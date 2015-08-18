@@ -43,7 +43,7 @@ class IntegerType extends FieldType
         }
 
         $html  = <<< EOF
-        <label>$display <input min="0" step="1" type="num" name="$name" value="$value" $readOnly $required /></label>
+        <label>$display <input min="0" step="1" type="number" name="$name" value="$value" $readOnly $required /></label>
 EOF;
 
         if ($echo)
