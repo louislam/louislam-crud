@@ -6,7 +6,7 @@
 * Auto create tables and fields for you.
 * Extensible Field Types.
 * Theme
-* Work without framework. (But work better with Slim Framework by default)
+* Work without any framework. (But work better with Slim Framework by default)
 
 ## Getting started with a simple example
 1. Require and Import Libraries.
