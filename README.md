@@ -25,8 +25,11 @@
     });
     ```
     
-5. Run the application. Done!    
+5. Run the application. 
     ```php
     $crud->run();
     ```
+    
+6. Open it in your browser.
+    ![Alt screenshot](http://i.imgur.com/L7ZsPEX.png)
     
