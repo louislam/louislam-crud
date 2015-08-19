@@ -1,10 +1,11 @@
 # Louis Lam's CRUD
 
 ## Features
-* Create/Update/Delete/ListView interface.
+* Create/Update/Delete/ListView web interface.
 * RESTful API.
 * Auto create tables and fields for you.
 * Extensible Field Types.
+* Theme
 * Work without framework. (But work better with Slim Framework by default)
 
 ## Getting started with a simple example
