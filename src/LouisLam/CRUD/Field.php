@@ -4,6 +4,8 @@ namespace LouisLam\CRUD;
 
 use LouisLam\CRUD\FieldType\CustomField;
 use LouisLam\CRUD\FieldType\FieldType;
+use LouisLam\CRUD\FieldType\IntegerType;
+use LouisLam\CRUD\FieldType\TextArea;
 use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\String;
 use LouisLam\Util;
@@ -45,6 +47,13 @@ class Field
     protected $readOnly = false;
 
     /**
+     * The highest priority value
+     * @var null
+     */
+    private $value = null;
+    private $overwriteValue = false;
+
+    /**
      * @param LouisCRUD $crud
      * @param string $name
      * @param string $dataType
@@ -59,6 +68,10 @@ class Field
 
         if (String::contains($dataType, "varchar")) {
             $this->fieldType = new TextField();
+        } else if (String::contains($dataType, "int")) {
+            $this->fieldType = new IntegerType();
+        } else if (String::contains($dataType, "text")) {
+                $this->fieldType = new TextArea();
         } else {
             $this->fieldType = new TextField();
         }
@@ -215,5 +228,33 @@ class Field
     {
         return $this->fieldType->renderCell($bean->{$this->getName()});
     }
+
+    /**
+     * @return null
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param int|string $value
+     * @param bool $force
+     */
+    public function setValue($value, $force = false)
+    {
+        $this->value = $value;
+        $this->overwriteValue = $force;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isOverwriteValue()
+    {
+        return $this->overwriteValue;
+    }
+
+
 
 }

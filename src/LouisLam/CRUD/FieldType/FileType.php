@@ -20,4 +20,6 @@ class FileType extends TextField
     public function renderCell($value) {
         echo $value;
     }
+
+
 }

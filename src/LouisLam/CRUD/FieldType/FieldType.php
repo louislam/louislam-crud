@@ -31,7 +31,7 @@ abstract class FieldType
     }
 
     public function renderCell($value) {
-        echo $value;
+       return $value;
     }
 
     protected function getReadOnlyString() {
@@ -49,6 +49,36 @@ abstract class FieldType
         } else {
             return "";
         }
+    }
+
+    public function getValue() {
+        $name = $this->field->getName();
+        $defaultValue = $this->field->getDefaultValue();
+        $bean = $this->field->getBean();
+        $value = "";
+
+        if ($this->field->isCreate()) {
+
+            // Create Page
+            // Use Default Value if not null
+            if ($this->field->getValue() !== null) {
+                $value = $this->field->getValue();
+            } else if ($defaultValue !== null) {
+                $value = $defaultValue;
+            }
+
+        } else {
+
+            // Edit Page
+            // Use the value from Database
+            if ($this->field->isOverwriteValue() && $this->field->getValue() !== null) {
+                $value = $this->field->getValue();
+            } else {
+                $value = $bean->{$name};
+            }
+        }
+
+        return $value;
     }
 
 }

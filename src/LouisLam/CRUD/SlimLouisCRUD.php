@@ -82,7 +82,7 @@ class SlimLouisCRUD extends LouisCRUD
         }
 
         // Link
-        $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . $params));
+        $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . "/list" . $params));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create" . $params));
         $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
         $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id" . $params));
@@ -192,7 +192,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim->get("/edit/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 // Load Bean first
                 $this->loadBean($id);
@@ -246,7 +246,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim->post("(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 if ($this->configFunction != null) {
                     $function = $this->configFunction;
@@ -297,7 +297,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim->put("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 // Load Bean
                 $this->loadBean($id);
@@ -348,7 +348,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim->delete("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 $this->enableJSONResponse();
 

@@ -25,25 +25,9 @@ class CKEditor extends FieldType
         $display = $this->field->getDisplayName();
         $defaultValue = $this->field->getDefaultValue();
         $bean = $this->field->getBean();
-        $value = "";
+        $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
-
-        if ($this->field->isCreate()) {
-
-            // Create Page
-            // Use Default Value if not null
-            if ($defaultValue !== null) {
-                $value = $defaultValue;
-            }
-
-        } else {
-
-            // Edit Page
-            // Use the value from Database
-            $value = $bean->{$name};
-
-        }
 
         $html  = <<< EOF
         <label>$display <textarea class="editor" name="$name" $readOnly $required>$value</textarea></label>

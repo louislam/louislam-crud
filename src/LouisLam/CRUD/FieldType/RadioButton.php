@@ -35,33 +35,28 @@ class RadioButton extends FieldType
     {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
-        $defaultValue = $this->field->getDefaultValue();
         $bean = $this->field->getBean();
-        $value = "";
+        $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
 
-        if ($this->field->isCreate()) {
 
-            // Create Page
-            // Use Default Value if not null
-            if ($defaultValue !== null) {
-                $value = $defaultValue;
+
+        $html = "<label>$display</label>";
+
+        foreach ($this->options as $v =>$optionName) {
+
+            if ($value == $v) {
+                $selected  = "checked";
+            } else {
+                $selected = "";
             }
 
-        } else {
 
-            // Edit Page
-            // Use the value from Database
-            $value = $bean->{$name};
-
-        }
-
-        $html = $display;
-
-        foreach ($this->options as $value =>$optionName) {
             $html  .= <<< EOF
-        <label><input type="radio" name="$name" value="$value" $readOnly $required /> $optionName</label>
+        <div class="radio">
+        <label><input type="radio" name="$name" value="$v" $readOnly $required $selected /> $optionName</label>
+        </div>
 EOF;
         }
 
@@ -69,6 +64,10 @@ EOF;
             echo $html;
 
         return $html;
+    }
+
+    public function renderCell($value) {
+        return $this->options[$value];
     }
 
 
