@@ -1,5 +1,13 @@
 # Louis Lam's CRUD
 
+## Features
+* Create/Update/Delete/ListView interface.
+* RESTful API.
+* Auto create tables and fields for you.
+* Extensible Field Types.
+* Work without framework. (But work better with Slim Framework by default)
+
+## Getting started with a simple example
 1. Require and Import Libraries.
     ```php
     <?php
