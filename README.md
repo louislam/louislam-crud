@@ -27,7 +27,7 @@
     ```php
     $crud = new SlimLouisCRUD();
     ```
-1. Add a route for your table (Product).
+1. Add a route for your table (product).
     ```php
     $crud->add("product", function () use ($crud) {
         $crud->showFields("id", "name", "price", "description");
