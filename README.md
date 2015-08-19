@@ -19,15 +19,14 @@
     $crud = new SlimLouisCRUD();
     ```
 1. Add CRUD for Product Table
-   
     ```php
     $crud->add("product", function () use ($crud) {
         $crud->showFields("id", "name", "price", "description");
-        $crud->field("price")->required();
     });
     ```
-5. Run the application. Done!    
     
+5. Run the application. Done!    
     ```php
     $crud->run();
     ```
+    
