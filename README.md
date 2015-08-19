@@ -9,7 +9,7 @@
     use RedBeanPHP\R;
     ```
 
-1. Setup Database Connection (Support MySQL, SQLite etc.)
+1. Setup a Database Connection (Support MySQL, SQLite etc.)
     ```php
     R::setup('sqlite:dbfile.db');
     ```
