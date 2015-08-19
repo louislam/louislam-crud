@@ -63,17 +63,29 @@ class SlimLouisCRUD extends LouisCRUD
 
     }
 
-    private function init($tableName, $routeName) {
+    private function init($tableName, $routeName, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         // Table Name set this time ONLY.
         $this->setTable($tableName);
 
         $this->currentRouteName = $routeName;
 
+        $params = "";
+
+        for ($i = 1; $i <= 5; $i++) {
+            $paramName = "p$i";
+
+            if ($$paramName != null) {
+                $params .= "/$p1";
+            } else {
+                break;
+            }
+        }
+
         // Link
-        $this->setListViewLink(Util::url($this->groupName . "/" . $routeName));
-        $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create"));
+        $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . $params));
+        $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create" . $params));
         $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
-        $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id"));
+        $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id" . $params));
         $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
         $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
     }
@@ -103,10 +115,10 @@ class SlimLouisCRUD extends LouisCRUD
             });
 
             // ListView
-            $this->slim->get("/list(/:p1/(:p2/(:p3/(:p4/(:p5/)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 if ($this->configFunction != null) {
                     $function = $this->configFunction;
@@ -118,7 +130,7 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -139,10 +151,10 @@ class SlimLouisCRUD extends LouisCRUD
             })->name("_louisCRUD_" . $routeName);
 
             // Create
-            $this->slim->get("/create", function () use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/create(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
-                $this->init($tableName, $routeName);
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
                 if ($this->configFunction != null) {
                     $function = $this->configFunction;
@@ -154,7 +166,7 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -163,7 +175,7 @@ class SlimLouisCRUD extends LouisCRUD
 
                 if ($this->createFunction != null) {
                     $createFunction = $this->createFunction;
-                    $result = $createFunction();
+                    $result = $createFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -177,7 +189,7 @@ class SlimLouisCRUD extends LouisCRUD
             });
 
             // Edit
-            $this->slim->get("/edit/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/edit/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
@@ -198,7 +210,7 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -207,7 +219,7 @@ class SlimLouisCRUD extends LouisCRUD
 
                 if ($this->editFunction != null) {
                     $editFunction = $this->editFunction;
-                    $result = $editFunction($id);
+                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -231,7 +243,7 @@ class SlimLouisCRUD extends LouisCRUD
              * Insert a bean
              * POST /crud/{tableName}
              */
-            $this->slim->post("/", function () use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->post("(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
@@ -246,7 +258,7 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -254,7 +266,7 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 // Custom Global Function
-                $result = $customCRUDFunction();
+                $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                 if ($result === false) {
                     return;
@@ -263,7 +275,7 @@ class SlimLouisCRUD extends LouisCRUD
                 // Custom Create Function
                 if ($this->createFunction != null) {
                     $createFunction = $this->createFunction;
-                    $result = $createFunction();
+                    $result = $createFunction($p1, $p2, $p3, $p4, $p5);
                 }
 
                 if ($result === false) {
@@ -282,7 +294,7 @@ class SlimLouisCRUD extends LouisCRUD
              * Update a bean
              * PUT /crud/{tableName}/{id}
              */
-            $this->slim->put("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->put("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
@@ -301,7 +313,7 @@ class SlimLouisCRUD extends LouisCRUD
 
                 // Custom Global Function
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -311,7 +323,7 @@ class SlimLouisCRUD extends LouisCRUD
                 // Custom Create Function
                 if ($this->editFunction != null) {
                     $editFunction = $this->editFunction;
-                    $result = $editFunction($id);
+                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -333,7 +345,7 @@ class SlimLouisCRUD extends LouisCRUD
              * Delete a bean
              * DELETE /crud/{tableName}/{id}
              */
-            $this->slim->delete("/:id", function ($id) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->delete("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName);
@@ -353,7 +365,7 @@ class SlimLouisCRUD extends LouisCRUD
 
                 // Custom Global Function
                 if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction();
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;
@@ -363,7 +375,7 @@ class SlimLouisCRUD extends LouisCRUD
                 // Custom Delete Function
                 if ($this->deleteFunction != null) {
                     $deleteFunction = $this->deleteFunction;
-                    $result =  $deleteFunction($id);
+                    $result =  $deleteFunction($id, $p1, $p2, $p3, $p4, $p5);
 
                     if ($result === false) {
                         return;

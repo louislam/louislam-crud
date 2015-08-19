@@ -9,14 +9,52 @@
 namespace LouisLam\CRUD\FieldType;
 
 
-class Hidden extends TextField
+class Hidden extends FieldType
 {
+
+    protected $type = "hidden";
+
     /**
-     * Email constructor.
+     * Render Field for Create/Edit
+     * @param bool|true $echo
+     * @return string
      */
-    public function __construct()
+    public function render($echo = true)
     {
-        $this->type = "hidden";
+        $name = $this->field->getName();
+        $display = $this->field->getDisplayName();
+        $defaultValue = $this->field->getDefaultValue();
+        $bean = $this->field->getBean();
+        $value = "";
+        $readOnly = $this->getReadOnlyString();
+        $required = $this->getRequiredString();
+        $type = $this->type;
+
+        if ($this->field->isCreate()) {
+
+            // Create Page
+            // Use Default Value if not null
+            if ($defaultValue !== null) {
+                $value = $defaultValue;
+            }
+
+        } else {
+
+            // Edit Page
+            // Use the value from Database
+            $value = $bean->{$name};
+
+        }
+
+        $html  = <<< EOF
+       <input type="$type" name="$name" value="$value" $readOnly $required />
+EOF;
+
+        if ($echo)
+            echo $html;
+
+        return $html;
     }
+
 
 }

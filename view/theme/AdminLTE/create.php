@@ -14,13 +14,34 @@ $this->layout($layoutName, [
 
 <form action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
 
-    <?php foreach($fields as $field) : ?>
-        <?php $field->render() ?>
-        <br />
-    <?php endforeach; ?>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
+            <!-- general form elements -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Quick Example</h3>
+                </div><!-- /.box-header -->
+                <!-- form start -->
+
+                    <div class="box-body">
+                        <?php foreach($fields as $field) : ?>
+                            <?php $field->render() ?>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <div class="box-footer">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+
+            </div>
+        </div>
+    </div>
 
 
-    <input type="submit" value="Create" />
+
+
+
 
 
 </form>

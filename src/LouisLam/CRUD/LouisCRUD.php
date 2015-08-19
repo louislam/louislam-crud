@@ -123,6 +123,12 @@ class LouisCRUD
      */
     public function addField($name, $dataType = "varchar(255)")
     {
+
+        // Check if the name whether is satisfied
+        if (ctype_upper($name[0])) {
+            throw new Exception("Field name cannot start with upper-case.");
+        }
+
         $this->fieldList[$name] = new Field($this, $name, $dataType);
     }
 
@@ -162,6 +168,8 @@ class LouisCRUD
         // now $this->fieldList remains fields that user do not input.
         // Use user's order and append remaining fields to the back.
         $this->fieldList = array_merge($newOrderList, $this->fieldList);
+
+
     }
 
     public function hideFields()

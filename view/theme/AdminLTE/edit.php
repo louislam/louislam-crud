@@ -1,36 +1,58 @@
 <?php
-use LouisLam\CRUD\LouisCRUD;
 use LouisLam\CRUD\Field;
+use LouisLam\CRUD\LouisCRUD;
 
 /** @var Field[] $fields */
 /** @var array $list */
 /** @var LouisCRUD $crud */
-/** @var string $layoutName*/
+/** @var string $layoutName */
 
 $this->layout($layoutName, [
     "crud" => $crud
 ]);
-
 ?>
 
-<form action="<?=$crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="put" class="ajax">
+<form action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="put" class="ajax">
 
-    <?php foreach($fields as $field) : ?>
-        <?php $field->render() ?>
-        <br />
-    <?php endforeach; ?>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-6">
 
-    <div id="msg" style="color:red"></div>
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Quick Example</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
 
-    <input type="submit" value="Save" />
+                <div class="box-body">
+                    <?php foreach ($fields as $field) : ?>
+                        <?php $field->render() ?>
+                    <?php endforeach; ?>
+                </div>
 
+                <div class="box-footer">
+                    <input type="submit" value="Save" class="btn btn-primary"/>
+                    <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
+                </div>
+
+
+            </div>
+
+            <div id="msg-callout" class="callout callout-info" style="display:none">
+                <p id="msg">
+                </p>
+            </div>
+        </div>
+    </div>
 
 </form>
 
-<button onclick="history.back()">Back</button>
+
 
 <script>
     crud.setAjaxFormCallback(function (result) {
+        $("#msg-callout").show();
         $("#msg").html(result.msg);
     });
 </script>

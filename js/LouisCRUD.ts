@@ -21,6 +21,11 @@ class LouisCRUD {
             });
 
             $('#table tfoot th').each( function () {
+
+                if ($(this).index() == 0) {
+                    return;
+                }
+
                 var title = $('#table thead th').eq( $(this).index() ).text();
                 $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
             } );

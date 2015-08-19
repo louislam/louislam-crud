@@ -14,12 +14,19 @@ $this->layout($layoutName, [
 ?>
 
 <?php if ($crud->isEnabledCreate()) : ?>
-    <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>">New</a>
+    <div class="row">
+    	<div class="col-xs-12">
+            <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>">New</a>
+            <br />  <br />
+        </div>
+
+    </div>
+
 <?php endif; ?>
 
 <div class="row">
     <div class="col-xs-12">
-        <div class="box">
+        <div class="box" style="overflow: scroll">
 
             <div class="box-header">
                 <h3 class="box-title"></h3>

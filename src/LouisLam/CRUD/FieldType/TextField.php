@@ -47,7 +47,9 @@ class TextField extends FieldType
         }
 
         $html  = <<< EOF
-        <label>$display <input type="$type" name="$name" value="$value" $readOnly $required /></label>
+        <div class="form-group">
+            <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
+        </div>
 EOF;
 
         if ($echo)
