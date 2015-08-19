@@ -40,5 +40,5 @@
     ```
     
 6. Open it in your browser.
-    ![Alt screenshot](http://i.imgur.com/L7ZsPEX.png)
+    ![Alt screenshot](http://i.imgur.com/c3rl7zr.png)
     
