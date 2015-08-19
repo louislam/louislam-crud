@@ -1,17 +1,28 @@
 # Louis Lam's CRUD
 
-    <?php
-    require "vendor/autoload.php";
-    
-	use LouisLam\CRUD\SlimLouisCRUD;
-	use RedBeanPHP\R;
+```php
+<?php
 
-	R::setup('sqlite:dbfile.db');
-	
-	// CRUD for Product Table
-	$crud->add("product", function () use ($crud) {
-	    $crud->showFields("id", "name", "price", "description");
-	    $crud->field("price")->required();
-	});
+require "vendor/autoload.php";
 
-	$crud->run();
+use LouisLam\CRUD\SlimLouisCRUD;
+use RedBeanPHP\R;
+
+/*
+ * 1. Setup Database Connection (Support MySQL, SQLite etc.)
+ */
+R::setup('sqlite:dbfile.db');
+
+/*
+ * 2. Add CRUD for Product Table
+ */
+$crud->add("product", function () use ($crud) {
+    $crud->showFields("id", "name", "price", "description");
+    $crud->field("price")->required();
+});
+
+/*
+ * 3. Run the application. Done!
+ */
+$crud->run();
+```
