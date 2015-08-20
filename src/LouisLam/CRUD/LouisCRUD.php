@@ -736,6 +736,8 @@ class LouisCRUD
         $fileUpload->processAll();
     }
 
-
+    public function getTemplateEngine() {
+        return $this->template;
+    }
 
 }
