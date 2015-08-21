@@ -76,6 +76,7 @@ $this->layout($layoutName, [
 
                             </td>
 
+                            <!-- Cell -->
                             <?php foreach ($fields as $field) : ?>
                                 <td><?=$field->cellValue($bean); ?></td>
                             <?php endforeach; ?>

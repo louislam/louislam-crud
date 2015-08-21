@@ -192,6 +192,23 @@ class LouisCRUD
         }
     }
 
+    public function readOnlyFields()
+    {
+        $numargs = func_num_args();
+        $fieldNames = func_get_args();
+
+        for ($i = 0; $i < $numargs; $i++) {
+            $this->field($fieldNames[$i])->setReadOnly(true);
+        }
+    }
+
+    public function allReadOnly()
+    {
+        foreach($this->fieldList as $field) {
+            $field->setReadOnly(true);
+        }
+    }
+
     public function setCurrentTheme($theme)
     {
         $this->theme = $theme;

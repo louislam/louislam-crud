@@ -42,6 +42,14 @@ abstract class FieldType
         }
     }
 
+    protected function getDisabledString() {
+        if ($this->field->isReadOnly()) {
+            return "disabled";
+        } else {
+            return "";
+        }
+    }
+
     protected function getRequiredString()
     {
         if ($this->field->isRequired()) {

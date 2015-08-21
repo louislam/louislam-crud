@@ -41,11 +41,11 @@ class Dropdown extends FieldType
         $required = $this->getRequiredString();
 
         $html = <<<TAG
-<label for="field-$name" name="$name" $required $readOnly>$display</label>
+<label for="field-$name" >$display</label>
 TAG;
 
         $html .= <<<TAG
-<select name>
+<select id="field-$name" name="$name" $required $readOnly class="form-control">
 TAG;
 
         foreach ($this->options as $v =>$optionName) {
@@ -61,7 +61,7 @@ TAG;
 EOF;
         }
 
-        $html .= "</select>";
+        $html .= "</select><br />";
 
         if ($echo)
             echo $html;
@@ -70,7 +70,11 @@ EOF;
     }
 
     public function renderCell($value) {
-        return $this->options[$value];
+       try {
+           return $this->options[$value];
+       } catch (\ErrorException $ex) {
+           return $value;
+       }
     }
 
 }

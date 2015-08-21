@@ -37,7 +37,7 @@ class RadioButton extends FieldType
         $display = $this->field->getDisplayName();
         $bean = $this->field->getBean();
         $value = $this->getValue();
-        $readOnly = $this->getReadOnlyString();
+        $disabled = $this->getDisabledString();
         $required = $this->getRequiredString();
 
 
@@ -55,7 +55,7 @@ class RadioButton extends FieldType
 
             $html  .= <<< EOF
         <div class="radio">
-        <label><input type="radio" name="$name" value="$v" $readOnly $required $selected /> $optionName</label>
+        <label><input type="radio" name="$name" value="$v" $disabled $required $selected /> $optionName</label>
         </div>
 EOF;
         }
