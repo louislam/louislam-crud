@@ -70,7 +70,6 @@ EOF;
         return $this->options[$value];
     }
 
-
 }
 
 ?>
