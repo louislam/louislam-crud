@@ -740,4 +740,7 @@ class LouisCRUD
         return $this->template;
     }
 
+    public function render($name, $data = []) {
+        return $this->template->render($name, $data);
+    }
 }
