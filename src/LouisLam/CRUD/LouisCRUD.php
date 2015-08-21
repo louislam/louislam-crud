@@ -175,11 +175,20 @@ class LouisCRUD
     public function hideFields()
     {
         $numargs = func_num_args();
-
         $fieldNames = func_get_args();
 
         for ($i = 0; $i < $numargs; $i++) {
             $this->field($fieldNames[$i])->hide();
+        }
+    }
+
+    public function requiredFields()
+    {
+        $numargs = func_num_args();
+        $fieldNames = func_get_args();
+
+        for ($i = 0; $i < $numargs; $i++) {
+            $this->field($fieldNames[$i])->required();
         }
     }
 
@@ -195,7 +204,6 @@ class LouisCRUD
 
     protected function setTable($tableName)
     {
-
         if ($this->tableName != null) {
             throw new TableNameException();
         }
