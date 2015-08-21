@@ -13,11 +13,6 @@ class TrueFalse extends RadioButton
 {
 
     /**
-     * @var string[]
-     */
-    private $options;
-
-    /**
      * RadioButton constructor.
      * @param string $true
      * @param string $false
