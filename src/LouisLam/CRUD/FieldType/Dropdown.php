@@ -9,7 +9,7 @@
 namespace LouisLam\CRUD\FieldType;
 
 
-class RadioButton extends FieldType
+class Dropdown extends FieldType
 {
 
     /**
@@ -40,25 +40,28 @@ class RadioButton extends FieldType
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
 
+        $html = <<<TAG
+<label for="field-$name" name="$name" $required $readOnly>$display</label>
+TAG;
 
-
-        $html = "<label>$display</label>";
+        $html .= <<<TAG
+<select name>
+TAG;
 
         foreach ($this->options as $v =>$optionName) {
 
             if ($value == $v) {
-                $selected  = "checked";
+                $selected  = "selected";
             } else {
                 $selected = "";
             }
 
-
             $html  .= <<< EOF
-        <div class="radio">
-        <label><input type="radio" name="$name" value="$v" $readOnly $required $selected /> $optionName</label>
-        </div>
+     <option value="$v"   $selected /> $optionName</option>
 EOF;
         }
+
+        $html .= "</select>";
 
         if ($echo)
             echo $html;
