@@ -308,7 +308,7 @@ class LouisCRUD
             return null;
         }
 
-        $html = $this->template->render($this->theme . "::listing", [
+        $html = $this->template->render($this->getListViewTemplate(), [
             "fields" => $this->getShowFields(),
             "list" => $list,
             "crud" => $this,
@@ -684,7 +684,7 @@ class LouisCRUD
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getListViewTemplate()
     {
@@ -765,7 +765,15 @@ class LouisCRUD
         return $this->template;
     }
 
-    public function render($name, $data = []) {
-        return $this->template->render($name, $data);
+    public function render($name, $data = [], $echo = true) {
+        $data["layoutName"] = $this->getLayoutName();
+        $data["crud"] = $this;
+
+        $html = $this->template->render($name, $data);
+        if ($echo) {
+            echo $html;
+        }
+
+        return $html;
     }
 }

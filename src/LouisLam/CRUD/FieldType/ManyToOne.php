@@ -16,8 +16,8 @@ class ManyToOne extends Dropdown
 
     /**
      * ManyToOne constructor.
-     * @param \string[] $tableName
-     * @param null $clause
+     * @param string $tableName
+     * @param string $clause
      * @param array $data
      * @param callable $nameClosure
      */

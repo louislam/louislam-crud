@@ -13,8 +13,6 @@ class LouisCRUD {
         $(document).ready(function() {
             self.table = $('#table').DataTable({
                 "paging": true,
-                "lengthChange": false,
-                "searching": false,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false
@@ -30,15 +28,11 @@ class LouisCRUD {
                 $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
             } );
 
-
             // Apply the search
             self.table.columns().every( function () {
                 var that = this;
                 $( 'input', this.footer() ).on( 'keyup change', function () {
-                    that
-                        .search( this.value )
-                        .draw();
-
+                    that.search(this.value).draw();
                 } );
             } );
 
