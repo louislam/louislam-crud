@@ -19,8 +19,8 @@ class TrueFalse extends RadioButton
      */
     public function __construct($true = "Yes", $false = "No") {
         parent::__construct([
-            0 => $false,
-            1 => $true
+            1 => $true,
+            0 => $false
         ]);
     }
 
