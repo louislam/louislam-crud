@@ -15,7 +15,8 @@ class LouisCRUD {
                 "paging": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false
+                "url": "",
+                "type": "POST",
             });
 
             $('#table tfoot th').each( function () {
@@ -25,7 +26,7 @@ class LouisCRUD {
                 }
 
                 var title = $('#table thead th').eq( $(this).index() ).text();
-                $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                $(this).html( '<input type="text" placeholder="Search '+title+'" class="filter-box" />' );
             } );
 
             // Apply the search

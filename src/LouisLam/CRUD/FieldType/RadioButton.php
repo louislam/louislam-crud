@@ -67,7 +67,11 @@ EOF;
     }
 
     public function renderCell($value) {
-        return $this->options[$value];
+        try {
+            return $this->options[$value];
+        } catch (\ErrorException $ex) {
+            return $value;
+        }
     }
 
 }
