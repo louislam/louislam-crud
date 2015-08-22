@@ -112,7 +112,7 @@ $this->layout($layoutName, [
                                 <?php if ($crud->getRowAction() != null) : ?>
                                     <?php
                                     $c = $crud->getRowAction();
-                                    $c($bean);
+                                    echo $c($bean);
                                     ?>
                                 <?php endif; ?>
 

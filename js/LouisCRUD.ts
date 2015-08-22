@@ -76,6 +76,7 @@ class LouisCRUD {
         if ($isAjax) {
             data.serverSide = true;
             data.processing =  true;
+            data.searching = false;
             data.ajax = {
                 url: tableURL,
                 type: "POST"

@@ -945,6 +945,9 @@ HTML;
         $this->listViewJSONLink = $listViewJSONLink;
     }
 
+    public function enableAjaxListView($bool = true) {
+        $this->ajaxListView = $bool;
+    }
 
 
 }
