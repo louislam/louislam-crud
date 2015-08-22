@@ -1,22 +1,25 @@
 /**
  * Created by Louis Lam on 8/15/2015.
+ *
  */
+/// <reference path="jquery.d.ts" />
+/// <reference path="jquery.dataTables-1.9.4.d.ts" />
 var LouisCRUD = (function () {
-    function LouisCRUD() {
+    function LouisCRUD(tableUrl) {
         var self = this;
         $(document).ready(function () {
-            self.table = $('#table').DataTable({
+            self.table = $('#louis-crud-table').DataTable({
                 "paging": true,
                 "ordering": true,
                 "info": true,
-                "url": "",
+                "url": tableUrl,
                 "type": "POST"
             });
-            $('#table tfoot th').each(function () {
+            $('#louis-crud-table tfoot th').each(function () {
                 if ($(this).index() == 0) {
                     return;
                 }
-                var title = $('#table thead th').eq($(this).index()).text();
+                var title = $('#louis-crud-table thead th').eq($(this).index()).text();
                 $(this).html('<input type="text" placeholder="Search ' + title + '" class="filter-box" />');
             });
             // Apply the search
@@ -42,7 +45,7 @@ var LouisCRUD = (function () {
                     });
                 }
             });
-            // Ajax Form
+            // Ajax Submit Form
             $("form.ajax").submit(function () {
                 $.ajax({
                     url: $(this).attr("action"),
@@ -56,10 +59,24 @@ var LouisCRUD = (function () {
                 return false;
             });
             self.ckEditor();
+            // Column Filter
+            self.columnFilter();
         });
     }
     // CKEditor
     LouisCRUD.prototype.ckEditor = function () {
+    };
+    LouisCRUD.prototype.columnFilter = function () {
+        var self = this;
+        $(".column-filter a").click(function (e) {
+            e.stopPropagation();
+        });
+        $(".column-filter [type=checkbox]").change(function (e) {
+            e.preventDefault();
+            var checked = $(this).is(":checked");
+            var column = self.table.column($(this).data('column'));
+            column.visible(checked);
+        });
     };
     LouisCRUD.prototype.setAjaxFormCallback = function (callback) {
         this.ajaxFormCallback = callback;

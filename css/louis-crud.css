@@ -1,3 +1,6 @@
 .filter-box {
   width: 100%;
 }
+#louis-crud-table td {
+  white-space: nowrap;
+}

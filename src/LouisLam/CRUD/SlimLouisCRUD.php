@@ -66,6 +66,7 @@ class SlimLouisCRUD extends LouisCRUD
     private function init($tableName, $routeName, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         // Table Name set this time ONLY.
         $this->setTable($tableName);
+        $this->setTableDisplayName($this->tableDisplayName[$routeName]);
 
         $this->currentRouteName = $routeName;
 
@@ -94,6 +95,7 @@ class SlimLouisCRUD extends LouisCRUD
      * @param string $tableName
      * @param callable $customCRUDFunction
      * @param string $routeName
+     * @param string $displayName
      */
     public function add($tableName, $customCRUDFunction = null, $routeName = null, $displayName = null)
     {
@@ -498,10 +500,18 @@ class SlimLouisCRUD extends LouisCRUD
     }
 
     public function getTableDisplayName($routeName = null) {
-        if ($this->tableDisplayName[$routeName] != null) {
+        if (isset($this->tableDisplayName[$routeName] ) && $this->tableDisplayName[$routeName] != null) {
             return $this->tableDisplayName[$routeName];
         } else {
-            return Util::displayName($routeName);
+            $name = parent::getTableDisplayName();
+
+            if ($name == "" && $routeName ==null) {
+                return $name;
+            } elseif ($name != "") {
+                return $name;
+            } else {
+                return Util::displayName($routeName);
+            }
         }
     }
 

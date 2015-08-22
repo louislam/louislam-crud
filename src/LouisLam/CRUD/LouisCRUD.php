@@ -9,6 +9,7 @@ use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\Exception\NoBeanException;
+use LouisLam\Util;
 use RedBeanPHP\R;
 
 /**
@@ -79,6 +80,8 @@ class LouisCRUD
     private $listViewTemplate = null;
     private $editTemplate = null;
     private $createTemplate = null;
+
+    private $tableDisplayName = null;
 
 
     public function __construct($tableName = null, $viewDir = "view")
@@ -776,4 +779,26 @@ class LouisCRUD
 
         return $html;
     }
+
+    /**
+     * @return string
+     */
+    public function getTableDisplayName()
+    {
+        if (($this->tableDisplayName == null)) {
+            return "";
+        } else {
+            return $this->tableDisplayName;
+        }
+    }
+
+    /**
+     * @param string $tableDisplayName
+     */
+    public function setTableDisplayName($tableDisplayName)
+    {
+        $this->tableDisplayName = $tableDisplayName;
+    }
+
+
 }
