@@ -372,6 +372,10 @@ class LouisCRUD
 
         $obj = new AjaxResult();
 
+        if (isset($_POST["draw"])) {
+            $obj->draw = $_POST["draw"];
+        }
+
         foreach ($list as $bean) {
             $row = [];
 
