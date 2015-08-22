@@ -53,8 +53,6 @@ class LouisCRUD {
             self.ckEditor();
 
 
-            // Column Filter
-            self.columnFilter();
         });
     }
 
@@ -69,7 +67,10 @@ class LouisCRUD {
         var data = {
             "paging": true,
             "ordering": true,
-            "info": true
+            "info": true,
+            "drawCallback": function( settings ) {
+              self.refresh();
+            }
         };
 
         if ($isAjax) {
@@ -101,41 +102,7 @@ class LouisCRUD {
                 });
             });
 
-            // Delete Button
-            $(".btn-delete").click(function () {
-                var result = window.confirm("Are you sure?");
 
-                if (result) {
-                    var btn = $(this);
-                    var deleteLink = $(this).data("url");
-
-                    $.ajax({
-                        url: deleteLink,
-                        type: "DELETE"
-                    }).done(function (data) {
-                        $("#row-" + btn.data("id")).remove();
-                    }).fail(function (data) {
-                        console.log(data);
-                    });
-                }
-            });
-
-            // Ajax Submit Form
-            $("form.ajax").submit(function () {
-
-                $.ajax({
-                    url: $(this).attr("action"),
-                    type: $(this).data("method"),
-                    data: $(this).serialize()
-                }).done(function (result) {
-                    if (self.ajaxFormCallback != null) {
-                        self.ajaxFormCallback(result);
-                    }
-                });
-                return false;
-            });
-
-            self.ckEditor();
 
 
             // Column Filter
@@ -162,6 +129,30 @@ class LouisCRUD {
 
     public setAjaxFormCallback(callback) {
         this.ajaxFormCallback = callback;
+    }
+
+    public refresh() {
+        var self = this;
+        // Delete Button
+        $(".btn-delete:not(.ok)").click(function () {
+
+            var result = window.confirm("Are you sure?");
+
+            if (result) {
+                var btn = $(this);
+                var deleteLink = $(this).data("url");
+
+                $.ajax({
+                    url: deleteLink,
+                    type: "DELETE"
+                }).done(function (data) {
+                    btn.parents('tr').remove();
+                   // self.table.ajax.reload();
+                }).fail(function (data) {
+                    console.log(data);
+                });
+            }
+        }).addClass("ok");
     }
 }
 

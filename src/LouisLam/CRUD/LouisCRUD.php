@@ -338,11 +338,30 @@ class LouisCRUD
     public function getListViewJSONString($echo = true) {
         $this->beforeRender();
 
+        if (isset($_POST["start"])) {
+            $start = $_POST["start"];
+        } else {
+            $start = 0;
+        }
+
+        if (isset($_POST["length"])) {
+            $rowPerPage = $_POST["length"];
+        } else {
+            $rowPerPage = 15;
+        }
+
         try {
             if ($this->findClause != null) {
-                $list = R::find($this->tableName, $this->findClause, $this->bindingData);
+                $list = R::find($this->tableName, $this->findClause .  " LIMIT $start,$rowPerPage", $this->bindingData);
             } else {
-                $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+
+                if ($this->findAllClause != null) {
+                    $clause = $this->findAllClause .  " LIMIT $start,$rowPerPage ";
+                } else {
+                    $clause =  " LIMIT $start,$rowPerPage";
+                }
+
+                $list = R::findAll($this->tableName, $clause, $this->bindingData);
             }
         } catch(\RedBeanPHP\RedException\SQL $ex) {
             // If the table is not existing create one, create the table and run this function again.
@@ -359,7 +378,9 @@ class LouisCRUD
             // Action
             $row[] = $this->getAction($bean);
 
-            foreach ($this->fieldList as $field) {
+            $fields = $this->getShowFields();
+
+            foreach ($fields as $field) {
                 $row[] = $field->cellValue($bean);
             }
 
@@ -382,7 +403,7 @@ class LouisCRUD
         if ($this->isEnabledEdit()) {
             $url = $this->getEditLink($bean->id);
             $html .= <<< HTML
-  <a href="$url" class="btn btn-default">Edit</a>
+<a href="$url" class="btn btn-default">Edit</a>
 HTML;
 
         }
@@ -390,7 +411,7 @@ HTML;
         if ($this->isEnabledDelete()) {
             $url = $this->getDeleteLink($bean->id);
             $html .= <<< HTML
-<a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
+ <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
 HTML;
         }
 
