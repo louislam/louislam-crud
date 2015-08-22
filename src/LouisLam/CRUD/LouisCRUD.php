@@ -6,10 +6,9 @@ use Exception;
 use FileUpload\FileUpload;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
+use LouisLam\CRUD\Exception\NoBeanException;
 use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
-use LouisLam\CRUD\Exception\NoBeanException;
-use LouisLam\Util;
 use RedBeanPHP\R;
 
 /**
@@ -41,6 +40,7 @@ class LouisCRUD
     private $editLink = "";
     private $editSubmitLink = "";
     private $deleteLink = "";
+    private $listViewJSONLink;
 
     /** @var Field[] */
     private $fieldList = [];
@@ -82,6 +82,11 @@ class LouisCRUD
     private $createTemplate = null;
 
     private $tableDisplayName = null;
+
+    /** @var array Data for layout */
+    private $data = "";
+
+    private $ajaxListView = true;
 
 
     public function __construct($tableName = null, $viewDir = "view")
@@ -298,17 +303,22 @@ class LouisCRUD
     {
         $this->beforeRender();
 
-        try {
-            if ($this->findClause != null) {
-                $list = R::find($this->tableName, $this->findClause, $this->bindingData);
-            } else {
-                $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+        if ($this->ajaxListView) {
+            $list = [];
+        } else {
+
+            try {
+                if ($this->findClause != null) {
+                    $list = R::find($this->tableName, $this->findClause, $this->bindingData);
+                } else {
+                    $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+                }
+            } catch(\RedBeanPHP\RedException\SQL $ex) {
+                // If the table is not existing create one, create the table and run this function again.
+                $this->createTable();
+                $this->renderListView($echo);
+                return null;
             }
-        } catch(\RedBeanPHP\RedException\SQL $ex) {
-            // If the table is not existing create one, create the table and run this function again.
-            $this->createTable();
-            $this->renderListView($echo);
-            return null;
         }
 
         $html = $this->template->render($this->getListViewTemplate(), [
@@ -320,6 +330,73 @@ class LouisCRUD
 
         if ($echo) {
             echo $html;
+        }
+
+        return $html;
+    }
+
+    public function getListViewJSONString($echo = true) {
+        $this->beforeRender();
+
+        try {
+            if ($this->findClause != null) {
+                $list = R::find($this->tableName, $this->findClause, $this->bindingData);
+            } else {
+                $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
+            }
+        } catch(\RedBeanPHP\RedException\SQL $ex) {
+            // If the table is not existing create one, create the table and run this function again.
+            $this->createTable();
+            $this->getListViewJSONString($echo);
+            return null;
+        }
+
+        $obj = new AjaxResult();
+
+        foreach ($list as $bean) {
+            $row = [];
+
+            // Action
+            $row[] = $this->getAction($bean);
+
+            foreach ($this->fieldList as $field) {
+                $row[] = $field->cellValue($bean);
+            }
+
+            $obj->data[] = $row;
+        }
+
+        $json = json_encode($obj);
+
+        if ($echo) {
+            echo $json;
+        }
+
+        return $json;
+    }
+
+    protected function getAction($bean)
+    {
+        $html = "";
+
+        if ($this->isEnabledEdit()) {
+            $url = $this->getEditLink($bean->id);
+            $html .= <<< HTML
+  <a href="$url" class="btn btn-default">Edit</a>
+HTML;
+
+        }
+
+        if ($this->isEnabledDelete()) {
+            $url = $this->getDeleteLink($bean->id);
+            $html .= <<< HTML
+<a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
+HTML;
+        }
+
+        if ($this->getRowAction() != null) {
+            $c = $this->getRowAction();
+            $html .= $c($bean);
         }
 
         return $html;
@@ -799,6 +876,50 @@ class LouisCRUD
     {
         $this->tableDisplayName = $tableDisplayName;
     }
+
+
+    public function setData($key, $value = null)
+    {
+        $this->data[$key] = $value;
+    }
+
+    public function getData($key) {
+        if (!isset($this->data[$key])) {
+            return "";
+        }
+        return $this->data[$key];
+    }
+
+    public function loadView($dataName, $viewName = null, $data = [])
+    {
+        if ($viewName == null) {
+            $viewName = $dataName;
+        }
+
+        $this->setData($dataName, $this->render($viewName, $data, false));
+    }
+
+    public function isAjaxListView()
+    {
+        return $this->ajaxListView;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getListViewJSONLink()
+    {
+        return $this->listViewJSONLink;
+    }
+
+    /**
+     * @param mixed $listViewJSONLink
+     */
+    public function setListViewJSONLink($listViewJSONLink)
+    {
+        $this->listViewJSONLink = $listViewJSONLink;
+    }
+
 
 
 }

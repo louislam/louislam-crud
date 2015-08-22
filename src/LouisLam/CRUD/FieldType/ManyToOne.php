@@ -41,6 +41,3 @@ class ManyToOne extends Dropdown
     }
 
 }
-
-?>
-

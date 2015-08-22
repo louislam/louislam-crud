@@ -18,6 +18,6 @@ class Password extends TextField
     }
 
     public function renderCell($value) {
-        echo "***";
+        return "***";
     }
 }

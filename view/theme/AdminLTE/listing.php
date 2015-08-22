@@ -14,7 +14,14 @@ $this->layout($layoutName, [
 ?>
 
 
+<script>
+    var isAjax = <?=($crud->isAjaxListView()) ? "true" : "false" ?>;
+    var ajaxUrl = "<?=$crud->getListViewJSONLink() ?>";
 
+    crud.initListView(isAjax, ajaxUrl);
+</script>
+
+<?=$crud->getData("header") ?>
 
     <div class="row">
     	<div class="col-xs-12">

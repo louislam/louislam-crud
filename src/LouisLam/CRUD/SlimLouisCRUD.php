@@ -82,13 +82,17 @@ class SlimLouisCRUD extends LouisCRUD
             }
         }
 
-        // Link
+        // UI Url
         $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . "/list" . $params));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create" . $params));
-        $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
         $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id" . $params));
+
+        // API Url
+        $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
+        $this->setListViewJSONLink(Util::url($this->apiGroupName . "/" . $routeName . "/list" . $params));
         $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
         $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
+
     }
 
     /**
@@ -240,6 +244,46 @@ class SlimLouisCRUD extends LouisCRUD
          * API Group, RESTful style.
          */
         $this->slim->group("/" . $this->apiGroupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
+
+            /*
+             * JSON for Listview
+             */
+            $this->slim->map("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+                $this->enableJSONResponse();
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($this->listviewFunction != null) {
+                    $listviewFunction = $this->listviewFunction;
+                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                $this->getListViewJSONString();
+                return;
+            })->via('GET', 'POST');;
+
 
             /*
              * Insert a bean

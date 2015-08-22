@@ -25,6 +25,3 @@ class TrueFalse extends RadioButton
     }
 
 }
-
-?>
-

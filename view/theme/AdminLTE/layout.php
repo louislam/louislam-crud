@@ -9,7 +9,7 @@ use LouisLam\CRUD\LouisCRUD;
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title><?=$crud->getData("title") ?></title>
 
     <?=$this->insert("adminlte::css") ?>
     <?=$this->insert('adminlte::scripts')?>
@@ -23,9 +23,8 @@ use LouisLam\CRUD\LouisCRUD;
         <!-- Logo -->
         <a href="index2.html" class="logo">
             <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>A</b>LT</span>
-            <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>Admin</b>LTE</span>
+            <span class="logo-mini"></span>
+            <span class="logo-lg"><?=$crud->getData("title") ?></span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -43,8 +42,12 @@ use LouisLam\CRUD\LouisCRUD;
 
         <section class="sidebar">
 
+            <div class="user-panel">
+                <?=@$crud->getData("userPanel") ?>
+            </div>
+
             <ul class="sidebar-menu">
-                <?=$crud->getLayoutHeader() ?>
+                <?=@$crud->getData("menu") ?>
             </ul>
         </section>
 
