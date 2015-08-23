@@ -33,7 +33,11 @@ $this->layout($layoutName, [
 
                 <div class="box-footer">
                     <input type="submit" value="Save" class="btn btn-primary"/>
-                    <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
+
+                    <?php if ($crud->isEnabledListView()) : ?>
+                        <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
+                    <?php endif; ?>
+
                 </div>
 
 
