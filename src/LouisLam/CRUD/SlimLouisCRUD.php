@@ -153,8 +153,10 @@ class SlimLouisCRUD extends LouisCRUD
                     }
                 }
 
-                $this->renderListView();
-                return;
+                if ($this->isEnabledListView()) {
+                    $this->renderListView();
+                }
+
             })->name("_louisCRUD_" . $routeName);
 
             // Create
@@ -192,7 +194,9 @@ class SlimLouisCRUD extends LouisCRUD
                 // Force Hide ID field
                 $this->field("id")->hide();
 
-                $this->renderCreateView();
+                if ($this->isEnabledCreate()) {
+                    $this->renderCreateView();
+                }
             });
 
             // Edit
@@ -236,7 +240,9 @@ class SlimLouisCRUD extends LouisCRUD
                 // If user show the ID field, force set it to readonly
                 $this->field("id")->setReadOnly(true);
 
-                $this->renderEditView();
+                if ($this->isEnabledEdit()) {
+                    $this->renderEditView();
+                }
             });
 
         });
@@ -281,7 +287,9 @@ class SlimLouisCRUD extends LouisCRUD
                     }
                 }
 
-                $this->getListViewJSONString();
+                if ($this->isEnabledListView()) {
+                    $this->getListViewJSONString();
+                }
                 return;
             })->via('GET', 'POST');;
 
@@ -333,7 +341,9 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->field("id")->hide();
 
                 // Insert into database
-                $this->insertBean($_POST);
+                if ($this->isEnabledCreate()) {
+                    $this->insertBean($_POST);
+                }
 
             });
 
@@ -381,11 +391,12 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->field("id")->hide();
 
                 // Insert into database
+                if ($this->isEnabledEdit()) {
+                    $jsonObject = $this->updateBean($this->slim->request()->params());
 
-                $jsonObject = $this->updateBean($this->slim->request()->params());
-
-                $this->enableJSONResponse();
-                echo json_encode($jsonObject);
+                    $this->enableJSONResponse();
+                    echo json_encode($jsonObject);
+                }
             });
 
             /*
@@ -429,12 +440,15 @@ class SlimLouisCRUD extends LouisCRUD
                     }
                 }
 
-                $this->deleteBean();
+                if ($this->isEnabledDelete()) {
+                    $this->deleteBean();
 
-                $result = new \stdClass();
-                $result->status = "succ";
+                    $result = new \stdClass();
+                    $result->status = "succ";
 
-                echo json_encode($result);
+                    echo json_encode($result);
+                }
+
             });
 
         });

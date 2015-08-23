@@ -63,6 +63,7 @@ class LouisCRUD
      */
     private $currentBean = null;
 
+    private $enableListView = true;
     private $enableEdit = true;
     private $enableDelete = true;
     private $enableCreate = true;
@@ -679,7 +680,23 @@ HTML;
     /**
      * @return mixed
      */
+    public function enableListView($bool)
+    {
+        $this->enableListView = $bool;
+    }
 
+    /**
+     * @return boolean
+     */
+    public function isEnabledListView()
+    {
+        return $this->enableListView;
+    }
+
+
+    /**
+     * @return mixed
+     */
     public function enableEdit($bool)
     {
         $this->enableEdit = $bool;
