@@ -20,7 +20,7 @@ abstract class FieldType
     protected $field;
 
 
-    public abstract function render($echo = true);
+    public abstract function render($echo = false);
 
     /**
      * @param Field $field

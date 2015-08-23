@@ -9,10 +9,8 @@
 namespace LouisLam\CRUD\FieldType;
 
 
-class TextField extends FieldType
+class IPType extends FieldType
 {
-
-    protected $type = "text";
 
     /**
      * Render Field for Create/Edit
@@ -23,18 +21,23 @@ class TextField extends FieldType
     {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
-        $bean = $this->field->getBean();
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
-        $type = $this->type;
 
+        $html  = <<< HTML
 
-        $html  = <<< EOF
         <div class="form-group">
-            <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
-        </div>
-EOF;
+                    <label  for="field-$name">$display</label>
+                    <div class="input-group">
+                      <div class="input-group-addon">
+                        <i class="fa fa-laptop"></i>
+                      </div>
+                      <input id="field-$name" type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="$name" value="$value" $readOnly $required >
+                    </div>
+                  </div>
+
+HTML;
 
         if ($echo)
             echo $html;

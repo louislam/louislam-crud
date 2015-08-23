@@ -27,7 +27,7 @@ $this->layout($layoutName, [
 
                 <div class="box-body">
                     <?php foreach ($fields as $field) : ?>
-                        <?php $field->render() ?>
+                        <?php $field->render(false) ?>
                     <?php endforeach; ?>
                 </div>
 

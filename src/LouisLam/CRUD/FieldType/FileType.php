@@ -21,5 +21,25 @@ class FileType extends TextField
         echo $value;
     }
 
+    public function render($echo = false)
+    {
+        $name = $this->field->getName();
+        $html = parent::render($echo);
+        $html .= <<< HTML
+    <script>
+        $('#field-$name').fileupload({
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+            }
+        });
+    </script>
+HTML;
+
+        return $html;
+    }
+
 
 }

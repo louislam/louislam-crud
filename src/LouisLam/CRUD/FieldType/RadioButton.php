@@ -31,7 +31,7 @@ class RadioButton extends FieldType
      * @param bool|true $echo
      * @return string
      */
-    public function render($echo = true)
+    public function render($echo = false)
     {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
