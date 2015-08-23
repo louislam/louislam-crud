@@ -59,16 +59,17 @@ class LouisCRUD {
                 return false;
             });
 
-            self.ckEditor();
+            // Active Menu Item
+            $(".main-sidebar ul li").each(function () {
+                if (location.href.indexOf($(this).find("a").attr("href")) >= 0) {
+                    $(this).addClass("active");
+                }
+            });
 
             self.refresh();
         });
     }
 
-    // CKEditor
-    public ckEditor() {
-
-    }
 
     public addValidateFunction(func) {
         this.validateFunctions.push(func);
@@ -82,6 +83,7 @@ class LouisCRUD {
         var self = this;
 
         var data = {
+            "pageLength": 25,
             "paging": true,
             "ordering": true,
             "info": true,

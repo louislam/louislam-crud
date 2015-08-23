@@ -23,7 +23,7 @@ $this->layout($layoutName, [
 
 <?=$crud->getData("header") ?>
 
-    <div class="row">
+<div class="row">
     	<div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
@@ -78,6 +78,7 @@ $this->layout($layoutName, [
                 <table id="louis-crud-table" class="table table-bordered table-hover dataTable display"  cellspacing="0" >
                     <thead>
                     <tr>
+                        <!-- colspan="2"-->
                         <th>Actions</th>
                         <?php foreach ($fields as $field) : ?>
                             <th><?=$field->getDisplayName() ?></th>
@@ -97,8 +98,13 @@ $this->layout($layoutName, [
                     <tbody>
                     <?php foreach ($list as $bean) : ?>
                         <tr id="row-<?=$bean->id ?>">
-                            <td>
 
+                     <!--       <td>
+                                <label><input type="checkbox" value="<?/*=$bean->id */?>" /> </label>
+                            </td>-->
+
+                            <!-- Action TD -->
+                            <td>
                                 <?php if ($crud->isEnabledEdit()) : ?>
                                     <a href="<?=$crud->getEditLink($bean->id) ?>" class="btn btn-default">Edit</a>
                                 <?php endif; ?>

@@ -903,5 +903,14 @@ HTML;
         $this->ajaxListView = $bool;
     }
 
+    public function msg($msg, $title = null) {
+
+        $title = ($title == null) ? "Message" : $title;
+
+        $this->render($this->theme . "::msg", [
+            "msg" => $msg,
+            "title" => $title
+        ]);
+    }
 
 }
