@@ -162,7 +162,7 @@ class Field
      */
     public function render($echo = true)
     {
-        return $this->fieldType->render(true);
+        return $this->fieldType->render($echo);
     }
 
     public function getBean()
@@ -254,6 +254,15 @@ class Field
     {
         return $this->overwriteValue;
     }
+
+    /**
+     * @return LouisCRUD
+     */
+    public function getCRUD()
+    {
+        return $this->crud;
+    }
+
 
 
 

@@ -23,7 +23,6 @@ class TextField extends FieldType
     {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
-        $bean = $this->field->getBean();
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
