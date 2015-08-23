@@ -13,22 +13,21 @@ use LouisLam\CRUD\LouisCRUD;
 
     <?=$this->insert("adminlte::css") ?>
     <?=$this->insert('adminlte::scripts')?>
-    <?=$crud->getHTMLHead() ?>
+
+    <?=@$crud->getData("head") ?>
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
     <header class="main-header">
-        <!-- Logo -->
-        <a href="index2.html" class="logo">
-            <!-- mini logo for sidebar mini 50x50 pixels -->
+        <a href="#" class="logo">
+
             <span class="logo-mini"></span>
             <span class="logo-lg"><?=$crud->getData("title") ?></span>
         </a>
-        <!-- Header Navbar: style can be found in header.less -->
+
         <nav class="navbar navbar-static-top" role="navigation">
-            <!-- Sidebar toggle button-->
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
                 <span class="sr-only">Toggle navigation</span>
             </a>
@@ -55,25 +54,21 @@ use LouisLam\CRUD\LouisCRUD;
 
 
     <div class="content-wrapper">
+        <section class="content-header"> </section>
 
-        <section class="content-header">
-
-
-
-        </section>
-
-        <!-- Main content -->
         <section class="content">
             <?=$this->section('content')?>
 
         </section>
     </div>
+
+
     <footer class="main-footer">
-        <?=$crud->getLayoutFooter() ?>
+        <?=@$crud->getData("footer") ?>
     </footer>
 
 
 </div>
-
+<?=@$crud->getData("bodyBeforeEnd") ?>
 </body>
 </html>

@@ -56,15 +56,12 @@ class LouisCRUD
 
 
     private $htmlHead = "";
-    private $layoutHeader = "";
-    private $layoutFooter = "";
 
     /**
      * Current Bean for edit or delete
      * @var
      */
     private $currentBean = null;
-
 
     private $enableEdit = true;
     private $enableDelete = true;
@@ -682,66 +679,6 @@ HTML;
     /**
      * @return mixed
      */
-    public function getHTMLHead()
-    {
-        return $this->htmlHead;
-    }
-
-    /**
-     * @param mixed $htmlHead
-     */
-    public function setHTMLHead($htmlHead)
-    {
-        $this->htmlHead = $htmlHead;
-    }
-
-    public function appendHTMLHead($htmlHead)
-    {
-        $this->htmlHead .= $htmlHead;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLayoutHeader()
-    {
-        return $this->layoutHeader;
-    }
-
-    /**
-     * @param mixed $layoutHeader
-     */
-    public function setLayoutHeader($layoutHeader)
-    {
-        $this->layoutHeader = $layoutHeader;
-    }
-
-    public function appendLayoutHeader($layoutHeader)
-    {
-        $this->layoutHeader .= $layoutHeader;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLayoutFooter()
-    {
-        return $this->layoutFooter;
-    }
-
-    public function appendLayoutFooter($layoutFooter)
-    {
-        $this->layoutFooter .= $layoutFooter;
-    }
-
-    /**
-     * @param mixed $layoutFooter
-     */
-    public function setLayoutFooter($layoutFooter)
-    {
-        $this->layoutFooter = $layoutFooter;
-    }
-
 
     public function enableEdit($bool)
     {

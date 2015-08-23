@@ -6,8 +6,12 @@
 /// <reference path="jquery.dataTables-1.9.4.d.ts" />
 var LouisCRUD = (function () {
     function LouisCRUD() {
+        this.validateFunctions = [];
+        this.errorMsgs = [];
         var self = this;
         $(document).ready(function () {
+            // Disable Datatables' alert!
+            $.fn.dataTableExt.sErrMode = 'throw';
             // Delete Button
             $(".btn-delete").click(function () {
                 var result = window.confirm("Are you sure?");
@@ -26,6 +30,22 @@ var LouisCRUD = (function () {
             });
             // Ajax Submit Form
             $("form.ajax").submit(function () {
+                // Clear all msgz
+                self.errorMsgs = [];
+                var ok = true;
+                for (var i = 0; i < self.validateFunctions.length; i++) {
+                    if (self.validateFunctions[i]() == false) {
+                        ok = false;
+                    }
+                }
+                if (!ok) {
+                    var str = "";
+                    for (var i = 0; i < self.errorMsgs.length; i++) {
+                        str += self.errorMsgs[i] + "\n";
+                    }
+                    alert(str);
+                    return false;
+                }
                 $.ajax({
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
@@ -42,6 +62,12 @@ var LouisCRUD = (function () {
     }
     // CKEditor
     LouisCRUD.prototype.ckEditor = function () {
+    };
+    LouisCRUD.prototype.addValidateFunction = function (func) {
+        this.validateFunctions.push(func);
+    };
+    LouisCRUD.prototype.addErrorMsg = function (msg) {
+        this.errorMsgs.push(msg);
     };
     LouisCRUD.prototype.initListView = function ($isAjax, tableURL) {
         var self = this;

@@ -96,15 +96,16 @@ class SlimLouisCRUD extends LouisCRUD
     }
 
     /**
+     * @param string $routeName
      * @param string $tableName
      * @param callable $customCRUDFunction
-     * @param string $routeName
      * @param string $displayName
      */
-    public function add($tableName, $customCRUDFunction = null, $routeName = null, $displayName = null)
+    public function add($routeName, $customCRUDFunction = null, $tableName = null, $displayName = null)
     {
-        if ($routeName == null) {
-            $routeName = $tableName;
+
+        if ($tableName == null) {
+            $tableName = $routeName;
         }
 
         $this->tableList[$routeName] = $tableName;

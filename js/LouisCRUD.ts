@@ -10,11 +10,17 @@ class LouisCRUD {
 
     private ajaxFormCallback;
 
+    private validateFunctions = [];
+
+    private errorMsgs = [];
+
     constructor() {
         var self = this;
 
         $(document).ready(function () {
 
+            // Disable Datatables' alert!
+            $.fn.dataTableExt.sErrMode = 'throw';
 
             // Delete Button
             $(".btn-delete").click(function () {
@@ -37,6 +43,28 @@ class LouisCRUD {
 
             // Ajax Submit Form
             $("form.ajax").submit(function () {
+                // Clear all msgz
+                self.errorMsgs = [];
+
+                var ok = true;
+
+                for (var i = 0; i < self.validateFunctions.length; i++) {
+                    if (self.validateFunctions[i]() == false) {
+                        ok = false;
+                    }
+                }
+
+               if (!ok) {
+                   var str = "";
+
+                   for (var i = 0; i < self.errorMsgs.length; i++) {
+                        str += self.errorMsgs[i]  +"\n";
+                   }
+
+                   alert(str);
+
+                   return false;
+               }
 
                 $.ajax({
                     url: $(this).attr("action"),
@@ -59,6 +87,14 @@ class LouisCRUD {
     // CKEditor
     public ckEditor() {
 
+    }
+
+    public addValidateFunction(func) {
+        this.validateFunctions.push(func);
+    }
+
+    public addErrorMsg(msg) {
+        this.errorMsgs.push(msg);
     }
 
     public initListView($isAjax, tableURL) {
