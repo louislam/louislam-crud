@@ -12,22 +12,6 @@ var LouisCRUD = (function () {
         $(document).ready(function () {
             // Disable Datatables' alert!
             $.fn.dataTableExt.sErrMode = 'throw';
-            // Delete Button
-            $(".btn-delete").click(function () {
-                var result = window.confirm("Are you sure?");
-                if (result) {
-                    var btn = $(this);
-                    var deleteLink = $(this).data("url");
-                    $.ajax({
-                        url: deleteLink,
-                        type: "DELETE"
-                    }).done(function (data) {
-                        $("#row-" + btn.data("id")).remove();
-                    }).fail(function (data) {
-                        console.log(data);
-                    });
-                }
-            });
             // Ajax Submit Form
             $("form.ajax").submit(function () {
                 // Clear all msgz
@@ -58,6 +42,7 @@ var LouisCRUD = (function () {
                 return false;
             });
             self.ckEditor();
+            self.refresh();
         });
     }
     // CKEditor
