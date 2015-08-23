@@ -18,7 +18,7 @@
         "louislam/louislam-utilities": "dev-master",
         "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
-        "gargron/fileupload": "1.0.2",
+        "verot/class.upload.php": "dev-master",
         "blueimp/jquery-file-upload": "9.11.0",
         "almasaeed2010/adminlte": "2.3.0",
         "fortawesome/font-awesome": "4.4.0",
