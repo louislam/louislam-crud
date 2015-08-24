@@ -34,6 +34,9 @@ class LouisCRUD
 
     private $fieldsInfoFromDatabase = null;
 
+    /*
+     * URLs
+     */
     private $listViewLink = "";
     private $createLink = "";
     private $createSubmitLink = "";
@@ -56,9 +59,6 @@ class LouisCRUD
 
     /** @var string This will highest priority to use */
     private $sql = null;
-
-
-    private $htmlHead = "";
 
     /**
      * Current Bean for edit or delete
