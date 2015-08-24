@@ -232,7 +232,13 @@ class Field
      */
     public function cellValue($bean)
     {
-        $value = $this->fieldType->renderCell($bean->{$this->getName()});
+
+        try {
+            $value = $this->fieldType->renderCell($bean->{$this->getName()});
+        } catch (\Exception $ex) {
+            $value = "N/A";
+        }
+
 
         if ($this->cellClosure != null) {
             $c = $this->cellClosure;

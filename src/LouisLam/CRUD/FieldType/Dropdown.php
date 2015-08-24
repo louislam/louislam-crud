@@ -37,7 +37,7 @@ class Dropdown extends FieldType
         $display = $this->field->getDisplayName();
         $bean = $this->field->getBean();
         $value = $this->getValue();
-        $readOnly = $this->getReadOnlyString();
+        $readOnly = $this->getDisabledString();
         $required = $this->getRequiredString();
 
         $html = <<<TAG
