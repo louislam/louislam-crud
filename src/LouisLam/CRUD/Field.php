@@ -54,6 +54,11 @@ class Field
     private $overwriteValue = false;
 
     /**
+     * @var callable
+     */
+    private $cellClosure = null;
+
+    /**
      * @param LouisCRUD $crud
      * @param string $name
      * @param string $dataType
@@ -201,6 +206,7 @@ class Field
 
     /**
      * @param $html
+     * @return string
      */
     public function customHTML($html)
     {
@@ -226,7 +232,15 @@ class Field
      */
     public function cellValue($bean)
     {
-        return $this->fieldType->renderCell($bean->{$this->getName()});
+        $value = $this->fieldType->renderCell($bean->{$this->getName()});
+
+        if ($this->cellClosure != null) {
+            $c = $this->cellClosure;
+            return $c($value);
+        } else {
+            return $value;
+        }
+
     }
 
     /**
@@ -261,6 +275,15 @@ class Field
     public function getCRUD()
     {
         return $this->crud;
+    }
+
+    /**
+     * @param callable $cellClosure
+     */
+    public function setCellHTML($cellClosure)
+    {
+        $this->cellClosure = $cellClosure;
+        return $this;
     }
 
 

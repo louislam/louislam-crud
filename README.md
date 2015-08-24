@@ -19,7 +19,8 @@
     ```
 
 1. Setup a Database Connection (Support MySQL, SQLite etc.)
-    ```php
+
+ ```php
     R::setup('sqlite:dbfile.db');
     ```
 

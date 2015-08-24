@@ -54,6 +54,9 @@ class LouisCRUD
     private $findAllClause = null;
     private $bindingData = [];
 
+    /** @var string This will highest priority to use */
+    private $sql = null;
+
 
     private $htmlHead = "";
 
@@ -306,7 +309,16 @@ class LouisCRUD
         } else {
 
             try {
-                if ($this->findClause != null) {
+                if ($this->sql != null) {
+                    $list = [];
+                    $tempList = R::getAll($this->sql, $this->bindingData);
+
+                    // Array convert to object
+                    foreach ($tempList as $row) {
+                        $list[] = (object) $row;
+                    }
+
+                } elseif ($this->findClause != null) {
                     $list = R::find($this->tableName, $this->findClause, $this->bindingData);
                 } else {
                     $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
@@ -913,4 +925,12 @@ HTML;
         ]);
     }
 
+    public function setSQL($sql, $data = []) {
+        $this->sql = $sql;
+        $this->bindingData = $data;
+    }
+
+    public function getSQL() {
+        return $this->sql;
+    }
 }
