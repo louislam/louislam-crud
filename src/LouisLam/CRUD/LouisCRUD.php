@@ -43,7 +43,8 @@ class LouisCRUD
     private $editLink = "";
     private $editSubmitLink = "";
     private $deleteLink = "";
-    private $listViewJSONLink;
+    private $exportLink = "";
+    private $listViewJSONLink = "";
 
     /** @var Field[] */
     private $fieldList = [];
@@ -292,12 +293,99 @@ class LouisCRUD
         R::trash($bean);
     }
 
-    private function beforeRender()
+    protected function getAction($bean)
+    {
+        $html = "";
+
+        if ($this->isEnabledEdit()) {
+            $url = $this->getEditLink($bean->id);
+            $html .= <<< HTML
+<a href="$url" class="btn btn-default">Edit</a>
+HTML;
+
+        }
+
+        if ($this->isEnabledDelete()) {
+            $url = $this->getDeleteLink($bean->id);
+            $html .= <<< HTML
+ <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
+HTML;
+        }
+
+        if ($this->getRowAction() != null) {
+            $c = $this->getRowAction();
+            $html .= $c($bean);
+        }
+
+        return $html;
+    }
+
+    protected function beforeRender()
     {
         // if there is a ID field only, no other fields, then throw an Exception
         if (count($this->fieldList) <= 1) {
             throw new NoFieldException();
         }
+    }
+
+    /**
+     * Get List view data
+     * @param null $start
+     * @param null $rowPerPage
+     * @return array List of beans
+     */
+    protected function getListViewData($start = null, $rowPerPage = null)
+    {
+        try {
+
+            if ($start != null && $rowPerPage != null) {
+                $limit = " LIMIT $start,$rowPerPage";
+            } else {
+                $limit = "";
+            }
+
+
+            if ($this->sql != null) {
+            // Custom SQL
+
+                $list = [];
+                $tempList = R::getAll($this->sql . $limit, $this->bindingData);
+
+                // Array convert to object
+                foreach ($tempList as $row) {
+                    $list[] = (object) $row;
+                }
+
+            } elseif ($this->findClause != null) {
+            // Find Clause
+
+                $list = R::find($this->tableName, $this->findClause . $limit, $this->bindingData);
+            } else {
+            // Find All Clause
+
+                if ($this->findAllClause != null) {
+                    $clause = $this->findAllClause .  $limit;
+                } else {
+                    $clause = $limit;
+                }
+                $list = R::findAll($this->tableName, $clause, $this->bindingData);
+
+            }
+        } catch(\RedBeanPHP\RedException\SQL $ex) {
+            // If the table is not existing create one, create the table and run this function again.
+            $this->createTable();
+            return $this->getListViewData($start, $rowPerPage);
+        }
+
+        return $list;
+    }
+
+    public function renderExcel()
+    {
+        $this->beforeRender();
+        $list = $this->getListViewData();
+
+        (new ExcelHelper())->genExcel($this, $list);
     }
 
     public function renderListView($echo = true)
@@ -307,28 +395,7 @@ class LouisCRUD
         if ($this->ajaxListView) {
             $list = [];
         } else {
-
-            try {
-                if ($this->sql != null) {
-                    $list = [];
-                    $tempList = R::getAll($this->sql, $this->bindingData);
-
-                    // Array convert to object
-                    foreach ($tempList as $row) {
-                        $list[] = (object) $row;
-                    }
-
-                } elseif ($this->findClause != null) {
-                    $list = R::find($this->tableName, $this->findClause, $this->bindingData);
-                } else {
-                    $list = R::findAll($this->tableName, $this->findAllClause, $this->bindingData);
-                }
-            } catch(\RedBeanPHP\RedException\SQL $ex) {
-                // If the table is not existing create one, create the table and run this function again.
-                $this->createTable();
-                $this->renderListView($echo);
-                return null;
-            }
+            $list = $this->getListViewData();
         }
 
         $html = $this->template->render($this->getListViewTemplate(), [
@@ -345,6 +412,7 @@ class LouisCRUD
         return $html;
     }
 
+
     public function getListViewJSONString($echo = true) {
         $this->beforeRender();
 
@@ -360,25 +428,7 @@ class LouisCRUD
             $rowPerPage = 15;
         }
 
-        try {
-            if ($this->findClause != null) {
-                $list = R::find($this->tableName, $this->findClause .  " LIMIT $start,$rowPerPage", $this->bindingData);
-            } else {
-
-                if ($this->findAllClause != null) {
-                    $clause = $this->findAllClause .  " LIMIT $start,$rowPerPage ";
-                } else {
-                    $clause =  " LIMIT $start,$rowPerPage";
-                }
-
-                $list = R::findAll($this->tableName, $clause, $this->bindingData);
-            }
-        } catch(\RedBeanPHP\RedException\SQL $ex) {
-            // If the table is not existing create one, create the table and run this function again.
-            $this->createTable();
-            $this->getListViewJSONString($echo);
-            return null;
-        }
+       $list = $this->getListViewData($start, $rowPerPage);
 
         $obj = new AjaxResult();
 
@@ -410,32 +460,6 @@ class LouisCRUD
         return $json;
     }
 
-    protected function getAction($bean)
-    {
-        $html = "";
-
-        if ($this->isEnabledEdit()) {
-            $url = $this->getEditLink($bean->id);
-            $html .= <<< HTML
-<a href="$url" class="btn btn-default">Edit</a>
-HTML;
-
-        }
-
-        if ($this->isEnabledDelete()) {
-            $url = $this->getDeleteLink($bean->id);
-            $html .= <<< HTML
- <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
-HTML;
-        }
-
-        if ($this->getRowAction() != null) {
-            $c = $this->getRowAction();
-            $html .= $c($bean);
-        }
-
-        return $html;
-    }
 
     /**
      * @param bool|true $echo
@@ -457,6 +481,7 @@ HTML;
         return $html;
     }
 
+
     public function renderEditView($echo = true)
     {
         $this->beforeRender();
@@ -476,6 +501,7 @@ HTML;
         }
         return $html;
     }
+
 
     /**
      * @return string
@@ -933,4 +959,22 @@ HTML;
     public function getSQL() {
         return $this->sql;
     }
+
+    /**
+     * @return string
+     */
+    public function getExportLink()
+    {
+        return $this->exportLink;
+    }
+
+    /**
+     * @param string $exportLink
+     */
+    public function setExportLink($exportLink)
+    {
+        $this->exportLink = $exportLink;
+    }
+
+
 }

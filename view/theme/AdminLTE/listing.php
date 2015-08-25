@@ -28,10 +28,13 @@ $this->layout($layoutName, [
             <div class="box">
                 <div class="box-body">
 
+
                     <?php if ($crud->isEnabledCreate()) : ?>
+                        <!-- Create Button -->
                         <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>">New</a>
                     <?php endif; ?>
 
+                    <!-- Filter -->
                     <div class="dropdown column-filter" style="display: inline-block">
                         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
                             Column Filter
@@ -57,6 +60,9 @@ $this->layout($layoutName, [
 
                         </ul>
                     </div>
+
+                    <!-- Export Button -->
+                    <a class="btn btn-default" href="<?=$crud->getExportLink() ?>">Export Excel</a>
 
                 </div>
             </div>

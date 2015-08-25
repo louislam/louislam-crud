@@ -82,10 +82,13 @@ class SlimLouisCRUD extends LouisCRUD
             }
         }
 
-        // UI Url
+        // WEB UI Url
         $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . "/list" . $params));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create" . $params));
         $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id" . $params));
+
+        // Export URL
+        $this->setExportLink(Util::url($this->groupName . "/" . $routeName . "/export" . $params));
 
         // API Url
         $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
@@ -121,7 +124,9 @@ class SlimLouisCRUD extends LouisCRUD
                 $this->slim->redirectTo("_louisCRUD_" . $routeName);
             });
 
-            // ListView
+            /*
+             * ListView
+             */
             $this->slim->get("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
@@ -159,7 +164,9 @@ class SlimLouisCRUD extends LouisCRUD
 
             })->name("_louisCRUD_" . $routeName);
 
-            // Create
+            /*
+             * Create
+             */
             $this->slim->get("/create(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
@@ -199,7 +206,9 @@ class SlimLouisCRUD extends LouisCRUD
                 }
             });
 
-            // Edit
+            /*
+             * Edit
+             */
             $this->slim->get("/edit/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
@@ -243,6 +252,45 @@ class SlimLouisCRUD extends LouisCRUD
                 if ($this->isEnabledEdit()) {
                     $this->renderEditView();
                 }
+            });
+
+            /*
+             * Export Excel
+             */
+            $this->slim->get("/export(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($this->listviewFunction != null) {
+                    $listviewFunction = $this->listviewFunction;
+                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                // TODO: isEnabledExport();
+                $this->renderExcel();
+
             });
 
         });
@@ -572,6 +620,24 @@ class SlimLouisCRUD extends LouisCRUD
                 return Util::displayName($routeName);
             }
         }
+    }
+
+    /**
+     * Override render Excel function
+     * @throws Exception\NoFieldException
+     */
+    public function renderExcel()
+    {
+        $this->beforeRender();
+        $list = $this->getListViewData();
+
+        $helper = new ExcelHelper();
+
+        $helper->setHeaderClosure(function ($key, $value) {
+            $this->getSlim()->response()->header($key, $value);
+        });
+
+        $helper->genExcel($this, $list);
     }
 
 }
