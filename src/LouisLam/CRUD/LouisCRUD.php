@@ -90,6 +90,8 @@ class LouisCRUD
 
     private $ajaxListView = true;
 
+    private $exportFilename = null;
+
 
     public function __construct($tableName = null, $viewDir = "view")
     {
@@ -385,7 +387,7 @@ HTML;
         $this->beforeRender();
         $list = $this->getListViewData();
 
-        (new ExcelHelper())->genExcel($this, $list);
+        (new ExcelHelper())->genExcel($this, $list, $this->getExportFilename());
     }
 
     public function renderListView($echo = true)
@@ -975,6 +977,23 @@ HTML;
     {
         $this->exportLink = $exportLink;
     }
+
+    /**
+     * @return null
+     */
+    public function getExportFilename()
+    {
+        return $this->exportFilename;
+    }
+
+    /**
+     * @param null $exportFilename
+     */
+    public function setExportFilename($exportFilename)
+    {
+        $this->exportFilename = $exportFilename;
+    }
+
 
 
 }

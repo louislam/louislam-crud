@@ -10,6 +10,7 @@ namespace LouisLam\CRUD;
 
 
 use PHPExcel;
+use PHPExcel_Shared_Font;
 use PHPExcel_Writer_Excel2007;
 
 class ExcelHelper
@@ -24,11 +25,39 @@ class ExcelHelper
     }
 
     public function genExcel(LouisCRUD $crud, array $list, $filename = null) {
+       // PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
         $excel = new PHPExcel();
 
-        $excel->createSheet();
+        $sheet = $excel->getActiveSheet();
 
+
+
+        $fields = $crud->getShowFields();
+
+        // Header
+        $i = 0;
+        foreach($fields as $field) {
+            $sheet->setCellValueByColumnAndRow($i, 1, $field->getDisplayName());
+            $sheet->getColumnDimensionByColumn($i)->setAutoSize(true);
+
+            $i++;
+        }
+
+        // Data
+        $j = 2;
+        foreach ($list as $bean) {
+            $i = 0;
+            foreach($fields as $field) {
+                $sheet->setCellValueByColumnAndRow($i, $j, strip_tags($field->cellValue($bean)));
+                $i++;
+            }
+            $j++;
+        }
+
+
+        // Save
         $objWriter = new PHPExcel_Writer_Excel2007($excel);
+
         //$rand = dechex(rand(0, 99999999));
 
         if ($filename == null) {

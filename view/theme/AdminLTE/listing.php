@@ -86,6 +86,8 @@ $this->layout($layoutName, [
                     <tr>
                         <!-- colspan="2"-->
                         <th>Actions</th>
+
+                         <!-- Column Header -->
                         <?php foreach ($fields as $field) : ?>
                             <th><?=$field->getDisplayName() ?></th>
                         <?php endforeach; ?>

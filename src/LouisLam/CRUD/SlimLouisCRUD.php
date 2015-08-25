@@ -637,7 +637,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->getSlim()->response()->header($key, $value);
         });
 
-        $helper->genExcel($this, $list);
+        $helper->genExcel($this, $list, $this->getExportFilename());
     }
 
 }
