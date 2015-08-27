@@ -242,7 +242,7 @@ class Field
 
         if ($this->cellClosure != null) {
             $c = $this->cellClosure;
-            return $c($value);
+            return $c($value, $bean);
         } else {
             return $value;
         }
