@@ -9,6 +9,7 @@ use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoBeanException;
 use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
+use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use RedBeanPHP\R;
 
 /**
@@ -373,7 +374,7 @@ HTML;
                 $list = R::findAll($this->tableName, $clause, $this->bindingData);
 
             }
-        } catch(\RedBeanPHP\RedException\SQL $ex) {
+        } catch(\Exception $ex) {
             // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
             return $this->getListViewData($start, $rowPerPage);
@@ -642,8 +643,11 @@ HTML;
         $fieldNameList = [];
 
         foreach ($fields as $field) {
-            $fieldNameList[] = $field->getName();
+            if ($field->isStorable()) {
+                $fieldNameList[] = $field->getName();
+            }
         }
+
 
         // http://www.redbeanphp.com/import_and_export
         $fieldsString = implode(",", $fieldNameList);
@@ -669,18 +673,54 @@ HTML;
         $fieldNameList = [];
 
         foreach ($fields as $field) {
-            $fieldNameList[] = $field->getName();
+
+            if ($field->getFieldRelation() == Field::NORMAL) {
+                $fieldNameList[] = $field->getName();
+                $this->currentBean->{$field->getName()} = $data[$field->getName()];
+
+            } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
+                // Many to many
+
+                // http://www.redbeanphp.com/many_to_many
+                $keyName = "shared". ucfirst($field->getName()) . "List";
+
+                // Clear the current list (tableB_tableA)
+                try {
+                    $tableName = $this->getTableName() . "_" . $field->getName();
+                    $idName = $this->getTableName() . "_id";
+                   R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
+                } catch (\Exception $ex) { }
+
+                // Clear the current list (tableA_tableB)
+                try {
+                    $tableName =$field->getName()  . "_" .  $this->getTableName();
+                    $idName = $this->getTableName() . "_id";
+                    R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
+                } catch (\Exception $ex) { }
+
+                // If User have checked a value in checkbox
+                if (isset($data[$field->getName()])) {
+                    $valueList = $data[$field->getName()];
+                    $slots = R::genSlots($valueList);
+                    $relatedBeans = R::find($field->getName(), " id IN ($slots)", $valueList);
+
+                    foreach ($relatedBeans as $relatedBean) {
+                        $this->currentBean->{$keyName}[] = $relatedBean;
+                    }
+                }
+
+            } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
+                // TODO
+            }
         }
 
-        $fieldsString = implode(",", $fieldNameList);
-
-        $this->currentBean->import($data, $fieldsString);
-
-        $result = new Result();
         // Store
-        $result->id = R::store($this->currentBean);
-        $result->msg = "Saved.";
+        $id = R::store($this->currentBean);
 
+        // Return result
+        $result = new Result();
+        $result->id = $id;
+        $result->msg = "Saved.";
         return $result;
     }
 
@@ -994,6 +1034,9 @@ HTML;
         $this->exportFilename = $exportFilename;
     }
 
-
+    public function manyToMany($tableName, $nameFormatClosure)
+    {
+        $this->field($tableName)->setFieldType(new CheckboxManyToMany($tableName, $nameFormatClosure));
+    }
 
 }

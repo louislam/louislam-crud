@@ -9,6 +9,7 @@ use LouisLam\Util;
 ?>
 
 <script src="<?=Util::res("vendor/components/jquery/jquery.min.js") ?>"></script>
+<script src="<?=Util::res("vendor/components/jqueryui/jquery-ui.min.js") ?>"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
     $.widget.bridge('uibutton', $.ui.button);

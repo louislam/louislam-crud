@@ -19,6 +19,25 @@ use LouisLam\Util;
 class Field
 {
 
+    /**
+     * A normal single value for the bean.
+     * Or Many to One.
+     * @var int
+     */
+    const NORMAL = 1;
+
+    /**
+     * Many to many
+     * @var int
+     */
+    const MANY_TO_MANY = 2;
+
+    /**
+     * One to many
+     * @var int
+     */
+    const ONE_TO_MANY = 3;
+
     /** @var LouisCRUD */
     private $crud;
     private $displayName = null;
@@ -45,6 +64,11 @@ class Field
      * @var bool
      */
     protected $readOnly = false;
+
+    /**
+     * @var bool
+     */
+    protected $storable = true;
 
     /**
      * The highest priority value
@@ -221,6 +245,10 @@ class Field
         return $this;
     }
 
+    /**
+     * The value can be stored into the current bean if it is false.
+     * @return bool
+     */
     public function isReadOnly()
     {
         return $this->readOnly;
@@ -293,6 +321,26 @@ class Field
     }
 
 
+    public function getFieldRelation()
+    {
+        return $this->getFieldType()->getFieldRelation();
+    }
 
 
+
+    /**
+     * Is the field storable to the current table.
+     *
+     * 1.  Is not read only.
+     * 2. Is not hidden field (Clarify: This is not equals to HTML's hidden, it's hide() ).
+     * 3. Is no special relation.
+     * @return bool
+     */
+    public function isStorable()
+    {
+        return
+            ! $this->isReadOnly() &&
+            ! $this->isHidden() &&
+            $this->getFieldRelation() == Field::NORMAL;
+    }
 }

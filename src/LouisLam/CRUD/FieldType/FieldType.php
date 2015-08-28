@@ -19,6 +19,7 @@ abstract class FieldType
      */
     protected $field;
 
+    private $fieldRelation = Field::NORMAL;
 
     public abstract function render($echo = false);
 
@@ -59,6 +60,9 @@ abstract class FieldType
         }
     }
 
+    /**
+     * @return array|mixed|string
+     */
     public function getValue() {
         $name = $this->field->getName();
         $defaultValue = $this->field->getDefaultValue();
@@ -78,15 +82,52 @@ abstract class FieldType
         } else {
 
             // Edit Page
-            // Use the value from Database
-            if ($this->field->isOverwriteValue() && $this->field->getValue() !== null) {
-                $value = $this->field->getValue();
+
+            if ($this->fieldRelation == Field::MANY_TO_MANY) {
+                // Many to many, Value list
+                $keyName = "shared". ucfirst($name) . "List";
+
+                $relatedBeans = $bean->{$keyName};
+                $value = [];
+
+                foreach ($relatedBeans as $relatedBean) {
+                    $value[$relatedBean->id] = $relatedBean->id;
+                }
+
+
             } else {
-                $value = $bean->{$name};
+                // Single Value
+
+                if ($this->field->isOverwriteValue() && $this->field->getValue() !== null) {
+                    // Use the value set by user.
+                    $value = $this->field->getValue();
+                } else {
+                    // Use the value from Database
+                    $value = $bean->{$name};
+                }
             }
+
+
         }
 
         return $value;
     }
+
+    /**
+     * @return int
+     */
+    public function getFieldRelation()
+    {
+        return $this->fieldRelation;
+    }
+
+    /**
+     * @param int $fieldRelation
+     */
+    public function setFieldRelation($fieldRelation)
+    {
+        $this->fieldRelation = $fieldRelation;
+    }
+
 
 }
