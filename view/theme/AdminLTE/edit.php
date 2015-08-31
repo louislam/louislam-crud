@@ -14,6 +14,8 @@ $this->layout($layoutName, [
 
 <form action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="put" class="ajax">
 
+    <?=$crud->getData("header") ?>
+
     <div class="row">
         <!-- left column -->
         <div class="col-md-6">
