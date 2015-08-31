@@ -168,21 +168,36 @@ class LouisCRUD
         return $fields;
     }
 
-    public function showFields()
+    /**
+     * @param $fieldNameList
+     */
+    public function showFields($fieldNameList)
     {
-        $numargs = func_num_args();
-        $fieldNames = func_get_args();
-
+        $nameList = [];
         $newOrderList = [];
 
-        // For each parameters (field name)
-        for ($i = 0; $i < $numargs; $i++) {
-            $field = $this->field($fieldNames[$i]);
+        if (is_array($fieldNameList)) {
+            // Array Style
+            $nameList = $fieldNameList;
+
+        } else {
+            // Grocery CRUD style
+            $numargs = func_num_args();
+            $fieldNames = func_get_args();
+
+            // For each parameters (field name)
+            for ($i = 0; $i < $numargs; $i++) {
+              $nameList[] = $fieldNames[$i];
+            }
+        }
+
+        foreach ($nameList as $name) {
+            $field = $this->field($name);
             $field->show();
-            $newOrderList[$fieldNames[$i]] = $field;
+            $newOrderList[$name] = $field;
 
             // Unset the field from the field list
-            unset($this->fieldList[$fieldNames[$i]]);
+            unset($this->fieldList[$name]);
         }
 
         // now $this->fieldList remains fields that user do not input.
@@ -192,13 +207,26 @@ class LouisCRUD
 
     }
 
-    public function hideFields()
+    public function hideFields($fieldNameList)
     {
-        $numargs = func_num_args();
-        $fieldNames = func_get_args();
 
-        for ($i = 0; $i < $numargs; $i++) {
-            $this->field($fieldNames[$i])->hide();
+        if (is_array($fieldNameList)) {
+            foreach ($fieldNameList as $name) {
+                $this->field($name)->hide();
+            }
+        } else {
+            $numargs = func_num_args();
+            $fieldNames = func_get_args();
+
+            for ($i = 0; $i < $numargs; $i++) {
+                $this->field($fieldNames[$i])->hide();
+            }
+        }
+    }
+
+    public function hideAllFields() {
+        foreach ($this->fieldList as $field) {
+            $field->hide();
         }
     }
 
@@ -628,15 +656,9 @@ HTML;
         $this->currentBean = R::load($this->tableName, $id);
     }
 
-    /**
-     * TODO: Validate Before INSERT/UPDATE
-     * @param $bean
-     */
-    public function validate($bean) {
-
-    }
 
     /**
+     * TODO: Update to similar to updateBean
      * Store Data into Database
      * @param $data
      * @return int|string
@@ -670,6 +692,12 @@ HTML;
         return $result;
     }
 
+    /**
+     * Update a bean.
+     * @param $data
+     * @return Result
+     * @throws NoBeanException
+     */
     public function updateBean($data)
     {
         if ($this->currentBean ==null) {
@@ -677,12 +705,33 @@ HTML;
         }
 
         $fields = $this->getShowFields();
-        $fieldNameList = [];
 
         foreach ($fields as $field) {
 
+            // Validate the value
+            $validateResult = $field->validate($data[$field->getName()], $data);
+
+            // If validate failed
+            if ($validateResult !== true) {
+
+                $result = new Result();
+                $result->id = $this->currentBean->id;
+                $result->msg = $validateResult;
+                $result->fieldName = $field->getName();
+                $result->class = "callout-danger";
+                return $result;
+            }
+
+            // If not storable, skip.
+            if (! $field->isStorable()) {
+                continue;
+            }
+
+
             if ($field->getFieldRelation() == Field::NORMAL) {
-                $fieldNameList[] = $field->getName();
+                // Normal data field
+
+                // Set the value to the current bean directly
                 $this->currentBean->{$field->getName()} = $data[$field->getName()];
 
             } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
@@ -728,6 +777,7 @@ HTML;
         $result = new Result();
         $result->id = $id;
         $result->msg = "Saved.";
+        $result->class = "callout-info";
         return $result;
     }
 

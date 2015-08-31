@@ -58,7 +58,6 @@ use LouisLam\CRUD\LouisCRUD;
 
         <section class="content">
             <?=$this->section('content')?>
-
         </section>
     </div>
 

@@ -43,10 +43,11 @@ $this->layout($layoutName, [
 
             </div>
 
-            <div id="msg-callout" class="callout callout-info" style="display:none">
-                <p id="msg">
-                </p>
-            </div>
+
+                <div id="msg" >
+
+                </div>
+
         </div>
     </div>
 
@@ -56,7 +57,7 @@ $this->layout($layoutName, [
 
 <script>
     crud.setAjaxFormCallback(function (result) {
-        $("#msg-callout").show();
-        $("#msg").html(result.msg);
+        var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
+        $("#msg").html(box)
     });
 </script>

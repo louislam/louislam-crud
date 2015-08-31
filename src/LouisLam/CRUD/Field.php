@@ -82,6 +82,14 @@ class Field
      */
     private $cellClosure = null;
 
+    private $isStorable = true;
+
+    /**
+     * Validator Closure
+     * @var callable[]
+     */
+    private $validatorList = [];
+
     /**
      * @param LouisCRUD $crud
      * @param string $name
@@ -267,7 +275,6 @@ class Field
             $value = "N/A";
         }
 
-
         if ($this->cellClosure != null) {
             $c = $this->cellClosure;
             return $c($value, $bean);
@@ -341,6 +348,39 @@ class Field
         return
             ! $this->isReadOnly() &&
             ! $this->isHidden() &&
-            $this->getFieldRelation() == Field::NORMAL;
+            $this->getFieldRelation() == Field::NORMAL &&
+            $this->isStorable;
     }
+
+    public function setStorable($bool) {
+        $this->isStorable = $bool;
+        return $this;
+    }
+
+    /**
+     * @param $closure
+     */
+    public function addValidator($closure) {
+        $this->validatorList[] = $closure;
+    }
+
+
+    /**
+     * Validate Before INSERT/UPDATE
+     * @param $value
+     * @param $postData
+     * @return bool
+     */
+    public function validate($value, $postData) {
+        foreach ($this->validatorList as $validator) {
+            $result = $validator($value, $postData);
+
+            if ($result !== true) {
+                return $result;
+            }
+        }
+
+        return true;
+    }
+
 }
