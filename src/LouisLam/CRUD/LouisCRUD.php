@@ -10,6 +10,8 @@ use LouisLam\CRUD\Exception\NoBeanException;
 use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
+use LouisLam\CRUD\FieldType\DropdownManyToOne;
+use LouisLam\CRUD\FieldType\ManyToOne;
 use RedBeanPHP\R;
 
 /**
@@ -1036,7 +1038,15 @@ HTML;
 
     public function manyToMany($tableName, $nameFormatClosure)
     {
-        $this->field($tableName)->setFieldType(new CheckboxManyToMany($tableName, $nameFormatClosure));
+        $field = $this->field($tableName);
+        $field->setFieldType(new CheckboxManyToMany($tableName, $nameFormatClosure));
+        return $field;
+    }
+
+    public function manyToOne($tableName) {
+        $field = $this->field($tableName . "_id");
+        $field->setFieldType(new DropdownManyToOne($tableName));
+        return $field;
     }
 
 }
