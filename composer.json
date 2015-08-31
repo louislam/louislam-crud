@@ -28,9 +28,9 @@
     },
     "autoload": {
         "psr-4": {
-            "LouisLam\\" : "src/LouisLam",
-            "files": ["src/helpers.php"]
-        }
+            "LouisLam\\" : "src/LouisLam"
+        },
+        "files": ["src/helpers.php"]
     },
     "minimum-stability": "dev"
 }

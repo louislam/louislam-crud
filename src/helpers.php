@@ -9,3 +9,5 @@
 function test() {
     echo 123;
 }
+
+$_GET["a"] = "sdfsdfsd";
