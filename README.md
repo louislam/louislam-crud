@@ -1,5 +1,7 @@
 # Louis Lam's CRUD
 
+Love GroceryCRUD, but don't like CodeIgniter? LouisLam's CRUD is a CRUD Library which is influenced by Grocery CRUD. It provides similar features of GroceryCRUD, but it is not based on CodeIgniter.
+
 ## Features
 * Create/Update/Delete/ListView web interface.
 * RESTful API.
@@ -7,6 +9,10 @@
 * Extensible Field Types.
 * Theme
 * Work without any framework. (But work better with Slim Framework by default)
+
+## Benefit
+* "Write Less, Do More". 
+* Easy to customize.
 
 ## Getting started with a simple example
 1. Require and Import Libraries.

@@ -6,8 +6,30 @@
  * Time: 10:17 AM
  */
 
-function test() {
-    echo 123;
-}
+use LouisLam\CRUD\LouisCRUD;
 
-$_GET["a"] = "sdfsdfsd";
+if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
+
+    /**
+     * @var $globalCRUD LouisLam\CRUD\LouisCRUD
+     */
+    $globalCRUD = null;
+
+    /**
+     * @param $crud LouisLam\CRUD\LouisCRUD
+     */
+    function setGlobalCRUD($crud) {
+        global $globalCRUD;
+        $globalCRUD = $crud;
+    }
+
+    /**
+     * @param $fieldName
+     * @return \LouisLam\CRUD\Field
+     */
+    function f($fieldName) {
+        global $globalCRUD;
+        return $globalCRUD->field($fieldName);
+    }
+
+}

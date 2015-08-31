@@ -116,6 +116,11 @@ class LouisCRUD
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
         $this->addTheme("raw", "vendor/$this->packageName/view/theme/RawCRUDTheme");
         $this->setCurrentTheme("adminlte");
+
+        // Enable helper?
+        if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
+            setGlobalCRUD($this);
+        }
     }
 
     public function setViewDirectory($viewDir)
