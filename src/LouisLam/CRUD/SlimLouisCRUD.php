@@ -257,7 +257,7 @@ class SlimLouisCRUD extends LouisCRUD
             /*
              * Export Excel
              */
-            $this->slim->get("/export(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->map("/export(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -291,7 +291,7 @@ class SlimLouisCRUD extends LouisCRUD
                 // TODO: isEnabledExport();
                 $this->renderExcel();
 
-            });
+            })->via('GET', 'POST');
 
         });
 
@@ -339,7 +339,7 @@ class SlimLouisCRUD extends LouisCRUD
                     $this->getListViewJSONString();
                 }
                 return;
-            })->via('GET', 'POST');;
+            })->via('GET', 'POST');
 
 
             /*

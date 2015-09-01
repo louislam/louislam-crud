@@ -12,7 +12,7 @@ $this->layout($layoutName, [
 ]);
 ?>
 
-<form action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="put" class="ajax">
+<form action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="<?=$crud->getEditSubmitMethod() ?>" class="ajax">
 
     <?=$crud->getData("header") ?>
 

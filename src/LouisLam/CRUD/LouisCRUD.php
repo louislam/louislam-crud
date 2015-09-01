@@ -49,6 +49,11 @@ class LouisCRUD
     private $exportLink = "";
     private $listViewJSONLink = "";
 
+    /*
+     * Submit Methods
+     */
+    private $editSubmitMethod = "put";
+
     /** @var Field[] */
     private $fieldList = [];
 
@@ -94,6 +99,9 @@ class LouisCRUD
     private $ajaxListView = true;
 
     private $exportFilename = null;
+
+
+
 
 
     public function __construct($tableName = null, $viewDir = "view")
@@ -507,7 +515,7 @@ HTML;
     {
         $this->beforeRender();
 
-        $html = $this->template->render($this->theme . "::create", [
+        $html = $this->template->render($this->getCreateTemplate(), [
             "fields" => $this->getShowFields(),
             "crud" => $this,
             "layoutName" => $this->getLayoutName()
@@ -528,7 +536,7 @@ HTML;
             throw new NoBeanException();
         }
 
-        $html = $this->template->render($this->theme . "::edit", [
+        $html = $this->template->render($this->getEditTemplate(), [
             "fields" => $this->getShowFields(),
             "crud" => $this,
             "layoutName" => $this->getLayoutName()
@@ -585,10 +593,12 @@ HTML;
 
     /**
      * @param string $editSubmitLink
+     * @param string $method
      */
-    public function setEditSubmitLink($editSubmitLink)
+    public function setEditSubmitLink($editSubmitLink, $method = "put")
     {
         $this->editSubmitLink = $editSubmitLink;
+        $this->editSubmitMethod = $method;
     }
 
     /**
@@ -1102,6 +1112,11 @@ HTML;
         $field = $this->field($tableName . "_id");
         $field->setFieldType(new DropdownManyToOne($tableName));
         return $field;
+    }
+
+    public function getEditSubmitMethod()
+    {
+        return $this->editSubmitMethod;
     }
 
 }
