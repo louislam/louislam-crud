@@ -719,7 +719,12 @@ HTML;
         foreach ($fields as $field) {
 
             // Validate the value
-            $validateResult = $field->validate($data[$field->getName()], $data);
+            if ($field->isStorable())
+                $validateResult = $field->validate($data[$field->getName()], $data);
+            else {
+                // TODO: check non-storable?
+                $validateResult = true;
+            }
 
             // If validate failed
             if ($validateResult !== true) {
@@ -732,51 +737,54 @@ HTML;
                 return $result;
             }
 
-            // If not storable, skip.
-            if (! $field->isStorable()) {
-                continue;
-            }
 
+             if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
+                 // 1. Many to many
 
-            if ($field->getFieldRelation() == Field::NORMAL) {
-                // Normal data field
+                 // http://www.redbeanphp.com/many_to_many
+                 $keyName = "shared" . ucfirst($field->getName()) . "List";
 
-                // Set the value to the current bean directly
-                $this->currentBean->{$field->getName()} = $data[$field->getName()];
+                 // Clear the current list (tableB_tableA)
+                 try {
+                     $tableName = $this->getTableName() . "_" . $field->getName();
+                     $idName = $this->getTableName() . "_id";
+                     R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
+                 } catch (\Exception $ex) {
+                 }
 
-            } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
-                // Many to many
+                 // Clear the current list (tableA_tableB)
+                 try {
+                     $tableName = $field->getName() . "_" . $this->getTableName();
+                     $idName = $this->getTableName() . "_id";
+                     R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
+                 } catch (\Exception $ex) {
+                 }
 
-                // http://www.redbeanphp.com/many_to_many
-                $keyName = "shared". ucfirst($field->getName()) . "List";
+                 // If User have checked a value in checkbox
+                 if (isset($data[$field->getName()])) {
+                     $valueList = $data[$field->getName()];
+                     $slots = R::genSlots($valueList);
+                     $relatedBeans = R::find($field->getName(), " id IN ($slots)", $valueList);
 
-                // Clear the current list (tableB_tableA)
-                try {
-                    $tableName = $this->getTableName() . "_" . $field->getName();
-                    $idName = $this->getTableName() . "_id";
-                   R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
-                } catch (\Exception $ex) { }
+                     foreach ($relatedBeans as $relatedBean) {
+                         $this->currentBean->{$keyName}[] = $relatedBean;
+                     }
+                 }
 
-                // Clear the current list (tableA_tableB)
-                try {
-                    $tableName =$field->getName()  . "_" .  $this->getTableName();
-                    $idName = $this->getTableName() . "_id";
-                    R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
-                } catch (\Exception $ex) { }
+             } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
+                 // TODO One to many
 
-                // If User have checked a value in checkbox
-                if (isset($data[$field->getName()])) {
-                    $valueList = $data[$field->getName()];
-                    $slots = R::genSlots($valueList);
-                    $relatedBeans = R::find($field->getName(), " id IN ($slots)", $valueList);
+             } else if (! $field->isStorable()) {
 
-                    foreach ($relatedBeans as $relatedBean) {
-                        $this->currentBean->{$keyName}[] = $relatedBean;
-                    }
-                }
+                 // 2. If not storable, skip
+                 continue;
 
-            } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
-                // TODO
+             } elseif ($field->getFieldRelation() == Field::NORMAL) {
+                 // 3.Normal data field
+
+                 // Set the value to the current bean directly
+                 $this->currentBean->{$field->getName()} = $data[$field->getName()];
+
             }
         }
 
