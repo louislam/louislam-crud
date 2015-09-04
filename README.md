@@ -10,6 +10,7 @@ Love GroceryCRUD, but don't like CodeIgniter? LouisLam's CRUD is a CRUD Library 
 * Theme
 * Work without any framework. (But work better with Slim Framework by default)
 * Export to Excel format (Customizable)
+* Support MySQL/MariaDB, SQLite, PostgreSQL and CUBRID.
 
 ## Benefit
 * "Write Less, Do More". 
