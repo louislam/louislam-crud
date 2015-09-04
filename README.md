@@ -14,7 +14,7 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 * Export to Excel format (Customizable)
 * Support MySQL/MariaDB, SQLite, PostgreSQL and CUBRID.
 
-## Benefit
+## Why choose us?
 * "Write Less, Do More". 
 * Easy to customize.
 
