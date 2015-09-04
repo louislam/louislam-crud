@@ -9,7 +9,7 @@ Love GroceryCRUD, but don't like CodeIgniter? LouisLam's CRUD is a CRUD Library 
 * Extensible Field Types.
 * Theme
 * Work without any framework. (But work better with Slim Framework by default)
-* Export to Excel format
+* Export to Excel format (Customizable)
 
 ## Benefit
 * "Write Less, Do More". 
