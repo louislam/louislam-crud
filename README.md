@@ -40,8 +40,12 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
     ```
 1. Add a route for your table (product).
     ```php
+    // Add a Route for "product" table
     $crud->add("product", function () use ($crud) {
+    
+        // Show and Ordering the fields
         $crud->showFields("id", "name", "price", "description");
+        
     });
     ```
     
