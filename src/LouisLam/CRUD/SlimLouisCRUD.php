@@ -640,4 +640,8 @@ class SlimLouisCRUD extends LouisCRUD
         $helper->genExcel($this, $list, $this->getExportFilename());
     }
 
+    public function notFound() {
+        $this->getSlim()->notFound();
+    }
+
 }
