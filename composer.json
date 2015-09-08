@@ -22,9 +22,9 @@
         "blueimp/jquery-file-upload": "9.11.0",
         "almasaeed2010/adminlte": "2.3.0",
         "fortawesome/font-awesome": "4.4.0",
-        "nuovo/spreadsheet-reader": "0.5.11",
         "phpoffice/phpexcel": "1.8.1",
-        "components/jqueryui": "1.11.4"
+        "components/jqueryui": "1.11.4",
+        "gettext/gettext": "3.5.3"
     },
     "autoload": {
         "psr-4": {
