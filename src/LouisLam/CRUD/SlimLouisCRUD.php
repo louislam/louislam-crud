@@ -86,6 +86,7 @@ class SlimLouisCRUD extends LouisCRUD
         $this->setListViewLink(Util::url($this->groupName . "/" . $routeName . "/list" . $params));
         $this->setCreateLink(Util::url($this->groupName . "/" . $routeName . "/create" . $params));
         $this->setEditLink(Util::url($this->groupName . "/" . $routeName . "/edit/:id" . $params));
+        $this->setCreateSuccURL($this->getListViewLink());
 
         // Export URL
         $this->setExportLink(Util::url($this->groupName . "/" . $routeName . "/export" . $params));

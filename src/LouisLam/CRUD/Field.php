@@ -6,6 +6,7 @@ use LouisLam\CRUD\FieldType\CustomField;
 use LouisLam\CRUD\FieldType\FieldType;
 use LouisLam\CRUD\FieldType\IntegerType;
 use LouisLam\CRUD\FieldType\Password;
+use LouisLam\CRUD\FieldType\PasswordWithConfirm;
 use LouisLam\CRUD\FieldType\TextArea;
 use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\String;
@@ -247,6 +248,9 @@ class Field
             switch ($fieldType) {
                 case "password":
                     $this->fieldType = new Password();
+                    break;
+                case "confirm_password":
+                    $this->fieldType = new PasswordWithConfirm();
                     break;
                 default:
                     throw new \ErrorException("Unsupported field type.");

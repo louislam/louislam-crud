@@ -3,7 +3,7 @@
 namespace LouisLam\CRUD;
 
 use Exception;
-use FileUpload\FileUpload;
+use Gettext\Translator;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoBeanException;
@@ -11,7 +11,6 @@ use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
-use LouisLam\CRUD\FieldType\ManyToOne;
 use RedBeanPHP\R;
 
 /**
@@ -48,6 +47,7 @@ class LouisCRUD
     private $deleteLink = "";
     private $exportLink = "";
     private $listViewJSONLink = "";
+    private $createSuccURL = "";
 
     /*
      * Submit Methods
@@ -115,6 +115,11 @@ class LouisCRUD
         R::ext('xdispense', function ($type) {
             return R::getRedBean()->dispense($type);
         });
+
+        // Language
+        $t = new Translator();
+        $t->loadTranslations('lang/en.php');
+        $t->register();
 
         if ($tableName != null) {
             $this->setTable($tableName);
@@ -243,13 +248,22 @@ class LouisCRUD
         }
     }
 
-    public function requiredFields()
+    /**
+     * @param string[]|string $fieldNameList
+     */
+    public function requiredFields($fieldNameList)
     {
-        $numargs = func_num_args();
-        $fieldNames = func_get_args();
+        if (is_array($fieldNameList)) {
+            foreach ($fieldNameList as $name) {
+                $this->field($name)->required();
+            }
+        } else {
+            $numargs = func_num_args();
+            $fieldNames = func_get_args();
 
-        for ($i = 0; $i < $numargs; $i++) {
-            $this->field($fieldNames[$i])->required();
+            for ($i = 0; $i < $numargs; $i++) {
+                $this->field($fieldNames[$i])->required();
+            }
         }
     }
 
@@ -1139,6 +1153,22 @@ HTML;
     public function setLayout($layout)
     {
         $this->layout = $layout;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreateSuccURL()
+    {
+        return $this->createSuccURL;
+    }
+
+    /**
+     * @param string $createSuccURL
+     */
+    public function setCreateSuccURL($createSuccURL)
+    {
+        $this->createSuccURL = $createSuccURL;
     }
 
 }
