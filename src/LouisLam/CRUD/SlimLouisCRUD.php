@@ -98,6 +98,16 @@ class SlimLouisCRUD extends LouisCRUD
 
     }
 
+
+    /**
+     * @param Route $route
+     */
+    public function addRoute($route)
+    {
+        $route->setCRUD($this);
+        $route->addToCRUD();
+    }
+
     /**
      * @param string $routeName
      * @param string $tableName
