@@ -32,21 +32,19 @@ $this->layout($layoutName, [
 
                     <div class="box-footer">
                         <input type="submit" value="Create" class="btn btn-primary" />
+
+                        <?php if ($crud->isEnabledListView()) : ?>
+                            <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
+                        <?php endif; ?>
+
                     </div>
 
             </div>
         </div>
     </div>
 
-
-
-
-
-
-
 </form>
 
-<button onclick="history.back()">Back</button>
 
 <script>
     crud.setAjaxFormCallback(function (result) {

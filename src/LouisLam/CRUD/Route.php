@@ -9,6 +9,8 @@
 namespace LouisLam\CRUD;
 
 
+use ReflectionClass;
+
 abstract class Route
 {
 
@@ -27,7 +29,9 @@ abstract class Route
      */
     public function __construct()
     {
-        $this->routeName = get_class();
+        $r = new \ReflectionClass($this);
+        $this->routeName = strtolower($r->getShortName());
+
     }
 
     /**
@@ -37,7 +41,7 @@ abstract class Route
 
 
     public function addToCRUD() {
-        $this->crud->add($this->routeName, function () use ($this) {
+        $this->crud->add($this->routeName, function ()  {
                 $this->route($this->crud);
         }, $this->tableName, $this->displayName);
     }

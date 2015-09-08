@@ -84,6 +84,11 @@ class LouisCRUD
     private $template;
     private $theme;
 
+    /**
+     * @var string $layout
+     */
+    private $layout = null;
+
     /*
      *  Template (please use getter to get the template name)
      */
@@ -821,6 +826,10 @@ HTML;
      */
     private function getLayoutName()
     {
+        if ($this->layout != null) {
+            return $this->layout;
+        }
+
         try {
             return $this->template->exists("layout") ? "layout" : $this->theme . "::layout";
         } catch (\LogicException $ex) {
@@ -1121,6 +1130,15 @@ HTML;
     public function getEditSubmitMethod()
     {
         return $this->editSubmitMethod;
+    }
+
+
+    /**
+     * @param string $layout
+     */
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
     }
 
 }
