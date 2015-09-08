@@ -24,12 +24,20 @@ if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
     }
 
     /**
-     * @param $fieldName
+     * @param $fieldName string
      * @return \LouisLam\CRUD\Field
      */
     function f($fieldName) {
         global $globalCRUD;
         return $globalCRUD->field($fieldName);
+    }
+
+    /**
+     * @param $fieldName string
+     * @return \LouisLam\CRUD\Field
+     */
+    function field($fieldName) {
+        return f($fieldName);
     }
 
 }

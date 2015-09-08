@@ -676,27 +676,10 @@ HTML;
     public function insertBean($data)
     {
         $bean = R::xdispense($this->tableName);
-
-        $fields = $this->getShowFields();
-
-        $fieldNameList = [];
-
-        foreach ($fields as $field) {
-            if ($field->isStorable()) {
-                $fieldNameList[] = $field->getName();
-            }
-        }
-
-
-        // http://www.redbeanphp.com/import_and_export
-        $fieldsString = implode(",", $fieldNameList);
-        $bean->import($data, $fieldsString);
+        $id = $this->saveBean($bean, $data);
 
         $result = new Result();
-
-        // Store
-        $result->id = R::store($bean);
-
+        $result->id = $id;
         $result->msg = "The record has been created successfully.";
 
         return $result;
@@ -714,6 +697,25 @@ HTML;
             throw new NoBeanException();
         }
 
+        $id = $this->saveBean($this->currentBean, $data);
+
+        // Return result
+        $result = new Result();
+        $result->id = $id;
+        $result->msg = "Saved.";
+        $result->class = "callout-info";
+        return $result;
+    }
+
+    /**
+     * Insert or Update a bean
+     *
+     * @param $bean
+     * @param $data
+     * @return int|Result|string
+     */
+    private function saveBean($bean, $data)
+    {
         $fields = $this->getShowFields();
 
         foreach ($fields as $field) {
@@ -730,7 +732,7 @@ HTML;
             if ($validateResult !== true) {
 
                 $result = new Result();
-                $result->id = $this->currentBean->id;
+                $result->id = @$bean->id;
                 $result->msg = $validateResult;
                 $result->fieldName = $field->getName();
                 $result->class = "callout-danger";
@@ -738,65 +740,59 @@ HTML;
             }
 
 
-             if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
-                 // 1. Many to many
+            if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
+                // 1. Many to many
 
-                 // http://www.redbeanphp.com/many_to_many
-                 $keyName = "shared" . ucfirst($field->getName()) . "List";
+                // http://www.redbeanphp.com/many_to_many
+                $keyName = "shared" . ucfirst($field->getName()) . "List";
 
-                 // Clear the current list (tableB_tableA)
-                 try {
-                     $tableName = $this->getTableName() . "_" . $field->getName();
-                     $idName = $this->getTableName() . "_id";
-                     R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
-                 } catch (\Exception $ex) {
-                 }
+                // Clear the current list (tableB_tableA)
+                try {
+                    $tableName = $this->getTableName() . "_" . $field->getName();
+                    $idName = $this->getTableName() . "_id";
+                    R::exec("DELETE FROM $tableName WHERE $idName = ?", [$bean->id]);
+                } catch (\Exception $ex) {
+                }
 
-                 // Clear the current list (tableA_tableB)
-                 try {
-                     $tableName = $field->getName() . "_" . $this->getTableName();
-                     $idName = $this->getTableName() . "_id";
-                     R::exec("DELETE FROM $tableName WHERE $idName = ?", [$this->currentBean->id]);
-                 } catch (\Exception $ex) {
-                 }
+                // Clear the current list (tableA_tableB)
+                try {
+                    $tableName = $field->getName() . "_" . $this->getTableName();
+                    $idName = $this->getTableName() . "_id";
+                    R::exec("DELETE FROM $tableName WHERE $idName = ?", [$bean->id]);
+                } catch (\Exception $ex) {
+                }
 
-                 // If User have checked a value in checkbox
-                 if (isset($data[$field->getName()])) {
-                     $valueList = $data[$field->getName()];
-                     $slots = R::genSlots($valueList);
-                     $relatedBeans = R::find($field->getName(), " id IN ($slots)", $valueList);
+                // If User have checked a value in checkbox
+                if (isset($data[$field->getName()])) {
+                    $valueList = $data[$field->getName()];
+                    $slots = R::genSlots($valueList);
+                    $relatedBeans = R::find($field->getName(), " id IN ($slots)", $valueList);
 
-                     foreach ($relatedBeans as $relatedBean) {
-                         $this->currentBean->{$keyName}[] = $relatedBean;
-                     }
-                 }
+                    foreach ($relatedBeans as $relatedBean) {
+                        $bean->{$keyName}[] = $relatedBean;
+                    }
+                }
 
-             } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
-                 // TODO One to many
+            } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
+                // TODO One to many
 
-             } else if (! $field->isStorable()) {
+            } else if (! $field->isStorable()) {
 
-                 // 2. If not storable, skip
-                 continue;
+                // 2. If not storable, skip
+                continue;
 
-             } elseif ($field->getFieldRelation() == Field::NORMAL) {
-                 // 3.Normal data field
+            } elseif ($field->getFieldRelation() == Field::NORMAL) {
+                // 3.Normal data field
 
-                 // Set the value to the current bean directly
-                 $this->currentBean->{$field->getName()} = $data[$field->getName()];
+                // Set the value to the current bean directly
+                $bean->{$field->getName()} = $data[$field->getName()];
 
             }
         }
 
         // Store
-        $id = R::store($this->currentBean);
-
-        // Return result
-        $result = new Result();
-        $result->id = $id;
-        $result->msg = "Saved.";
-        $result->class = "callout-info";
-        return $result;
+        $id = R::store($bean);
+        return $id;
     }
 
     /**

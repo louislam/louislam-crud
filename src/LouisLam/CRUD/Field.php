@@ -5,6 +5,7 @@ namespace LouisLam\CRUD;
 use LouisLam\CRUD\FieldType\CustomField;
 use LouisLam\CRUD\FieldType\FieldType;
 use LouisLam\CRUD\FieldType\IntegerType;
+use LouisLam\CRUD\FieldType\Password;
 use LouisLam\CRUD\FieldType\TextArea;
 use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\String;
@@ -226,13 +227,36 @@ class Field
     }
 
     /**
-     * @param FieldType $fieldType
-     * @return $this
+     * @param FieldType|string $fieldType
+     * @return Field
+     * @throws \ErrorException
      */
     public function setFieldType($fieldType)
     {
-        $this->fieldType = $fieldType;
-        $this->fieldType->setField($this);
+
+        // Overloading
+        if ($fieldType instanceof FieldType) {
+            // If FieldType
+
+            $this->fieldType = $fieldType;
+
+
+        } else {
+            // If String
+
+            switch ($fieldType) {
+                case "password":
+                    $this->fieldType = new Password();
+                    break;
+                default:
+                    throw new \ErrorException("Unsupported field type.");
+            }
+
+        }
+
+        if ($this->fieldType != null)
+            $this->fieldType->setField($this);
+
         return $this;
     }
 

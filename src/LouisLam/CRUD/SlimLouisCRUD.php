@@ -139,6 +139,7 @@ class SlimLouisCRUD extends LouisCRUD
              */
             $this->slim->get("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
+
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
 
