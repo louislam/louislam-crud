@@ -52,7 +52,6 @@ class LouisCRUD {
                     type: $(this).data("method"),
                     data: $(this).serialize()
                 }).done(function (result) {
-                    alert(result);
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);
                     }
