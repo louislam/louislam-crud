@@ -116,11 +116,6 @@ class LouisCRUD
             return R::getRedBean()->dispense($type);
         });
 
-        // Language
-        $t = new Translator();
-        $t->loadTranslations('lang/en.php');
-        $t->register();
-
         if ($tableName != null) {
             $this->setTable($tableName);
         }

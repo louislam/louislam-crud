@@ -23,8 +23,7 @@
         "almasaeed2010/adminlte": "2.3.0",
         "fortawesome/font-awesome": "4.4.0",
         "phpoffice/phpexcel": "1.8.1",
-        "components/jqueryui": "1.11.4",
-        "gettext/gettext": "3.5.3"
+        "components/jqueryui": "1.11.4"
     },
     "autoload": {
         "psr-4": {

@@ -1,4 +1,6 @@
 <?php
-[
-    "Create" => "Create"
+return [
+    "Create" => [
+        "Cre2ate"
+    ]
 ];

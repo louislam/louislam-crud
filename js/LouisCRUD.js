@@ -14,7 +14,7 @@ var LouisCRUD = (function () {
             $.fn.dataTableExt.sErrMode = 'throw';
             // Ajax Submit Form
             $("form.ajax").submit(function () {
-                // Clear all msgz
+                // Clear all msgs
                 self.errorMsgs = [];
                 var ok = true;
                 for (var i = 0; i < self.validateFunctions.length; i++) {
@@ -35,6 +35,7 @@ var LouisCRUD = (function () {
                     type: $(this).data("method"),
                     data: $(this).serialize()
                 }).done(function (result) {
+                    alert(result);
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);
                     }

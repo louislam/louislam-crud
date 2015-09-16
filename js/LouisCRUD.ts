@@ -24,7 +24,7 @@ class LouisCRUD {
 
             // Ajax Submit Form
             $("form.ajax").submit(function () {
-                // Clear all msgz
+                // Clear all msgs
                 self.errorMsgs = [];
 
                 var ok = true;
@@ -52,6 +52,7 @@ class LouisCRUD {
                     type: $(this).data("method"),
                     data: $(this).serialize()
                 }).done(function (result) {
+                    alert(result);
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);
                     }
