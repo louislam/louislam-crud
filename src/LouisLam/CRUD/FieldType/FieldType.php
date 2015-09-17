@@ -130,4 +130,8 @@ abstract class FieldType
     }
 
 
+    public function beforeStore($value) {
+        return $value;
+    }
+
 }

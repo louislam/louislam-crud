@@ -744,7 +744,6 @@ HTML;
 
             // If validate failed
             if ($validateResult !== true) {
-
                 $result = new Result();
                 $result->id = @$bean->id;
                 $result->msg = $validateResult;
@@ -799,7 +798,7 @@ HTML;
                 // 3.Normal data field
 
                 // Set the value to the current bean directly
-                $bean->{$field->getName()} = $data[$field->getName()];
+                $bean->{$field->getName()} = $field->getValue($data);
 
             }
         }

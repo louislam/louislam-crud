@@ -313,10 +313,26 @@ class Field
     }
 
     /**
+     *
+     * @param array $data Most likely refer to $_POST
      * @return null
      */
-    public function getValue()
+    public function getValue($data = null)
     {
+
+        // If Overrite Value
+        if (isset($this->value) && $this->overwriteValue) {
+            return $this->value;
+        }
+
+        // If user have user input value
+        if ($data != null) {
+
+            // Process the value by FieldType
+            // For example, HTML5's datetime-local is unable insert into the database directly. So the DateTimeLocal have to convert it to the proper format.
+            return $this->fieldType->beforeStore($data[$this->getName()]);
+        }
+
         return $this->value;
     }
 

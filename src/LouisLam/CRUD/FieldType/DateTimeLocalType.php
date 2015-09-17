@@ -9,6 +9,8 @@
 namespace LouisLam\CRUD\FieldType;
 
 
+use RedBeanPHP\R;
+
 class DateTimeLocalType extends TextField
 {
     /**
@@ -18,5 +20,21 @@ class DateTimeLocalType extends TextField
     {
         $this->type = "datetime-local";
     }
+
+    /**
+     * Generate DateTime String for datetime-local
+     * @param int $timestamp
+     * @return string
+     */
+    public static function getHTMLDateTime($timestamp = null) {
+        return date("Y-m-d\TH:i", $timestamp);
+    }
+
+    public function beforeStore($value)
+    {
+        echo R::isoDateTime($value);
+        return R::isoDateTime($value);
+    }
+
 
 }
