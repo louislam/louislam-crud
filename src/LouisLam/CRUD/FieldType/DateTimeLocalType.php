@@ -33,7 +33,7 @@ class DateTimeLocalType extends TextField
 
     public function beforeStoreValue($valueFromUser)
     {
-        return R::isoDateTime($valueFromUser);
+        return R::isoDateTime(strtotime($valueFromUser));
     }
 
     public function beforeRenderValue($valueFromDatabase)
