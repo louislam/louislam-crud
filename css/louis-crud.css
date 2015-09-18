@@ -4,3 +4,8 @@
 #louis-crud-table td {
   white-space: nowrap;
 }
+.checkboxes-group {
+  max-height: 400px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}

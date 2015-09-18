@@ -54,7 +54,7 @@ class CheckboxList extends FieldType
 TAG;
 
         $html .= <<<TAG
-       <div class="form-group">
+       <div class="form-group checkboxes-group">
 TAG;
 
         foreach ($this->options as $v =>$optionName) {
@@ -85,6 +85,8 @@ HTML;
     }
 
     public function renderCell($value) {
+
+        print_r($value);
         try {
             return $this->options[$value];
         } catch (\ErrorException $ex) {

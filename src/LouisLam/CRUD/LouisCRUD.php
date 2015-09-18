@@ -976,7 +976,9 @@ HTML;
     }
 
     /**
-     * @param callable $actionClosure
+     * Row Action
+     * @param callable $actionClosure Closure Format: function($bean) { }
+     *
      */
     public function rowAction($actionClosure)
     {

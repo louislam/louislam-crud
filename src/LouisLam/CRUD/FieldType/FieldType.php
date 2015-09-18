@@ -18,6 +18,8 @@ abstract class FieldType
      * @var Field
      */
     protected $field;
+    protected $attributeList = [];
+    protected $classList = [];
 
     private $fieldRelation = Field::NORMAL;
 
@@ -91,4 +93,21 @@ abstract class FieldType
     public function beforeRenderValue($valueFromDatabase) {
         return $valueFromDatabase;
     }
+
+    public function addAttribute($key, $value) {
+        $this->attributeList[$key] = $value;
+    }
+
+    public function removeAttribute($key) {
+        unset($this->attributeList[$key]);
+    }
+
+    public function addClass($key, $value) {
+        $this->classList[$key] = $value;
+    }
+
+    public function removeClass($key) {
+        unset($this->classList[$key]);
+    }
+
 }

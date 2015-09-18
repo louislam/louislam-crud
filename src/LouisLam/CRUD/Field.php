@@ -298,7 +298,15 @@ class Field
     {
 
         try {
-            $value = $this->fieldType->renderCell($bean->{$this->getName()});
+
+            if ($this->fieldType->getFieldRelation() == Field::NORMAL) {
+                $value = $this->fieldType->renderCell($bean->{$this->getName()});
+            } else {
+
+                //TODO: Show a few items
+                $value = "Click 'Edit' to view select item(s).";
+            }
+
         } catch (\Exception $ex) {
             $value = "N/A";
         }
@@ -397,6 +405,8 @@ class Field
     {
         $this->value = $value;
         $this->overwriteValue = $force;
+
+        return $this;
     }
 
     /**
