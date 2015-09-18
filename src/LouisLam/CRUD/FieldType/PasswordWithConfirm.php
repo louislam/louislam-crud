@@ -23,7 +23,6 @@ class PasswordWithConfirm extends FieldType
     {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
-        $bean = $this->field->getBean();
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
@@ -40,14 +39,16 @@ class PasswordWithConfirm extends FieldType
         </div>
 
         <script>
-                crud.addValidateFunction(function () {
-                        if ($("#field-$name-confirm").val() != $("#field-$name").val()) {
-                                crud.addErrorMsg("Passwords are not matched.");
-                                return false;
-                        } else {
-                                return true;
-                        }
+            $(document).ready(function () {
+            	  crud.addValidateFunction(function () {
+                    if ($("#field-$name-confirm").val() != $("#field-$name").val()) {
+                            crud.addErrorMsg("Passwords are not matched.");
+                            return false;
+                    } else {
+                            return true;
+                    }
                 });
+            });
         </script>
 HTML;
 
