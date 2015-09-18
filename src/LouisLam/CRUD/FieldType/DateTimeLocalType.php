@@ -26,15 +26,19 @@ class DateTimeLocalType extends TextField
      * @param int $timestamp
      * @return string
      */
-    public static function getHTMLDateTime($timestamp = null) {
+    public static function getHTMLDateTime($timestamp = null)
+    {
         return date("Y-m-d\TH:i", $timestamp);
     }
 
-    public function beforeStore($value)
+    public function beforeStoreValue($valueFromUser)
     {
-        echo R::isoDateTime($value);
-        return R::isoDateTime($value);
+        return R::isoDateTime($valueFromUser);
     }
 
+    public function beforeRenderValue($valueFromDatabase)
+    {
+        return DateTimeLocalType::getHTMLDateTime(strtotime($valueFromDatabase));
+    }
 
 }

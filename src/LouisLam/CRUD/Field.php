@@ -313,11 +313,11 @@ class Field
     }
 
     /**
-     *
+     * Get the value that will be inserted into the database
      * @param array $data Most likely refer to $_POST
      * @return null
      */
-    public function getValue($data = null)
+    public function getStoreValue($data = null)
     {
 
         // If Overrite Value
@@ -330,10 +330,63 @@ class Field
 
             // Process the value by FieldType
             // For example, HTML5's datetime-local is unable insert into the database directly. So the DateTimeLocal have to convert it to the proper format.
-            return $this->fieldType->beforeStore($data[$this->getName()]);
+            return $this->fieldType->beforeStoreValue($data[$this->getName()]);
         }
 
         return $this->value;
+    }
+
+
+    /**
+     * GEt the value that will be rendered on HTML page
+     * @return array|mixed|null|string
+     */
+    public function getRenderValue()
+    {
+        $name = $this->getName();
+        $defaultValue = $this->getDefaultValue();
+        $bean = $this->getBean();
+        $value = "";
+
+        if ($this->isCreate()) {
+
+            // Create Page
+            // Use Default Value if not null
+            if ($this->value !== null) {
+                $value = $this->value;
+            } else if ($defaultValue !== null) {
+                $value = $defaultValue;
+            }
+
+        } else {
+
+            // Edit Page
+            if ($this->getFieldRelation() == Field::MANY_TO_MANY) {
+                // Many to many, Value list
+                $keyName = "shared". ucfirst($name) . "List";
+
+                $relatedBeans = $bean->{$keyName};
+                $value = [];
+
+                foreach ($relatedBeans as $relatedBean) {
+                    $value[$relatedBean->id] = $relatedBean->id;
+                }
+
+            } else {
+
+                // Single Value
+                if ($this->isOverwriteValue() && $this->value !== null) {
+                    // Use the value set by user.
+                    $value = $this->value;
+                } else {
+                    // Use the value from Database
+                    $value = $this->getFieldType()->beforeRenderValue($bean->{$name});
+                }
+            }
+
+        }
+
+        return $value;
     }
 
     /**

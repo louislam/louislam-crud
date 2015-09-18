@@ -61,56 +61,11 @@ abstract class FieldType
     }
 
     /**
-     * @return array|mixed|string
+     * @return array|string
      */
-    public function getValue() {
-        $name = $this->field->getName();
-        $defaultValue = $this->field->getDefaultValue();
-        $bean = $this->field->getBean();
-        $value = "";
-
-        if ($this->field->isCreate()) {
-
-            // Create Page
-            // Use Default Value if not null
-            if ($this->field->getValue() !== null) {
-                $value = $this->field->getValue();
-            } else if ($defaultValue !== null) {
-                $value = $defaultValue;
-            }
-
-        } else {
-
-            // Edit Page
-
-            if ($this->fieldRelation == Field::MANY_TO_MANY) {
-                // Many to many, Value list
-                $keyName = "shared". ucfirst($name) . "List";
-
-                $relatedBeans = $bean->{$keyName};
-                $value = [];
-
-                foreach ($relatedBeans as $relatedBean) {
-                    $value[$relatedBean->id] = $relatedBean->id;
-                }
-
-
-            } else {
-                // Single Value
-
-                if ($this->field->isOverwriteValue() && $this->field->getValue() !== null) {
-                    // Use the value set by user.
-                    $value = $this->field->getValue();
-                } else {
-                    // Use the value from Database
-                    $value = $bean->{$name};
-                }
-            }
-
-
-        }
-
-        return $value;
+    public function getValue()
+    {
+        return $this->field->getRenderValue();
     }
 
     /**
@@ -129,9 +84,11 @@ abstract class FieldType
         $this->fieldRelation = $fieldRelation;
     }
 
-
-    public function beforeStore($value) {
-        return $value;
+    public function beforeStoreValue($valueFromUser) {
+        return $valueFromUser;
     }
 
+    public function beforeRenderValue($valueFromDatabase) {
+        return $valueFromDatabase;
+    }
 }

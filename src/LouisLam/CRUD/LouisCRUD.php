@@ -798,7 +798,7 @@ HTML;
                 // 3.Normal data field
 
                 // Set the value to the current bean directly
-                $bean->{$field->getName()} = $field->getValue($data);
+                $bean->{$field->getName()} = $field->getStoreValue($data);
 
             }
         }
