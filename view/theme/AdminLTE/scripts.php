@@ -25,9 +25,14 @@ use LouisLam\Util;
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>dist/js/app.min.js"></script>
+
+<!-- Upload Plugin -->
 <script src="<?= Util::res("vendor/blueimp/jquery-file-upload/js/vendor/jquery.ui.widget.js") ?>"></script>
 <script src="<?= Util::res("vendor/blueimp/jquery-file-upload/js/jquery.iframe-transport.js") ?>"></script>
 <script src="<?= Util::res("vendor/blueimp/jquery-file-upload/js/jquery.fileupload.js") ?>"></script>
+
+<script src="<?= Util::res("vendor/moment/moment/min/moment.min.js") ?>"></script>
+<script src="<?= Util::res("vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") ?>"></script>
 
 <script>
     var crud = new LouisCRUD();

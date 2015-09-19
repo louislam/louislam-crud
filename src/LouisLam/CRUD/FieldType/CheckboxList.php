@@ -86,7 +86,6 @@ HTML;
 
     public function renderCell($value) {
 
-        print_r($value);
         try {
             return $this->options[$value];
         } catch (\ErrorException $ex) {
