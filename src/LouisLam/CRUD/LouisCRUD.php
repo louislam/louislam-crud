@@ -404,34 +404,38 @@ HTML;
                 $limit = "";
             }
 
-
             if ($this->sql != null) {
-            // Custom SQL
+                // Custom SQL
 
                 $list = [];
                 $tempList = R::getAll($this->sql . $limit, $this->bindingData);
 
                 // Array convert to object
                 foreach ($tempList as $row) {
-                    $list[] = (object) $row;
+                    $list[] = (object)$row;
                 }
 
             } elseif ($this->findClause != null) {
-            // Find Clause
+                // Find Clause
 
                 $list = R::find($this->tableName, $this->findClause . $limit, $this->bindingData);
             } else {
-            // Find All Clause
+                // Find All Clause
 
                 if ($this->findAllClause != null) {
-                    $clause = $this->findAllClause .  $limit;
+                    $clause = $this->findAllClause . $limit;
                 } else {
                     $clause = $limit;
                 }
                 $list = R::findAll($this->tableName, $clause, $this->bindingData);
 
             }
+        } catch (\RedBeanPHP\RedException\SQL $ex) {
+
+                throw $ex;
         } catch(\Exception $ex) {
+            // TODO: This should be for not existing test only, not other exceptions.
+
             // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
             return $this->getListViewData($start, $rowPerPage);

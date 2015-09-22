@@ -48,7 +48,7 @@ class ExcelHelper
         foreach ($list as $bean) {
             $i = 0;
             foreach($fields as $field) {
-                $sheet->setCellValueByColumnAndRow($i, $j, strip_tags($field->cellValue($bean)));
+                $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit(strip_tags($field->cellValue($bean)));
                 $i++;
             }
             $j++;
