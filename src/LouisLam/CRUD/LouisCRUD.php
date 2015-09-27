@@ -11,6 +11,7 @@ use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
+use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 
 /**
@@ -23,7 +24,7 @@ class LouisCRUD
 {
 
     /**
-     * For those who would like to fork my project and re-publish on Packagist, please update the composer name.
+     * For those who would like to fork my project, please update the composer name.
      * TODO: Read from composer.json?
      * @var string Package Name
      */
@@ -71,7 +72,7 @@ class LouisCRUD
 
     /**
      * Current Bean for edit or delete
-     * @var
+     * @var OODBBean
      */
     private $currentBean = null;
 
@@ -105,13 +106,14 @@ class LouisCRUD
 
     private $exportFilename = null;
 
-
-
-
-
+    /**
+     * @param string $tableName Table Name
+     * @param string $viewDir User Template directory
+     * @throws TableNameException
+     * @throws \RedBeanPHP\RedException
+     */
     public function __construct($tableName = null, $viewDir = "view")
     {
-
         R::ext('xdispense', function ($type) {
             return R::getRedBean()->dispense($type);
         });
@@ -694,11 +696,16 @@ HTML;
     public function insertBean($data)
     {
         $bean = R::xdispense($this->tableName);
-        $id = $this->saveBean($bean, $data);
+        $result =  $this->saveBean($bean, $data);
 
-        $result = new Result();
-        $result->id = $id;
-        $result->msg = "The record has been created successfully.";
+        if (!isset($result->msg)) {
+            //$result->msg = "The record has been created successfully.";
+            $result->msg = "帳號已建立成功。";
+            $result->class = "callout-info";
+            $result->ok = true;
+        } else {
+            $result->ok = false;
+        }
 
         return $result;
     }
@@ -715,25 +722,33 @@ HTML;
             throw new NoBeanException();
         }
 
-        $id = $this->saveBean($this->currentBean, $data);
+        $result = $this->saveBean($this->currentBean, $data);
 
         // Return result
-        $result = new Result();
-        $result->id = $id;
-        $result->msg = "Saved.";
-        $result->class = "callout-info";
+        if (!isset($result->msg)) {
+            $result->msg = "Saved.";
+            $result->class = "callout-info";
+        }
+
         return $result;
     }
 
     /**
      * Insert or Update a bean
      *
-     * @param $bean
-     * @param $data
-     * @return int|Result|string
+     * @param OODBBean $bean
+     * @param $data array
+     * @return Result
      */
     private function saveBean($bean, $data)
     {
+
+        // Handle File Field that may not in the $data, because Filename always go into $_FILES.
+        foreach ($_FILES as $fieldName => $file) {
+            $data[$fieldName] = $file["name"];
+        }
+
+        // Store Showing fields only
         $fields = $this->getShowFields();
 
         foreach ($fields as $field) {
@@ -746,7 +761,19 @@ HTML;
                 $validateResult = true;
             }
 
-            // If validate failed
+            // Check is unique
+            if ($field->isUnique()) {
+
+                // Try to find duplicate beans
+                $fieldName = $field->getName();
+                $duplicateBeans = R::find($bean->getMeta('type'), " $fieldName = ? ", [$data[$field->getName()]]);
+
+                if (count($duplicateBeans) > 0) {
+                    $validateResult = "Email 已存在！";
+                }
+            }
+
+            // If validate failed, return result object.
             if ($validateResult !== true) {
                 $result = new Result();
                 $result->id = @$bean->id;
@@ -808,8 +835,11 @@ HTML;
         }
 
         // Store
+        // TODO: Return result object
         $id = R::store($bean);
-        return $id;
+        $result = new Result();
+        $result->id = $id;
+        return $result;
     }
 
     /**

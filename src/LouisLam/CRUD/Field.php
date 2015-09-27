@@ -93,6 +93,11 @@ class Field
     private $validatorList = [];
 
     /**
+     *
+     */
+    private $isUnique = false;
+
+    /**
      * @param LouisCRUD $crud
      * @param string $name
      * @param string $dataType
@@ -300,7 +305,14 @@ class Field
         try {
 
             if ($this->fieldType->getFieldRelation() == Field::NORMAL) {
-                $value = $this->fieldType->renderCell($bean->{$this->getName()});
+
+                if (isset($bean->{$this->getName()})) {
+                    $value = $this->fieldType->renderCell($bean->{$this->getName()});
+                } else {
+                    $value = "";
+                }
+
+
             } else {
 
                 //TODO: Show a few items
@@ -489,5 +501,23 @@ class Field
 
         return true;
     }
+
+    /**
+     * @return mixed
+     */
+    public function isUnique()
+    {
+        return $this->isUnique;
+    }
+
+    /**
+     * @param mixed $isUnique
+     */
+    public function setUnique($isUnique)
+    {
+        $this->isUnique = $isUnique;
+    }
+
+
 
 }

@@ -15,6 +15,20 @@ class PasswordWithConfirm extends FieldType
     protected $type = "password";
 
     /**
+     * @var callback
+     */
+    private $encryptionClosure = null;
+
+    public function  __construct() {
+
+        // Use MD5 by default
+        $this->encryptionClosure = function ($v) {
+            return md5($v);
+        };
+
+    }
+
+    /**
      * Render Field for Create/Edit
      * @param bool|true $echo
      * @return string
@@ -56,6 +70,19 @@ HTML;
             echo $html;
 
         return $html;
+    }
+
+    /**
+     * @param callback $c function ($value) { return md5($value); }
+     */
+    public function setEncryptionClosure($c) {
+        $this->encryptionClosure = $c;
+    }
+
+    public function beforeStoreValue($valueFromUser)
+    {
+        $c =  $this->encryptionClosure;
+        return $c($valueFromUser);
     }
 
 

@@ -24,33 +24,38 @@ class LouisCRUD {
 
             // Ajax Submit Form
             $("form.ajax").submit(function () {
+
                 // Clear all msgs
                 self.errorMsgs = [];
 
                 var ok = true;
 
+                // Validate
                 for (var i = 0; i < self.validateFunctions.length; i++) {
-                    if (self.validateFunctions[i]() == false) {
+                    if (self.validateFunctions[i]() === false) {
                         ok = false;
                     }
                 }
 
                if (!ok) {
                    var str = "";
-
                    for (var i = 0; i < self.errorMsgs.length; i++) {
                         str += self.errorMsgs[i]  +"\n";
                    }
-
                    alert(str);
-
                    return false;
                }
+
+                // Create Form Data from the form.
+                var data = new FormData($(this)[0]);
 
                 $.ajax({
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
-                    data: $(this).serialize()
+                    data: data,
+                    contentType: false,
+                    cache: false,
+                    processData: false
                 }).done(function (result) {
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);

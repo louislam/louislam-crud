@@ -402,7 +402,10 @@ class SlimLouisCRUD extends LouisCRUD
 
                 // Insert into database
                 if ($this->isEnabledCreate()) {
-                    $this->insertBean($_POST);
+                    $jsonObject = $this->insertBean($_POST);
+
+                    $this->enableJSONResponse();
+                    echo json_encode($jsonObject);
                 }
 
             });
