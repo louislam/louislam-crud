@@ -14,6 +14,7 @@ use LouisLam\CRUD\FieldType\DropdownManyToOne;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 
+
 /**
  * Created by PhpStorm.
  * User: Louis Lam
@@ -748,18 +749,12 @@ HTML;
             $data[$fieldName] = $file["name"];
         }
 
+
         // Store Showing fields only
         $fields = $this->getShowFields();
 
         foreach ($fields as $field) {
 
-            // Validate the value
-            if ($field->isStorable())
-                $validateResult = $field->validate($data[$field->getName()], $data);
-            else {
-                // TODO: check non-storable?
-                $validateResult = true;
-            }
 
             // Check is unique
             if ($field->isUnique()) {
@@ -772,17 +767,6 @@ HTML;
                     $validateResult = "Email 已存在！";
                 }
             }
-
-            // If validate failed, return result object.
-            if ($validateResult !== true) {
-                $result = new Result();
-                $result->id = @$bean->id;
-                $result->msg = $validateResult;
-                $result->fieldName = $field->getName();
-                $result->class = "callout-danger";
-                return $result;
-            }
-
 
             if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
                 // 1. Many to many
@@ -828,8 +812,28 @@ HTML;
             } elseif ($field->getFieldRelation() == Field::NORMAL) {
                 // 3.Normal data field
 
+                $value = $field->getStoreValue($data);
+
+                // Validate the value
+                if ($field->isStorable())
+                    $validateResult = $field->validate($value, $data);
+                else {
+                    // TODO: check non-storable?
+                    $validateResult = true;
+                }
+
+                // If validate failed, return result object.
+                if ($validateResult !== true) {
+                    $result = new Result();
+                    $result->id = @$bean->id;
+                    $result->msg = $validateResult;
+                    $result->fieldName = $field->getName();
+                    $result->class = "callout-danger";
+                    return $result;
+                }
+
                 // Set the value to the current bean directly
-                $bean->{$field->getName()} = $field->getStoreValue($data);
+                $bean->{$field->getName()} = $value;
 
             }
         }

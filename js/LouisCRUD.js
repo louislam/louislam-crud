@@ -13,7 +13,8 @@ var LouisCRUD = (function () {
             // Disable Datatables' alert!
             $.fn.dataTableExt.sErrMode = 'throw';
             // Ajax Submit Form
-            $("form.ajax").submit(function () {
+            $("form.ajax").submit(function (e) {
+                e.preventDefault();
                 // Clear all msgs
                 self.errorMsgs = [];
                 var ok = true;
@@ -31,14 +32,12 @@ var LouisCRUD = (function () {
                     return false;
                 }
                 // Create Form Data from the form.
-                var data = new FormData($(this)[0]);
+                // if ($(this).attr("enctype") !== "undefined") {
+                //data = new FormData($(this)[0]);
                 $.ajax({
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
-                    data: data,
-                    contentType: false,
-                    cache: false,
-                    processData: false
+                    data: $(this).serialize()
                 }).done(function (result) {
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);

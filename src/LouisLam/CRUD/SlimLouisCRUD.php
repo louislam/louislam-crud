@@ -161,6 +161,8 @@ class SlimLouisCRUD extends LouisCRUD
                     }
                 }
 
+
+
                 if ($this->listviewFunction != null) {
                     $listviewFunction = $this->listviewFunction;
                     $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
@@ -356,7 +358,7 @@ class SlimLouisCRUD extends LouisCRUD
 
             /*
              * Insert a bean
-             * POST /crud/{tableName}
+             * POST /api/{tableName}
              */
             $this->slim->post("(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
 
@@ -406,6 +408,9 @@ class SlimLouisCRUD extends LouisCRUD
 
                     $this->enableJSONResponse();
                     echo json_encode($jsonObject);
+                } else {
+                    // TODO: Should be json object
+                    echo "No permission";
                 }
 
             });

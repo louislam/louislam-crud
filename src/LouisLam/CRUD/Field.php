@@ -346,7 +346,7 @@ class Field
         }
 
         // If user have user input value
-        if ($data != null) {
+        if ($data != null && isset($data[$this->getName()])) {
 
             // Process the value by FieldType
             // For example, HTML5's datetime-local is unable insert into the database directly. So the DateTimeLocal have to convert it to the proper format.
