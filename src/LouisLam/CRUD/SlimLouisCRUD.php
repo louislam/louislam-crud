@@ -35,6 +35,9 @@ class SlimLouisCRUD extends LouisCRUD
     /** @var callable */
     private $deleteFunction = null;
 
+    /** @var callable */
+    private $exportFunction = null;
+
     /** @var string[] */
     private $tableList = [];
     private $routeNameList = [];
@@ -302,6 +305,15 @@ class SlimLouisCRUD extends LouisCRUD
                     }
                 }
 
+                if ($this->exportFunction != null) {
+                    $exportFunction = $this->exportFunction;
+                    $result = $exportFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
                 // TODO: isEnabledExport();
                 $this->renderExcel();
 
@@ -560,6 +572,14 @@ class SlimLouisCRUD extends LouisCRUD
     public function delete($func)
     {
         $this->deleteFunction = $func;
+    }
+
+    /**
+     * @param callable $func
+     */
+    public function export($func)
+    {
+        $this->exportFunction = $func;
     }
 
     /**
