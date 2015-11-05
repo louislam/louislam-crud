@@ -55,5 +55,8 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
     ```
     
 6. Open it in your browser.
+   ```
+   http://<your hostname>/index.php/crud/product
+   ```
     ![Alt screenshot](http://i.imgur.com/c3rl7zr.png)
     
