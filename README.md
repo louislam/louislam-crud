@@ -24,6 +24,7 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 ### Method 1: add louislam-crud to your composer.json
 
 1. Require the library.
+
     ```json
     "require": {
         "louislam/louislam-crud": "dev-master"
