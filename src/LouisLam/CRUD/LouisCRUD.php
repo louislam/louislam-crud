@@ -480,6 +480,14 @@ HTML;
     }
 
 
+    /**
+     * For Ajax ListView
+     *
+     * @param bool|true $echo
+     * @return string
+     * @throws NoFieldException
+     * @throws \RedBeanPHP\RedException\SQL
+     */
     public function getListViewJSONString($echo = true) {
         $this->beforeRender();
 
@@ -512,7 +520,7 @@ HTML;
             $fields = $this->getShowFields();
 
             foreach ($fields as $field) {
-                $row[$field->getName()] = $field->cellValue($bean);
+                $row[] = $field->cellValue($bean);
             }
 
             $obj->data[] = $row;
