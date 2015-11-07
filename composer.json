@@ -14,7 +14,6 @@
         "slim/slim": "2.6.2",
         "league/plates": "3.1.1",
         "gabordemooij/redbean": "4.2.1",
-        "ckeditor/ckeditor": "4.5.2",
         "louislam/louislam-utilities": "dev-master",
         "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
