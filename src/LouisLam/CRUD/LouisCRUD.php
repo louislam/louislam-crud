@@ -512,7 +512,7 @@ HTML;
             $fields = $this->getShowFields();
 
             foreach ($fields as $field) {
-                $row[] = $field->cellValue($bean);
+                $row[$field->getName()] = $field->cellValue($bean);
             }
 
             $obj->data[] = $row;
