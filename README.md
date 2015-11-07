@@ -18,6 +18,28 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 * "Write Less, Do More". 
 * Easy to customize.
 
+
+## Installation
+
+### Method 1: add louislam-crud to your composer.json
+
+1. Require the library.
+
+    ```json
+    "require": {
+        "louislam/louislam-crud": "dev-master"
+    },
+    "minimum-stability": "dev"
+    ```
+1. Compose the project with PHP Composer.
+
+### Method 2: Start a new project with bootstrap project.
+
+1. Download bootstrap project from: https://github.com/louislam/louislam-crud-bootstrap
+1. Compose the project with PHP Composer.
+
+### Method 3: Direct Download without Composer (Comming Soon)
+
 ## Getting started with a simple example
 1. Require and Import Libraries.
     ```php
@@ -55,5 +77,8 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
     ```
     
 6. Open it in your browser.
+   ```
+   http://<your hostname>/index.php/crud/product
+   ```
     ![Alt screenshot](http://i.imgur.com/c3rl7zr.png)
     
