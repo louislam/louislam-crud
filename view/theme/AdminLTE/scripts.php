@@ -32,7 +32,9 @@ use LouisLam\Util;
 <script src="<?= Util::res("vendor/blueimp/jquery-file-upload/js/jquery.fileupload.js") ?>"></script>
 
 <script src="<?= Util::res("vendor/moment/moment/min/moment.min.js") ?>"></script>
-<script src="<?= Util::res("vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") ?>"></script>
+<!--<script src="<?/*= Util::res("vendor/eonasdan/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js") */?>"></script>-->
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
 
 <script>
     var crud = new LouisCRUD();

@@ -31,7 +31,7 @@ class Hidden extends FieldType
         $type = $this->type;
 
         $html  = <<< EOF
-       <input type="$type" name="$name" value="$value" $readOnly $required />
+       <input type="$type" id="field-$name" name="$name" value="$value" $readOnly $required />
 EOF;
 
         if ($echo)
