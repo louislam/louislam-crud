@@ -18,6 +18,7 @@ var LouisCRUD = (function () {
                 // Clear all msgs
                 self.errorMsgs = [];
                 var ok = true;
+                // Validate
                 for (var i = 0; i < self.validateFunctions.length; i++) {
                     if (self.validateFunctions[i]() === false) {
                         ok = false;

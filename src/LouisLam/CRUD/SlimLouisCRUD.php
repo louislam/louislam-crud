@@ -96,7 +96,7 @@ class SlimLouisCRUD extends LouisCRUD
 
         // API Url
         $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
-        $this->setListViewJSONLink(Util::url($this->apiGroupName . "/" . $routeName . "/list" . $params));
+        $this->setListViewJSONLink(Util::url($this->apiGroupName . "/" . $routeName . "/datatables" . $params));
         $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
         $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
 
@@ -362,11 +362,106 @@ class SlimLouisCRUD extends LouisCRUD
                 }
 
                 if ($this->isEnabledListView()) {
+                    $this->getJSONList();
+                }
+                return;
+            })->via('GET', 'POST');
+
+            /*
+             * For Datatables
+             */
+            $this->slim->map("/datatables(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+                $this->enableJSONResponse();
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($this->listviewFunction != null) {
+                    $listviewFunction = $this->listviewFunction;
+                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                if ($this->isEnabledListView()) {
                     $this->getListViewJSONString();
                 }
                 return;
             })->via('GET', 'POST');
 
+
+            /*
+         * View a bean
+         * PUT /api/{tableName}/{id}
+         */
+            $this->slim->get("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+
+                // MUST INIT FIRST
+                $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
+
+                // Load Bean
+                $this->loadBean($id);
+
+                if ($this->configFunction != null) {
+                    $function = $this->configFunction;
+                    $result = $function();
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                // Custom Global Function
+                if ($customCRUDFunction != null) {
+                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                // Custom Edit Function
+                if ($this->editFunction != null) {
+                    $editFunction = $this->editFunction;
+                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
+
+                    if ($result === false) {
+                        return;
+                    }
+                }
+
+                // Force hide ID
+                $this->field("id")->hide();
+
+                // Insert into database
+                if ($this->isEnabledEdit()) {
+
+
+                   $json = $this->getJSON(false);
+
+                    $this->enableJSONResponse();
+                    echo $json;
+                }
+            });
 
             /*
              * Insert a bean

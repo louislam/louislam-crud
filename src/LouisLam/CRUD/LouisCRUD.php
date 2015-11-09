@@ -516,7 +516,6 @@ HTML;
 
             // Action
             $row[] = $this->getAction($bean);
-
             $fields = $this->getShowFields();
 
             foreach ($fields as $field) {
@@ -535,6 +534,70 @@ HTML;
         return $json;
     }
 
+    public function getJSONList($echo = true) {
+        $this->beforeRender();
+
+        if (isset($_POST["start"])) {
+            $start = $_POST["start"];
+        } else {
+            $start = 0;
+        }
+
+        if (isset($_POST["length"])) {
+            $rowPerPage = $_POST["length"];
+        } else {
+            $rowPerPage = 15;
+        }
+
+        $list = $this->getListViewData($start, $rowPerPage);
+        $obj = [];
+
+        foreach ($list as $bean) {
+            $row = [];
+            // Action
+            //$row[] = $this->getAction($bean);
+            $fields = $this->getShowFields();
+
+            foreach ($fields as $field) {
+                $row[$field->getName()] = $field->cellValue($bean);
+            }
+            $obj[] = $row;
+        }
+
+        $json = \LouisLam\Util::prettyJSONPrint(json_encode($obj));
+
+        if ($echo) {
+            echo $json;
+        }
+
+        return $json;
+    }
+
+
+    /**
+     * @param bool echo?
+     */
+    public function getJSON($echo = true) {
+        $bean = $this->getBean();
+
+        $fields = $this->getShowFields();
+
+        $output = "";
+        $array = [];
+
+        foreach ($fields as $field) {
+            $array[$field->getName()] = $field->cellValue($bean);
+        }
+
+        $output = \LouisLam\Util::prettyJSONPrint(json_encode($array));
+
+        if ($echo) {
+            echo $output;
+        }
+
+
+        return $output;
+    }
 
     /**
      * @param bool|true $echo
