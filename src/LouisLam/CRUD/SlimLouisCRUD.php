@@ -628,6 +628,16 @@ class SlimLouisCRUD extends LouisCRUD
         return $tempList;
     }
 
+    public function enableMenu() {
+        $plates = $this->getTemplateEngine();
+
+        $menu = $plates->render($this->getFullViewName("menu"), [
+            "menuItems" => $this->getMenuItems()
+        ]);
+
+        $this->setData("menu", $menu);
+    }
+
     /**
      * $crud->url("user", ["male", "1970"]);
      * @param $routeName

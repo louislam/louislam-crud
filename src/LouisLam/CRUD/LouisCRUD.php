@@ -1129,6 +1129,10 @@ HTML;
         ]);
     }
 
+    public function getFullViewName($viewName) {
+        return $this->theme . "::" . $viewName;
+    }
+
     public function setSQL($sql, $data = []) {
         $this->sql = $sql;
         $this->bindingData = $data;
