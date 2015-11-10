@@ -29,15 +29,16 @@ class CKEditor extends FieldType
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
 
-        $html  = <<< EOF
+        $html  = <<< HTML
         <label>$display <textarea class="editor" name="$name" $readOnly $required>$value</textarea></label>
         <script>
+
                 $( 'textarea.editor[name=$name]' ).ckeditor( {
                     extraPlugins: 'uploadimage',
                     imageUploadUrl: '/uploader/upload.php?type=Images'
                 } );
         </script>
-EOF;
+HTML;
 
         if ($echo)
             echo $html;
@@ -49,6 +50,12 @@ EOF;
 
         $output = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(' . $callback . ', "' . $image_url . '","' . $msg . '");</script>';
         echo $output;
+    }
+
+
+    public function renderCell($value)
+    {
+        return (strlen($value) > 70) ? substr($value, 0, 50) . "..." : $value;
     }
 
 }
