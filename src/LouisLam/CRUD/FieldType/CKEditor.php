@@ -11,7 +11,6 @@ namespace LouisLam\CRUD\FieldType;
 
 class CKEditor extends FieldType
 {
-
     // TODO: Check 777 for uploading images
 
     /**
@@ -29,13 +28,15 @@ class CKEditor extends FieldType
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
 
+        $uploadURL = \LouisLam\Util::url("uploader");
+
         $html  = <<< HTML
         <label>$display <textarea class="editor" name="$name" $readOnly $required>$value</textarea></label>
         <script>
 
                 $( 'textarea.editor[name=$name]' ).ckeditor( {
                     extraPlugins: 'uploadimage',
-                    imageUploadUrl: '/uploader/upload.php?type=Images'
+                    imageUploadUrl: '$uploadURL'
                 } );
         </script>
 HTML;

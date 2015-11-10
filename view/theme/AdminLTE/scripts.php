@@ -22,8 +22,8 @@ use LouisLam\Util;
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/dataTables.bootstrap.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
-<script src="<?=Util::res("vendor/almasaeed2010/adminlte/plugins/ckeditor/ckeditor.js") ?>"></script>
-<script src="<?=Util::res("vendor/almasaeed2010/adminlte/plugins/ckeditor/adapters/jquery.js") ?>"></script>
+<script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
+<script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>dist/js/app.min.js"></script>
 <!-- Upload Plugin -->
 <script src="<?= Util::res("vendor/blueimp/jquery-file-upload/js/vendor/jquery.ui.widget.js") ?>"></script>
@@ -36,4 +36,9 @@ use LouisLam\Util;
 
 <script>
     var crud = new LouisCRUD();
+
+    var BASE_URL = "<?="http://" . $_SERVER['SERVER_NAME'] ?>";
+
+    CKEDITOR.plugins.addExternal( 'uploadimage', BASE_URL + "<?=Util::res("vendor/louislam/louislam-crud/js/ckeditor_plugins/uploadimage/plugin.js") ?>");
+    CKEDITOR.plugins.addExternal( 'uploadwidget', BASE_URL + "<?=Util::res("vendor/louislam/louislam-crud/js/ckeditor_plugins/uploadwidget/plugin.js") ?>");
 </script>

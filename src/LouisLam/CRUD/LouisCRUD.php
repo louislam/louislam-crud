@@ -1094,9 +1094,18 @@ HTML;
         $this->actionClosure = $actionClosure;
     }
 
-    public function upload($fieldName) {
-        $fileUpload = new FileUpload($_FILES[$fieldName], $_SERVER);
-        $fileUpload->processAll();
+    public function upload($fieldName = "upload") {
+        $filename = $_FILES[$fieldName]["name"] . "-" . rand(1, 99999999999999);
+
+        move_uploaded_file($_FILES[$fieldName]["tmp_name"], "upload/" . $filename);
+
+        $output = [
+            "fileName" =>$filename,
+            "uploaded" => 1,
+            "url" => "http://123.com/" . $filename
+        ];
+
+        echo json_encode($output);
     }
 
     public function getTemplateEngine() {

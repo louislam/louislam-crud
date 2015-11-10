@@ -11,7 +11,7 @@ namespace LouisLam\CRUD\FieldType;
 
 use LouisLam\CRUD\Exception\DirectoryPermissionException;
 
-class FileType extends FieldType
+class Image extends FieldType
 {
 
     private $uploadPath;
@@ -38,7 +38,7 @@ class FileType extends FieldType
         $url = \LouisLam\Util::res($this->getUploadPath() . $value);
 
         return <<< HTML
-    <a href="$url" target="_blank">Open File</a>
+    <a href="$url" target="_blank"><img src="$url" alt=""></a>
 HTML;
     }
 
@@ -52,10 +52,24 @@ HTML;
         $type = $this->type;
 
         $html = <<< HTML
+
+
 <div class="form-group">
     <label for="field-$name">$display</label>
-    <input id="field-$name" class="form-control file"  type="$type" name="$name" value="$value" $readOnly $required />
+    <input id="field-$name" class="form-control file"  type="$type" name="$name" value="$value" $readOnly $required data-url="server/php/" multiple />
 
+    <script>
+    $(function () {
+        $('#field-$name').fileupload({
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+            }
+        });
+    });
+    </script>
 HTML;
 
         if ($echo)
@@ -68,7 +82,7 @@ HTML;
     {
         $targetFilename = $this->uploadPath . $valueFromUser;
         move_uploaded_file($_FILES[$this->field->getName()]["tmp_name"], $targetFilename);
-
+        echo $valueFromUser;
         return $valueFromUser;
     }
 
