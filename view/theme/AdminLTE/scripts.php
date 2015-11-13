@@ -39,6 +39,4 @@ use LouisLam\Util;
 
     var BASE_URL = "<?="http://" . $_SERVER['SERVER_NAME'] ?>";
 
-    CKEDITOR.plugins.addExternal( 'uploadimage', BASE_URL + "<?=Util::res("vendor/louislam/louislam-crud/js/ckeditor_plugins/uploadimage/plugin.js") ?>");
-    CKEDITOR.plugins.addExternal( 'uploadwidget', BASE_URL + "<?=Util::res("vendor/louislam/louislam-crud/js/ckeditor_plugins/uploadwidget/plugin.js") ?>");
 </script>

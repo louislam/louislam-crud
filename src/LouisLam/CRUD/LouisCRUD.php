@@ -1095,17 +1095,33 @@ HTML;
     }
 
     public function upload($fieldName = "upload") {
-        $filename = $_FILES[$fieldName]["name"] . "-" . rand(1, 99999999999999);
 
-        move_uploaded_file($_FILES[$fieldName]["tmp_name"], "upload/" . $filename);
 
-        $output = [
-            "fileName" =>$filename,
-            "uploaded" => 1,
-            "url" => "http://123.com/" . $filename
-        ];
+        if (isset($_FILES[$fieldName])) {
+            $folder = "upload/";
+            $filename = dechex(rand(1, 99999999999999)) . "-" . $_FILES[$fieldName]["name"];
 
-        echo json_encode($output);
+            $relativePath = $folder . $filename;
+            move_uploaded_file($_FILES[$fieldName]["tmp_name"], $relativePath);
+
+            $output = [
+                "fileName" =>$filename,
+                "uploaded" => 1,
+                "url" => \LouisLam\Util::res($relativePath),
+                "status" => "SUCC"
+            ];
+        } else {
+            $output = [
+                "fileName" => "",
+                "uploaded" => 0,
+                "url" => "",
+                "status" => "FAIL",
+                "msg" => "The file size was too big."
+            ];
+        }
+
+
+        return $output;
     }
 
     public function getTemplateEngine() {

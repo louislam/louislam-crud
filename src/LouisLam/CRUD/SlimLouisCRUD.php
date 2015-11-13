@@ -64,6 +64,37 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim = $slim;
         }
 
+        $slim->post("/louislam-crud/upload/:type", function ($type) {
+            $result = $this->upload();
+
+            if ($type == "js") {
+                $url = $result["url"];
+
+                if ($result["uploaded"]) {
+                    echo <<< HTML
+<script type="text/javascript">
+    window.parent.CKEDITOR.tools.callFunction("0", "$url", "");
+</script>
+HTML;
+                } else {
+                    $msg = $result["msg"];
+
+                        echo <<< HTML
+<script type="text/javascript">
+    alert("$msg");
+</script>
+HTML;
+                }
+
+
+
+            } else {
+                $this->enableJSONResponse();
+                echo json_encode($result);
+            }
+
+        });
+
     }
 
     private function init($tableName, $routeName, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {

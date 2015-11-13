@@ -28,16 +28,23 @@ class CKEditor extends FieldType
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
 
-        $uploadURL = \LouisLam\Util::url("uploader");
+        $uploadURL = \LouisLam\Util::url("louislam-crud/upload");
 
         $html  = <<< HTML
-        <label>$display <textarea class="editor" name="$name" $readOnly $required>$value</textarea></label>
+        <label for="field-$name">$display </label>
+        <textarea id="field-$name" class="editor" name="$name" $readOnly $required style="width:100%">$value</textarea>
         <script>
+                 var element = $( 'textarea.editor[name=$name]' );
 
-                $( 'textarea.editor[name=$name]' ).ckeditor( {
+                element.ckeditor( {
+                    height: 600,
+                    width: "100%",
                     extraPlugins: 'uploadimage',
-                    imageUploadUrl: '$uploadURL'
+                    imageUploadUrl: '$uploadURL/json',
+                    filebrowserImageUploadUrl: '$uploadURL/js'
                 } );
+
+                element.ckeditor().resize("100%");
         </script>
 HTML;
 
@@ -56,7 +63,8 @@ HTML;
 
     public function renderCell($value)
     {
-        return (strlen($value) > 70) ? substr($value, 0, 50) . "..." : $value;
+        $value = trim(strip_tags($value));
+        return mb_strimwidth($value, 0, 60, "...", "UTF-8");
     }
 
 }
