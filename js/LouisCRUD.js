@@ -8,6 +8,7 @@ var LouisCRUD = (function () {
     function LouisCRUD() {
         this.validateFunctions = [];
         this.errorMsgs = [];
+        this.isUploading = false;
         var self = this;
         $(document).ready(function () {
             // Disable Datatables' alert!
@@ -15,6 +16,10 @@ var LouisCRUD = (function () {
             // Ajax Submit Form
             $("form.ajax").submit(function (e) {
                 e.preventDefault();
+                if (self.isUploading) {
+                    alert("Uploading image(s), please wait.");
+                    return;
+                }
                 // Clear all msgs
                 self.errorMsgs = [];
                 var ok = true;
@@ -55,6 +60,9 @@ var LouisCRUD = (function () {
             self.refresh();
         });
     }
+    LouisCRUD.prototype.setUploading = function (val) {
+        this.isUploading = val;
+    };
     LouisCRUD.prototype.addValidateFunction = function (func) {
         this.validateFunctions.push(func);
     };

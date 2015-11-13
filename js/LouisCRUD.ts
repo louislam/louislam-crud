@@ -14,6 +14,12 @@ class LouisCRUD {
 
     private errorMsgs = [];
 
+    private isUploading : boolean = false;
+
+    public setUploading(val : boolean) : void {
+        this.isUploading = val;
+    }
+
     constructor() {
         var self = this;
 
@@ -26,6 +32,11 @@ class LouisCRUD {
             $("form.ajax").submit(function (e) {
 
                 e.preventDefault();
+
+                if (self.isUploading) {
+                    alert("Uploading image(s), please wait.");
+                    return;
+                }
 
                 // Clear all msgs
                 self.errorMsgs = [];

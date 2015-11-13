@@ -10,6 +10,7 @@ namespace LouisLam\CRUD\FieldType;
 
 
 use LouisLam\CRUD\Exception\DirectoryPermissionException;
+use LouisLam\Util;
 
 class Image extends FieldType
 {
@@ -34,13 +35,6 @@ class Image extends FieldType
         }
     }
 
-    public function renderCell($value) {
-        $url = \LouisLam\Util::res($this->getUploadPath() . $value);
-
-        return <<< HTML
-    <a href="$url" target="_blank"><img src="$url" alt=""></a>
-HTML;
-    }
 
     public function render($echo = false)
     {
@@ -51,39 +45,79 @@ HTML;
         $required = $this->getRequiredString();
         $type = $this->type;
 
+        $uploadURL = Util::url("louislam-crud/upload/json");
+
+
+        if ($value != "" && $value != null) {
+            $imgTag = <<< HTML
+<img src="$value" alt="" />
+HTML;
+            $hideRemoveButton = "";
+        } else {
+            $imgTag = "";
+            $hideRemoveButton = 'style="display: none"';
+        }
+
         $html = <<< HTML
 
 
 <div class="form-group">
-    <label for="field-$name">$display</label>
-    <input id="field-$name" class="form-control file"  type="$type" name="$name" value="$value" $readOnly $required data-url="server/php/" multiple />
+    <label for="upload-$name">$display</label>
 
+    <input id="upload-$name" class="form-control" type="file" $readOnly $required />
+    <input id="field-$name" type="hidden" name="$name" value="$value" $readOnly $required />
+
+    <div id="image-preview-$name" class="image-preview">
+                $imgTag
+        </div>
+
+        <a id="image-remove-$name" href="javascript:void(0)" class="btn btn-danger" $hideRemoveButton>Remove Image</a>
+   <br/>   <br/>
     <script>
-    $(function () {
-        $('#field-$name').fileupload({
-            dataType: 'json',
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo(document.body);
-                });
-            }
+
+        $("#image-remove-$name").click(function () {
+                $("#image-preview-$name").html("");
+                $("#field-$name").val("");
+                $(this).hide();
         });
-    });
+
+       $("#upload-$name").change(function () {
+
+            if ($(this).val() == "") {
+                return;
+            }
+
+           var data = new FormData();
+
+            jQuery.each($(this)[0].files, function(i, file) {
+                data.append("upload", file);
+            });
+
+             $.ajax({
+                url: '$uploadURL',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(data){
+                        var img = $("<img alt=\"\" />");
+                        img.attr("src", data.url);
+
+                        $("#image-preview-$name").html(img);
+                        $("#field-$name").val(data.url);
+                        $("#image-remove-$name").show();
+                }
+            });
+       });
     </script>
+
 HTML;
 
         if ($echo)
             echo $html;
 
         return $html;
-    }
-
-    public function beforeStoreValue($valueFromUser)
-    {
-        $targetFilename = $this->uploadPath . $valueFromUser;
-        move_uploaded_file($_FILES[$this->field->getName()]["tmp_name"], $targetFilename);
-        echo $valueFromUser;
-        return $valueFromUser;
     }
 
     /**
@@ -102,6 +136,14 @@ HTML;
         // TODO: Append slash if no end slash
         $this->uploadPath = $uploadPath;
     }
+    
+    public function renderCell($value)
+    {
+        return <<< HTML
+<a target="_blank" href="$value"><img src="$value" alt="" style="max-width: 200px; max-height:70px;"></a>
+HTML;
 
-
+    }
+    
+    
 }
