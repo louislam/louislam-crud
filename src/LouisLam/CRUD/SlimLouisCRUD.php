@@ -64,7 +64,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim = $slim;
         }
 
-        $slim->post("/louislam-crud/upload/:type", function ($type) {
+        $this->slim->post("/louislam-crud/upload/:type", function ($type) {
             $result = $this->upload();
 
             if ($type == "js") {
