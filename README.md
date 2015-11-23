@@ -21,6 +21,8 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 
 ## Installation
 
+Note: The library is under development and not tested very well currently. 
+
 ### Method 1: add louislam-crud to your composer.json
 
 1. Require the library.
@@ -52,9 +54,20 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 
 1. Setup a Database Connection (Support MySQL, SQLite etc.)
 
- ```php
+    For SQLite:
+
+    ```php
     R::setup('sqlite:dbfile.db');
     ```
+    
+    For MySQL:
+
+    ```php
+    R::setup( 'mysql:host=localhost;dbname=mydatabase', 'user', 'password' );
+    ```
+    
+    More info: http://www.redbeanphp.com/index.php?p=/connection
+
 
 1. Create a SlimLouisCRUD instance.
     ```php
