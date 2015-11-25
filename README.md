@@ -79,7 +79,12 @@ Note: The library is under development and not tested very well currently.
     $crud->add("product", function () use ($crud) {
     
         // Show and Ordering the fields
-        $crud->showFields("id", "name", "price", "description");
+        $crud->showFields([
+            "id", 
+            "name", 
+            "price", 
+            "description"
+        ]);
         
     });
     ```
