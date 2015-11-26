@@ -51,6 +51,11 @@ class Image extends FieldType
         if ($value != "" && $value != null) {
             $imgTag = <<< HTML
 <img src="$value" alt="" />
+
+<!-- Remove Required for the upload field -->
+<script>
+ $("#upload-$name").removeAttr("required");
+</script>
 HTML;
             $hideRemoveButton = "";
         } else {
@@ -64,8 +69,8 @@ HTML;
 <div class="form-group">
     <label for="upload-$name">$display</label>
 
-    <input id="upload-$name" class="form-control" type="file" $readOnly $required />
-    <input id="field-$name" type="hidden" name="$name" value="$value" $readOnly $required />
+    <input id="upload-$name" class="form-control" type="file" $readOnly $required data-required="$required"  />
+    <input id="field-$name" type="hidden" name="$name" value="$value"  />
 
     <div id="image-preview-$name" class="image-preview">
                 $imgTag
@@ -78,6 +83,13 @@ HTML;
         $("#image-remove-$name").click(function () {
                 $("#image-preview-$name").html("");
                 $("#field-$name").val("");
+
+                var required = $("#upload-$name").data("required");
+
+                if (requried == "required") {
+                         $("#upload-$name").attr("required", true);
+                }
+
                 $(this).hide();
         });
 
@@ -107,6 +119,8 @@ HTML;
                         $("#image-preview-$name").html(img);
                         $("#field-$name").val(data.url);
                         $("#image-remove-$name").show();
+
+                         $("#upload-$name").removeAttr("required");
                 }
             });
        });
