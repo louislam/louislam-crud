@@ -293,6 +293,10 @@ class LouisCRUD
         $this->template->addFolder($themeName, $path);
     }
 
+    public function getThemeName() {
+        return $this->theme;
+    }
+
     protected function setTable($tableName)
     {
         if ($this->tableName != null) {
@@ -1131,7 +1135,7 @@ HTML;
         return $this->template;
     }
 
-    public function render($name, $data = [], $echo = true) {
+    public function render($name, $data = [], $echo = false) {
         $data["layoutName"] = $this->getLayoutName();
         $data["crud"] = $this;
 

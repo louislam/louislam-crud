@@ -823,11 +823,13 @@ HTML;
             }
         }
 
+        $crud = $this;
+
         $content = $callback();
-        $this->getSlim()->get($route, function () use ($content) {
-            $this->render($this->theme . "::page", [
+        $this->getSlim()->get($route, function () use ($content, $crud) {
+            $this->render($crud->getThemeName() . "::page", [
                 "content" => $content
-            ]);
+            ], true);
         });
     }
 
