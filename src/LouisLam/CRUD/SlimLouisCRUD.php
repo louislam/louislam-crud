@@ -808,6 +808,29 @@ HTML;
         $helper->genExcel($this, $list, $this->getExportFilename());
     }
 
+    /**
+     * Content Page
+     * @param $route
+     * @param callable $callback
+     */
+    public function page($route, $callback) {
+        if ($this->configFunction != null) {
+            $function = $this->configFunction;
+            $result = $function();
+
+            if ($result === false) {
+                return;
+            }
+        }
+
+        $content = $callback();
+        $this->getSlim()->get($route, function () use ($content) {
+            $this->render($this->theme . "::page", [
+                "content" => $content
+            ]);
+        });
+    }
+
     public function notFound() {
         $this->getSlim()->notFound();
     }

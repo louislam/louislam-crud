@@ -85,7 +85,7 @@ class LouisCRUD
 
     /** @var Engine */
     private $template;
-    private $theme;
+    protected $theme;
 
     /**
      * @var string $layout
