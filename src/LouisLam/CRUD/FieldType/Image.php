@@ -86,7 +86,7 @@ HTML;
 
                 var required = $("#upload-$name").data("required");
 
-                if (requried == "required") {
+                if (required == "required") {
                          $("#upload-$name").attr("required", true);
                 }
 
