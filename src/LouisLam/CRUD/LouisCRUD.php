@@ -23,6 +23,7 @@ use RedBeanPHP\R;
  */
 class LouisCRUD
 {
+    const NULL = "--louislam-crud-null";
 
     /**
      * For those who would like to fork my project, please update the composer name.
@@ -884,7 +885,7 @@ HTML;
 
                 $value = $field->getStoreValue($data);
 
-                if ($value == "--louislam-crud-null") {
+                if ($value == LouisCRUD::NULL) {
                     $value = null;
                 }
 

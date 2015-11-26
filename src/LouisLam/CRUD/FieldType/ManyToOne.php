@@ -9,6 +9,7 @@
 namespace LouisLam\CRUD\FieldType;
 
 
+use LouisLam\CRUD\LouisCRUD;
 use RedBeanPHP\R;
 
 class ManyToOne extends Dropdown
@@ -29,7 +30,7 @@ class ManyToOne extends Dropdown
         $options = [];
 
         if ($nullOption) {
-            $options["--louislam-crud-null"] = "--";
+            $options[LouisCRUD::NULL] = "--";
         }
 
         foreach ($beans as $bean) {
