@@ -1094,11 +1094,10 @@ HTML;
         $this->actionClosure = $actionClosure;
     }
 
-    public function upload($fieldName = "upload") {
-
+    public function upload($fieldName = "upload", $folder = "upload/") {
 
         if (isset($_FILES[$fieldName])) {
-            $folder = "upload/";
+
             $filename = dechex(rand(1, 99999999999999)) . "-" . $_FILES[$fieldName]["name"];
 
             $relativePath = $folder . $filename;
