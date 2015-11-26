@@ -786,15 +786,7 @@ HTML;
         if (isset($this->tableDisplayName[$routeName] ) && $this->tableDisplayName[$routeName] != null) {
             return $this->tableDisplayName[$routeName];
         } else {
-            $name = parent::getTableDisplayName();
-
-            if ($name == "" && $routeName ==null) {
-                return $name;
-            } elseif ($name != "") {
-                return $name;
-            } else {
-                return Util::displayName($routeName);
-            }
+            return Util::displayName($routeName);
         }
     }
 
