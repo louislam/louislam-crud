@@ -754,11 +754,11 @@ HTML;
         return $tempList;
     }
 
-    public function enableMenu() {
+    public function enableMenu($menuItems = []) {
         $plates = $this->getTemplateEngine();
 
         $menu = $plates->render($this->getFullViewName("menu"), [
-            "menuItems" => $this->getMenuItems()
+            "menuItems" => array_merge($this->getMenuItems(), $menuItems)
         ]);
 
         $this->setData("menu", $menu);
