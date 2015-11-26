@@ -36,6 +36,12 @@ class DateTimeLocalType extends TextField
         return R::isoDateTime(strtotime($valueFromUser));
     }
 
+    public function renderCell($value)
+    {
+        return date("Y-m-d h:i A", strtotime($value));
+    }
+
+
     public function beforeRenderValue($valueFromDatabase)
     {
         return DateTimeLocalType::getHTMLDateTime(strtotime($valueFromDatabase));
