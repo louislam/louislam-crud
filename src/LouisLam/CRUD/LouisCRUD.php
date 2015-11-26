@@ -771,8 +771,7 @@ HTML;
         $result =  $this->saveBean($bean, $data);
 
         if (!isset($result->msg)) {
-            //$result->msg = "The record has been created successfully.";
-            $result->msg = "帳號已建立成功。";
+            $result->msg = "The record has been created successfully.";
             $result->class = "callout-info";
             $result->ok = true;
         } else {
@@ -884,6 +883,10 @@ HTML;
                 // 3.Normal data field
 
                 $value = $field->getStoreValue($data);
+
+                if ($value == "--louislam-crud-null") {
+                    $value = null;
+                }
 
                 // Validate the value
                 if ($field->isStorable())

@@ -21,11 +21,16 @@ class ManyToOne extends Dropdown
      * @param array $data
      * @param callable $nameClosure
      * @param string $valueField The field name that used to be value. The default field is "id".
+     * @param bool $nullOption
      */
-    public function __construct($tableName, $clause = null, $data = [], $nameClosure = null, $valueField = "id") {
+    public function __construct( $tableName,  $clause = null,  $data = [],  $nameClosure = null,  $valueField = "id", $nullOption = true) {
         $beans = R::find($tableName, $clause, $data);
 
         $options = [];
+
+        if ($nullOption) {
+            $options["--louislam-crud-null"] = "--";
+        }
 
         foreach ($beans as $bean) {
 
