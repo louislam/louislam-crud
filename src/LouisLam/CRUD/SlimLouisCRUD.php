@@ -1,6 +1,8 @@
 <?php
 namespace LouisLam\CRUD;
 
+use League\Plates\Engine;
+use LouisLam\Auth;
 use LouisLam\Util;
 use Slim\Slim;
 
@@ -14,6 +16,10 @@ use Slim\Slim;
  */
 class SlimLouisCRUD extends LouisCRUD
 {
+
+
+    protected $checkLogin = false;
+
     private $groupName;
     private $apiGroupName;
 
@@ -64,6 +70,7 @@ class SlimLouisCRUD extends LouisCRUD
             $this->slim = $slim;
         }
 
+        // Upload function
         $this->slim->post("/louislam-crud/upload/:type", function ($type) {
             $result = $this->upload();
 
@@ -93,6 +100,14 @@ HTML;
                 echo json_encode($result);
             }
 
+        });
+
+        $this->slim->get("/louislam-crud/login", function () {
+            $this->getTemplateEngine()->render("adminlte::login");
+        });
+
+        $this->slim->post("/louislam-crud/login", function () {
+            Auth::login($_POST["username"], $_POST["password"]);
         });
 
     }
@@ -721,6 +736,9 @@ HTML;
         $this->slim->run();
     }
 
+    /**
+     * Please make sure you return a valid JSON.
+     */
     public function enableJSONResponse()
     {
         $this->slim->response->header('Content-Type', 'application/json');
@@ -837,4 +855,11 @@ HTML;
         $this->getSlim()->notFound();
     }
 
+    public function checkLogin() {
+        $crud = $this;
+
+        Auth::checkLogin(function () use ($crud) {
+            $crud->getSlim()->redirect(Util::url("louislam-crud/login"));
+        });
+    }
 }
