@@ -52,6 +52,7 @@ class SlimLouisCRUD extends LouisCRUD
     private $currentRouteName = "";
 
 
+
     /**
      * SlimCRUD constructor.
      * @param string $groupName
@@ -60,6 +61,8 @@ class SlimLouisCRUD extends LouisCRUD
      */
     public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null)
     {
+        session_start();
+
         parent::__construct();
         $this->groupName = $groupName;
         $this->apiGroupName = $apiGroupName;
@@ -102,12 +105,22 @@ HTML;
 
         });
 
-        $this->slim->get("/louislam-crud/login", function () {
-            $this->getTemplateEngine()->render("adminlte::login");
+        $this->slim->get("/auth/login", function () {
+
+            echo $this->getTemplateEngine()->render("adminlte::login");
+
         });
 
-        $this->slim->post("/louislam-crud/login", function () {
-            Auth::login($_POST["username"], $_POST["password"]);
+        $app = $this->slim;
+
+        $this->slim->post("/auth/login", function () use ($app) {
+            $result=  Auth::login($_POST["username"], $_POST["password"]);
+
+            if ($result) {
+                @$app->redirect($_SESSION["redirect"]);
+            } else {
+                $app->redirect(Util::url("auth/login"));
+            }
         });
 
     }
@@ -859,7 +872,19 @@ HTML;
         $crud = $this;
 
         Auth::checkLogin(function () use ($crud) {
-            $crud->getSlim()->redirect(Util::url("louislam-crud/login"));
+
+            // Get request object
+            $req = $crud->getSlim()->request;
+
+//Get root URI
+            $rootUri = $req->getRootUri();
+
+//Get resource URI
+            $resourceUri = $req->getResourceUri();
+
+            $_SESSION["redirect"] = $rootUri . $resourceUri;
+
+            $crud->getSlim()->redirect(Util::url("auth/login"));
         });
     }
 }

@@ -30,7 +30,7 @@ use LouisLam\Util;
         <?php endif; ?>
 
 
-        <form action="<?=Util::url("login") ?>" method="post">
+        <form action="<?=Util::url("auth/login") ?>" method="post">
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" placeholder="Username" name="username"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
