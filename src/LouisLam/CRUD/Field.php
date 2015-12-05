@@ -9,7 +9,7 @@ use LouisLam\CRUD\FieldType\Password;
 use LouisLam\CRUD\FieldType\PasswordWithConfirm;
 use LouisLam\CRUD\FieldType\TextArea;
 use LouisLam\CRUD\FieldType\TextField;
-use LouisLam\String;
+use LouisLam\LouisString;
 use LouisLam\Util;
 
 /**
@@ -110,11 +110,11 @@ class Field
 
         $this->dataType = $dataType;
 
-        if (String::contains($dataType, "varchar")) {
+        if (LouisString::contains($dataType, "varchar")) {
             $this->fieldType = new TextField();
-        } else if (String::contains($dataType, "int")) {
+        } else if (LouisString::contains($dataType, "int")) {
             $this->fieldType = new IntegerType();
-        } else if (String::contains($dataType, "text")) {
+        } else if (LouisString::contains($dataType, "text")) {
                 $this->fieldType = new TextArea();
         } else {
             $this->fieldType = new TextField();
