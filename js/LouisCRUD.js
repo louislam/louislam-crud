@@ -78,12 +78,19 @@ var LouisCRUD = (function () {
             "info": true,
             "drawCallback": function (settings) {
                 self.refresh();
+            },
+            "bStateSave": true,
+            "fnStateSave": function (oSettings, oData) {
+                localStorage.setItem('DataTables_' + window.location.pathname, JSON.stringify(oData));
+            },
+            "fnStateLoad": function (oSettings) {
+                return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
             }
         };
         if ($isAjax) {
             data.serverSide = true;
             data.processing = true;
-            data.searching = false;
+            //data.searching = true;
             data.ajax = {
                 url: tableURL,
                 type: "POST"
