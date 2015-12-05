@@ -401,6 +401,7 @@ HTML;
      * @param null $start
      * @param null $rowPerPage
      * @return array List of beans
+     * @throws \RedBeanPHP\RedException\SQL
      */
     protected function getListViewData($start = null, $rowPerPage = null)
     {
@@ -486,7 +487,7 @@ HTML;
 
 
     /**
-     * For Ajax ListView
+     * For Ajax ListView (DataTables)
      *
      * @param bool|true $echo
      * @return string
@@ -505,12 +506,18 @@ HTML;
         if (isset($_POST["length"])) {
             $rowPerPage = $_POST["length"];
         } else {
-            $rowPerPage = 15;
+            $rowPerPage = 25;
         }
 
        $list = $this->getListViewData($start, $rowPerPage);
 
+
         $obj = new AjaxResult();
+
+        // Get the total number of record
+        // TODO: Can improve performance?
+        $obj->recordsTotal = count($this->getListViewData());
+        $obj->recordsFiltered = $obj->recordsTotal;
 
         if (isset($_POST["draw"])) {
             $obj->draw = $_POST["draw"];
@@ -539,6 +546,14 @@ HTML;
         return $json;
     }
 
+    /**
+     * For API
+     *
+     * @param bool|true $echo
+     * @return mixed
+     * @throws NoFieldException
+     * @throws \RedBeanPHP\RedException\SQL
+     */
     public function getJSONList($echo = true) {
         $this->beforeRender();
 
