@@ -11,6 +11,8 @@ use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
+use PHPSQL\Creator;
+use PHPSQL\Parser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 
@@ -403,10 +405,11 @@ HTML;
      * @return array List of beans
      * @throws \RedBeanPHP\RedException\SQL
      */
-    protected function getListViewData($start = null, $rowPerPage = null)
+    protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null)
     {
         try {
 
+            // Paging
             if ($start != null && $rowPerPage != null) {
                 $limit = " LIMIT $start,$rowPerPage";
             } else {
@@ -424,20 +427,48 @@ HTML;
                     $list[] = (object)$row;
                 }
 
-            } elseif ($this->findClause != null) {
-                // Find Clause
-
-                $list = R::find($this->tableName, $this->findClause . $limit, $this->bindingData);
             } else {
-                // Find All Clause
 
+                $bindingData = $this->bindingData;
+
+                // For Find All Clause
                 if ($this->findAllClause != null) {
-                    $clause = $this->findAllClause . $limit;
+                    $findClause = " 1 = 1 " . $this->findAllClause;
+                } else if ($this->findClause != null) {
+                    $findClause = $this->findAllClause;
                 } else {
-                    $clause = $limit;
+                    $findClause = " 1 = 1 ";
                 }
-                $list = R::findAll($this->tableName, $clause, $this->bindingData);
 
+                // Build a searching clause
+                if ($keyword != null) {
+                    $searchClause = $this->buildSearchingClause();
+                    $searchData = $this->buildSearchingData($keyword);
+
+                    $findClause = $searchClause . $findClause;
+
+                    // Merge Array
+                    $bindingData = $searchData + $bindingData;
+                }
+
+                // Sorting
+                if ($sortField != null) {
+                    $fakeSelect = "SELECT * FROM louislamcrud_fake_table WHERE ";
+
+                    $parser = new Parser($fakeSelect . $findClause);
+
+                    $sqlArray = $parser->parsed;
+
+                    $sqlArray["ORDER"][0]["expr_type"] = "colref";
+                    $sqlArray["ORDER"][0]["base_expr"] = $sortField;
+                    $sqlArray["ORDER"][0]["sub_tree"] = null;
+                    $sqlArray["ORDER"][0]["direction"] = $sortOrder;
+
+                    $findClause = str_replace($fakeSelect, "", (new Creator($sqlArray))->created);
+                }
+
+
+                $list = R::find($this->tableName, $findClause . $limit, $bindingData);
             }
         } catch (\RedBeanPHP\RedException\SQL $ex) {
 
@@ -451,6 +482,39 @@ HTML;
         }
 
         return $list;
+    }
+
+    protected function buildSearchingClause() {
+        $searchClause = " ( ";
+
+        $searchFields = $this->getShowFields();
+        $isFirstSearchField = true;
+        foreach ($searchFields as $searchField) {
+
+            if ($isFirstSearchField) {
+                $isFirstSearchField = false;
+            } else {
+                $searchClause .= " OR ";
+            }
+
+            $searchClause .= $searchField->getName() . " LIKE ? ";
+        }
+
+        $searchClause .= " ) AND ";
+
+        return $searchClause;
+    }
+
+    protected function buildSearchingData($keyword) {
+        $searchData = [];
+
+        $searchFields = $this->getShowFields();
+
+        foreach ($searchFields as $searchField) {
+            $searchData[] = "%$keyword%";
+        }
+
+        return $searchData;
     }
 
     public function renderExcel()
@@ -509,7 +573,31 @@ HTML;
             $rowPerPage = 25;
         }
 
-       $list = $this->getListViewData($start, $rowPerPage);
+        if (isset($_POST["search"]["value"])) {
+            $keyword = $_POST["search"]["value"];
+        } else {
+            $keyword = null;
+        }
+
+        if (isset($_POST["order"][0]["column"])) {
+           $fieldIndex = $_POST["order"][0]["column"] - 1;
+
+            if ($fieldIndex >= 0) {
+                $orderField = $this->getShowFields()[$fieldIndex]->getName();
+                $order = $_POST["order"][0]["dir"];
+            } else {
+
+                // Invalid Request
+                return null;
+            }
+
+
+        } else {
+            $orderField = null;
+            $order = null;
+        }
+
+        $list = $this->getListViewData($start, $rowPerPage, $keyword, $orderField, $order);
 
 
         $obj = new AjaxResult();
