@@ -586,9 +586,8 @@ HTML;
                 $orderField = $this->getShowFields()[$fieldIndex]->getName();
                 $order = $_POST["order"][0]["dir"];
             } else {
-
-                // Invalid Request
-                return null;
+                $orderField = null;
+                $order = null;
             }
 
 
