@@ -435,10 +435,12 @@ HTML;
                 if ($this->findAllClause != null) {
                     $findClause = " 1 = 1 " . $this->findAllClause;
                 } else if ($this->findClause != null) {
-                    $findClause = $this->findAllClause;
+                    $findClause = $this->findClause;
                 } else {
                     $findClause = " 1 = 1 ";
                 }
+
+
 
                 // Build a searching clause
                 if ($keyword != null) {
