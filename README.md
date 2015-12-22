@@ -19,6 +19,10 @@ LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standa
 * Easy to customize.
 
 
+## Docmentation
+
+https://github.com/louislam/louislam-crud/wiki/Quick-API-and-Reference
+
 ## Installation
 
 Note: The library is under development and not tested very well currently. 
