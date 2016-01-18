@@ -25,7 +25,8 @@ class FileType extends FieldType
         if (! file_exists($this->getUploadPath())) {
             mkdir($this->getUploadPath(), 0777);
         } else {
-            chmod($this->getUploadPath(), 0777);
+            // Just Kidding, I cannot do this
+            //chmod($this->getUploadPath(), 0777);
         }
 
         // Check the directory permission
