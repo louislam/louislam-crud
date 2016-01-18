@@ -26,7 +26,7 @@ class Image extends FieldType
         if (! file_exists($this->getUploadPath())) {
             mkdir($this->getUploadPath(), 0777);
         } else {
-            chmod($this->getUploadPath(), 0777);
+            //chmod($this->getUploadPath(), 0777);
         }
 
         // Check the directory permission
