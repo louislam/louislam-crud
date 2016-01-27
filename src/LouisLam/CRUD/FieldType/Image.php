@@ -49,8 +49,10 @@ class Image extends FieldType
 
 
         if ($value != "" && $value != null) {
+            $imgURL = Util::res($value);
+
             $imgTag = <<< HTML
-<img src="$value" alt="" />
+<img src="$imgURL" alt="" />
 
 <!-- Remove Required for the upload field -->
 <script>
@@ -114,7 +116,7 @@ HTML;
                 type: 'POST',
                 success: function(data){
                         var img = $("<img alt=\"\" />");
-                        img.attr("src", data.url);
+                        img.attr("src", RES_URL + data.url);
 
                         $("#image-preview-$name").html(img);
                         $("#field-$name").val(data.url);

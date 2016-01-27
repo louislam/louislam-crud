@@ -38,5 +38,5 @@ use LouisLam\Util;
     var crud = new LouisCRUD();
 
     var BASE_URL = "<?="http://" . $_SERVER['SERVER_NAME'] ?>";
-
+    var RES_URL = "<?=Util::res("") ?>";
 </script>
