@@ -155,8 +155,10 @@ HTML;
     
     public function renderCell($value)
     {
+        $imgURL = Util::res($value);
+
         return <<< HTML
-<a target="_blank" href="$value"><img src="$value" alt="" style="max-width: 200px; max-height:70px;"></a>
+<a target="_blank" href="$value"><img src="$imgURL" alt="" style="max-width: 200px; max-height:70px;"></a>
 HTML;
 
     }
