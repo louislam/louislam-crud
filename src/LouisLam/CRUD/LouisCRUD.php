@@ -1218,7 +1218,7 @@ HTML;
             $output = [
                 "fileName" =>$filename,
                 "uploaded" => 1,
-                "url" => \LouisLam\Util::res($relativePath),
+                "url" => $relativePath,
                 "status" => "SUCC"
             ];
         } else {
