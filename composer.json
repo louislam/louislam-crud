@@ -23,13 +23,13 @@
         "phpoffice/phpexcel": "1.8.1",
         "components/jqueryui": "1.11.4",
         "ckeditor/ckeditor": "4.5.4",
-        "soundintheory/php-sql-parser": "1.0"
+        "soundintheory/php-sql-parser": "1.0",
+        "maximebf/debugbar": "1.*"
     },
     "autoload": {
         "psr-4": {
             "LouisLam\\" : "src/LouisLam"
-        },
-        "files": ["src/helpers.php"]
+        }
     },
     "minimum-stability": "dev"
 }

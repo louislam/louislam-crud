@@ -1,6 +1,10 @@
 <?php
 /** @var LouisCRUD $crud */
 use LouisLam\CRUD\LouisCRUD;
+use DebugBar\StandardDebugBar;
+
+$debugbar = new StandardDebugBar();
+$debugbarRenderer = $debugbar->getJavascriptRenderer();
 
 ?>
 <!DOCTYPE html>
@@ -15,7 +19,7 @@ use LouisLam\CRUD\LouisCRUD;
     <?=$this->insert('adminlte::scripts')?>
 
     <?=@$crud->getData("head") ?>
-
+    <?php echo $debugbarRenderer->renderHead() ?>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -69,5 +73,6 @@ use LouisLam\CRUD\LouisCRUD;
 
 </div>
 <?=@$crud->getData("bodyBeforeEnd") ?>
+<?php echo $debugbarRenderer->render() ?>
 </body>
 </html>
