@@ -44,7 +44,7 @@ Note: The library is under development and not tested very well currently.
 1. Download bootstrap project from: https://github.com/louislam/louislam-crud-bootstrap
 1. Compose the project with PHP Composer.
 
-### Method 3: Direct Download without Composer (Comming Soon)
+### Method 3: Direct Download without Composer (Coming Soon)
 
 ## Getting started with a simple example
 1. Require and Import Libraries.
