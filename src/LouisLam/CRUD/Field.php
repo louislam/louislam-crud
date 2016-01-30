@@ -401,6 +401,9 @@ class Field
                 } else {
                     // Use the value from Database
                     $value = $this->getFieldType()->beforeRenderValue($bean->{$name});
+
+                    // Escape the html
+                    $value = htmlspecialchars($value);
                 }
             }
 

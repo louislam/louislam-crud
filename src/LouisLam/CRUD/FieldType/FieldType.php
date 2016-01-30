@@ -34,7 +34,7 @@ abstract class FieldType
     }
 
     public function renderCell($value) {
-       return $value;
+       return htmlspecialchars($value);
     }
 
     protected function getReadOnlyString() {
