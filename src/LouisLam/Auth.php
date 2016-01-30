@@ -23,7 +23,7 @@ class Auth
             $encrypt = Auth::$encryptPasswordFunction;
             $password = $encrypt($password);
         } else {
-            $password = md5($password);
+            $password = password_hash($password, PASSWORD_DEFAULT);
         }
 
         $row = R::getRow("SELECT * FROM `user` WHERE username = ? AND password = ?", array(
