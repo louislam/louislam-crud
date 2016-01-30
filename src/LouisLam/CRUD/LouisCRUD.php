@@ -259,10 +259,10 @@ class LouisCRUD
                 $this->field($name)->required();
             }
         } else {
-            $numargs = func_num_args();
+            $numArgs = func_num_args();
             $fieldNames = func_get_args();
 
-            for ($i = 0; $i < $numargs; $i++) {
+            for ($i = 0; $i < $numArgs; $i++) {
                 $this->field($fieldNames[$i])->required();
             }
         }
@@ -270,10 +270,10 @@ class LouisCRUD
 
     public function readOnlyFields()
     {
-        $numargs = func_num_args();
+        $numArgs = func_num_args();
         $fieldNames = func_get_args();
 
-        for ($i = 0; $i < $numargs; $i++) {
+        for ($i = 0; $i < $numArgs; $i++) {
             $this->field($fieldNames[$i])->setReadOnly(true);
         }
     }
@@ -439,7 +439,6 @@ HTML;
                 } else {
                     $findClause = " 1 = 1 ";
                 }
-
 
 
                 // Build a searching clause
