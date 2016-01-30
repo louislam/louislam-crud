@@ -1,10 +1,6 @@
 <?php
 /** @var LouisCRUD $crud */
 use LouisLam\CRUD\LouisCRUD;
-use DebugBar\StandardDebugBar;
-
-$debugbar = new StandardDebugBar();
-$debugbarRenderer = $debugbar->getJavascriptRenderer();
 
 ?>
 <!DOCTYPE html>

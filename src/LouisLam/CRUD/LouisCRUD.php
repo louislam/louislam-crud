@@ -2,6 +2,7 @@
 
 namespace LouisLam\CRUD;
 
+use DebugBar\StandardDebugBar;
 use Exception;
 use Gettext\Translator;
 use League\Plates\Engine;
@@ -11,6 +12,7 @@ use LouisLam\CRUD\Exception\NoFieldException;
 use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
+use LouisLam\Util;
 use PHPSQL\Creator;
 use PHPSQL\Parser;
 use RedBeanPHP\OODBBean;
@@ -110,6 +112,8 @@ class LouisCRUD
 
     private $exportFilename = null;
 
+    private $debugbar;
+
     /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
@@ -130,6 +134,15 @@ class LouisCRUD
             $this->template = new Engine($viewDir);
         } catch(\LogicException $ex) {
             $this->template = new Engine();
+
+            // Debug Bar
+            $this->debugbar = new StandardDebugBar();
+            $debugbarRenderer = $this->debugbar->getJavascriptRenderer(Util::res("vendor/maximebf/debugbar/src/DebugBar/Resources"));
+
+            $this->template->addData([
+                "debugbar" => $this->debugbar,
+                "debugbarRenderer" => $debugbarRenderer
+            ]);
         }
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
@@ -138,8 +151,17 @@ class LouisCRUD
 
         // Enable helper?
         if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
-            setGlobalCRUD($this);
+            //setGlobalCRUD($this);
         }
+
+
+    }
+
+    /**
+     * @param $msg
+     */
+    public function log($msg) {
+        $this->debugbar["messages"]->addMessage($msg);
     }
 
     public function setViewDirectory($viewDir)
@@ -672,7 +694,7 @@ HTML;
             $obj[] = $row;
         }
 
-        $json = \LouisLam\Util::prettyJSONPrint(json_encode($obj));
+        $json = Util::prettyJSONPrint(json_encode($obj));
 
         if ($echo) {
             echo $json;
@@ -697,7 +719,7 @@ HTML;
             $array[$field->getName()] = $field->cellValue($bean);
         }
 
-        $output = \LouisLam\Util::prettyJSONPrint(json_encode($array));
+        $output = Util::prettyJSONPrint(json_encode($array));
 
         if ($echo) {
             echo $output;
