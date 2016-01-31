@@ -4,7 +4,6 @@ namespace LouisLam\CRUD;
 
 use DebugBar\StandardDebugBar;
 use Exception;
-use Gettext\Translator;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
 use LouisLam\CRUD\Exception\NoBeanException;
@@ -36,7 +35,7 @@ class LouisCRUD
      */
     private $packageName = "louislam/louislam-crud";
 
-    /**
+    /**`
      * @var string Table Name
      */
     private $tableName = null;
@@ -112,11 +111,15 @@ class LouisCRUD
 
     private $exportFilename = null;
 
-    /** @var StandardDebugBar */
     private $debugbar;
 
-
     private $cacheVersion = 2;
+
+    /** @var \Stolz\Assets\Manager Assets Manager  */
+    private $headAssets;
+
+    /** @var \Stolz\Assets\Manager Assets Manager  */
+    private $bodyEndAssets;
 
     /**
      * @param string $tableName Table Name
@@ -134,6 +137,14 @@ class LouisCRUD
             $this->setTable($tableName);
         }
 
+        // Init Assets Manager
+        $this->bodyEndAssets = new \Stolz\Assets\Manager();
+        $this->headAssets = new \Stolz\Assets\Manager();
+
+        $this->bodyEndAssets
+            ->add('style.css')
+            ->add('script.js');
+
         try {
             $this->template = new Engine($viewDir);
         } catch(\LogicException $ex) {
@@ -147,7 +158,9 @@ class LouisCRUD
             $this->template->addData([
                 "cacheVersion" => $this->cacheVersion,
                 "debugbar" => $this->debugbar,
-                "debugbarRenderer" => $debugbarRenderer
+                "debugbarRenderer" => $debugbarRenderer,
+                "headAssets" => $this->headAssets,
+                "bodyEndAssets" => $this->bodyEndAssets
             ]);
         }
 
@@ -1443,5 +1456,23 @@ HTML;
     {
         $this->createSuccURL = $createSuccURL;
     }
+
+    /**
+     * @return \Stolz\Assets\Manager
+     */
+    public function getBodyEndAssets()
+    {
+        return $this->bodyEndAssets;
+    }
+
+    /**
+     * @return \Stolz\Assets\Manager
+     */
+    public function getHeadAssets()
+    {
+        return $this->headAssets;
+    }
+
+
 
 }

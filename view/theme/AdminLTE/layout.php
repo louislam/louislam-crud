@@ -1,6 +1,9 @@
 <?php
-/** @var LouisCRUD $crud */
 use LouisLam\CRUD\LouisCRUD;
+
+/** @var LouisCRUD $crud */
+/** @var \Stolz\Assets\Manager $assets */
+/** @var \DebugBar\JavascriptRenderer $debugbarRenderer */
 
 ?>
 <!DOCTYPE html>
@@ -68,7 +71,14 @@ use LouisLam\CRUD\LouisCRUD;
 
 
 </div>
+
 <?=@$crud->getData("bodyBeforeEnd") ?>
-<?php echo $debugbarRenderer->render() ?>
+
+<?php
+    echo $assets->js();
+    echo $debugbarRenderer->render();
+?>
+
+
 </body>
 </html>
