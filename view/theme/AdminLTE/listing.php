@@ -7,19 +7,22 @@ use LouisLam\CRUD\Field;
 /** @var LouisCRUD $crud */
 /** @var string $layoutName*/
 
-$this->layout($layoutName, [
-    "crud" => $crud
-]);
+$isAjax = ($crud->isAjaxListView()) ? "true" : "false";
+$jsonLink = $crud->getListViewJSONLink();
+
+$crud->addScript(<<< JS
+<script>
+    var isAjax = $isAjax;
+    var ajaxUrl = "$jsonLink";
+    crud.initListView(isAjax, ajaxUrl);
+</script>
+JS
+);
+
+$this->layout($layoutName);
 
 ?>
 
-
-<script>
-    var isAjax = <?=($crud->isAjaxListView()) ? "true" : "false" ?>;
-    var ajaxUrl = "<?=$crud->getListViewJSONLink() ?>";
-
-    crud.initListView(isAjax, ajaxUrl);
-</script>
 
 <?=$crud->getData("header") ?>
 

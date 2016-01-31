@@ -121,6 +121,8 @@ class LouisCRUD
     /** @var \Stolz\Assets\Manager Assets Manager  */
     private $bodyEndAssets;
 
+    private $script = "";
+
     /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
@@ -138,12 +140,16 @@ class LouisCRUD
         }
 
         // Init Assets Manager
-        $this->bodyEndAssets = new \Stolz\Assets\Manager();
-        $this->headAssets = new \Stolz\Assets\Manager();
+        $this->headAssets = new \Stolz\Assets\Manager([
+            'css_dir' => '',
+            'js_dir' => '',
+        ]);
 
-        $this->bodyEndAssets
-            ->add('style.css')
-            ->add('script.js');
+        $this->bodyEndAssets = new \Stolz\Assets\Manager([
+            'css_dir' => '',
+            'js_dir' => '',
+        ]);
+
 
         try {
             $this->template = new Engine($viewDir);
@@ -156,6 +162,7 @@ class LouisCRUD
 
             // Template Default Data
             $this->template->addData([
+                "crud" => $this,
                 "cacheVersion" => $this->cacheVersion,
                 "debugbar" => $this->debugbar,
                 "debugbarRenderer" => $debugbarRenderer,
@@ -165,14 +172,12 @@ class LouisCRUD
         }
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
-        $this->addTheme("raw", "vendor/$this->packageName/view/theme/RawCRUDTheme");
         $this->setCurrentTheme("adminlte");
 
         // Enable helper?
         if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
             //setGlobalCRUD($this);
         }
-
 
     }
 
@@ -1473,6 +1478,12 @@ HTML;
         return $this->headAssets;
     }
 
+    public function addScript($script) {
+        $this->script .= $script;
+    }
 
+    public function getScript() {
+        return $this->script;
+    }
 
 }

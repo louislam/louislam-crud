@@ -43,21 +43,16 @@ class Image extends FieldType
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
-        $type = $this->type;
+        $crud = $this->field->getCRUD();
+
 
         $uploadURL = Util::url("louislam-crud/upload/json");
 
 
         if ($value != "" && $value != null) {
             $imgURL = Util::res($value);
-
             $imgTag = <<< HTML
 <img src="$imgURL" alt="" />
-
-<!-- Remove Required for the upload field -->
-<script>
- $("#upload-$name").removeAttr("required");
-</script>
 HTML;
             $hideRemoveButton = "";
         } else {
@@ -66,8 +61,6 @@ HTML;
         }
 
         $html = <<< HTML
-
-
 <div class="form-group">
     <label for="upload-$name">$display</label>
 
@@ -80,6 +73,15 @@ HTML;
 
         <a id="image-remove-$name" href="javascript:void(0)" class="btn btn-danger" $hideRemoveButton>Remove Image</a>
    <br/>   <br/>
+HTML;
+
+        $crud->addScript(<<< HTML
+
+        <!-- Remove Required for the upload field -->
+    <script>
+     $("#upload-$name").removeAttr("required");
+    </script>
+
     <script>
 
         $("#image-remove-$name").click(function () {
@@ -128,7 +130,8 @@ HTML;
        });
     </script>
 
-HTML;
+HTML
+        );
 
         if ($echo)
             echo $html;

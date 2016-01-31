@@ -41,7 +41,7 @@ class PasswordWithConfirm extends FieldType
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
         $type = $this->type;
-
+        $crud = $this->field->getCRUD();
 
         $html  = <<< HTML
         <div class="form-group">
@@ -52,19 +52,23 @@ class PasswordWithConfirm extends FieldType
             <label for="field-$name-confirm">Confirm $display</label> <input id="field-$name-confirm" class="form-control"  type="$type" value="" $readOnly $required />
         </div>
 
-        <script>
-            $(document).ready(function () {
-            	  crud.addValidateFunction(function () {
-                    if ($("#field-$name-confirm").val() != $("#field-$name").val()) {
-                            crud.addErrorMsg("Passwords are not matched.");
-                            return false;
-                    } else {
-                            return true;
-                    }
-                });
-            });
-        </script>
 HTML;
+
+        $crud->addScript(<<< HTML
+<script>
+    $(document).ready(function () {
+        crud.addValidateFunction(function () {
+            if ($("#field-$name-confirm").val() != $("#field-$name").val()) {
+                crud.addErrorMsg("Passwords are not matched.");
+                return false;
+            } else {
+                return true;
+            }
+        });
+    });
+</script>
+HTML
+        );
 
         if ($echo)
             echo $html;

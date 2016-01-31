@@ -27,26 +27,31 @@ class CKEditor extends FieldType
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
+        $crud = $this->field->getCRUD();
 
         $uploadURL = \LouisLam\Util::url("louislam-crud/upload");
 
         $html  = <<< HTML
         <label for="field-$name">$display </label>
         <textarea id="field-$name" class="editor" name="$name" $readOnly $required style="width:100%">$value</textarea>
-        <script>
-                 var element = $( 'textarea.editor[name=$name]' );
-
-                element.ckeditor( {
-                    height: 600,
-                    width: "100%",
-                    extraPlugins: 'uploadimage',
-                    imageUploadUrl: '$uploadURL/json',
-                    filebrowserImageUploadUrl: '$uploadURL/js'
-                } );
-
-                element.ckeditor().resize("100%");
-        </script>
 HTML;
+
+        $crud->addScript(<<< HTML
+        <script>
+             var element = $( 'textarea.editor[name=$name]' );
+
+            element.ckeditor( {
+                height: 600,
+                width: "100%",
+                extraPlugins: 'uploadimage',
+                imageUploadUrl: '$uploadURL/json',
+                filebrowserImageUploadUrl: '$uploadURL/js'
+            } );
+
+            element.ckeditor().resize("100%");
+        </script>
+HTML
+);
 
         if ($echo)
             echo $html;

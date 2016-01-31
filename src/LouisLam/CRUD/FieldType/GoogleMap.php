@@ -39,6 +39,7 @@ class GoogleMap extends FieldType
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
+        $crud = $this->field->getCRUD();
 
         $longitudeFieldName = $this->longitudeField->getName();
 
@@ -47,6 +48,12 @@ class GoogleMap extends FieldType
             <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="hidden" name="$name" value="$value" $readOnly $required />
  <div id="map-$name" style="width:500px; height:500px"></div>
 
+
+
+        </div>
+HTML;
+
+        $crud->addScript(<<< HTML
   <script>
         $(document).ready(function () {
 
@@ -84,9 +91,8 @@ class GoogleMap extends FieldType
         });
 
   </script>
-
-        </div>
-HTML;
+HTML
+        );
 
         if ($echo)
             echo $html;
