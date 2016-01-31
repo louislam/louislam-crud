@@ -57,7 +57,7 @@ HTML;
         $crud->addScript(<<< HTML
 <script>
     $(document).ready(function () {
-        crud.addValidateFunction(function () {
+        crud.addValidator(function (data) {
             if ($("#field-$name-confirm").val() != $("#field-$name").val()) {
                 crud.addErrorMsg("Passwords are not matched.");
                 return false;

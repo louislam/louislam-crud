@@ -23,6 +23,9 @@ use LouisLam\Util;
     <link rel="stylesheet" href="<?= Util::res("vendor/datatables/datatables/media/css/dataTables.bootstrap.min.css") ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/css/louis-crud.css"); ?>">
 
+    <script src="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
+    <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
+
     <?php
         echo $headAssets->css();
         echo $debugbarRenderer->renderHead();

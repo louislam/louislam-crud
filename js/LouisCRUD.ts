@@ -4,6 +4,15 @@
  */
 /// <reference path="jquery.d.ts" />
 /// <reference path="jquery.dataTables-1.9.4.d.ts" />
+
+window.alert2 = function(msg) {
+    sweetAlert(msg);
+};
+
+window.alertError = function(msg) {
+    swal("Error!", msg, "error");
+};
+
 class LouisCRUD {
 
     private table;
@@ -34,7 +43,7 @@ class LouisCRUD {
                 e.preventDefault();
 
                 if (self.isUploading) {
-                    alert("Uploading image(s), please wait.");
+                    alert2("Uploading image(s), please wait.");
                     return;
                 }
 
@@ -43,9 +52,16 @@ class LouisCRUD {
 
                 var ok = true;
 
+                var data = {};
+
+                $.each($('#louis-form')​.serializeArray(), function () {
+                    data[this.name] = this.value;
+                });
+
+
                 // Validate
                 for (var i = 0; i < self.validateFunctions.length; i++) {
-                    if (self.validateFunctions[i]() === false) {
+                    if (self.validateFunctions[i](data) === false) {
                         ok = false;
                     }
                 }
@@ -55,7 +71,7 @@ class LouisCRUD {
                    for (var i = 0; i < self.errorMsgs.length; i++) {
                         str += self.errorMsgs[i]  +"\n";
                    }
-                   alert(str);
+                   alertError(str);
                    return false;
                }
 
@@ -88,7 +104,7 @@ class LouisCRUD {
     }
 
 
-    public addValidateFunction(func) {
+    public addValidator(func) {
         this.validateFunctions.push(func);
     }
 
@@ -129,7 +145,6 @@ class LouisCRUD {
 
         $(document).ready(function () {
             self.table = $('#louis-crud-table').DataTable(data);
-
             $('#louis-crud-table tfoot th').each(function () {
                 if ($(this).index() == 0) {
                     return;

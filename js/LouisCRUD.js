@@ -4,6 +4,12 @@
  */
 /// <reference path="jquery.d.ts" />
 /// <reference path="jquery.dataTables-1.9.4.d.ts" />
+window.alert2 = function (msg) {
+    sweetAlert(msg);
+};
+window.alertError = function (msg) {
+    swal("Error!", msg, "error");
+};
 var LouisCRUD = (function () {
     function LouisCRUD() {
         this.validateFunctions = [];
@@ -17,15 +23,19 @@ var LouisCRUD = (function () {
             $("form.ajax").submit(function (e) {
                 e.preventDefault();
                 if (self.isUploading) {
-                    alert("Uploading image(s), please wait.");
+                    alert2("Uploading image(s), please wait.");
                     return;
                 }
                 // Clear all msgs
                 self.errorMsgs = [];
                 var ok = true;
+                var data = {};
+                $.each($('#louis-form').serializeArray(), function () {
+                    data[this.name] = this.value;
+                });
                 // Validate
                 for (var i = 0; i < self.validateFunctions.length; i++) {
-                    if (self.validateFunctions[i]() === false) {
+                    if (self.validateFunctions[i](data) === false) {
                         ok = false;
                     }
                 }
@@ -34,7 +44,7 @@ var LouisCRUD = (function () {
                     for (var i = 0; i < self.errorMsgs.length; i++) {
                         str += self.errorMsgs[i] + "\n";
                     }
-                    alert(str);
+                    alertError(str);
                     return false;
                 }
                 // Create Form Data from the form.
@@ -63,7 +73,7 @@ var LouisCRUD = (function () {
     LouisCRUD.prototype.setUploading = function (val) {
         this.isUploading = val;
     };
-    LouisCRUD.prototype.addValidateFunction = function (func) {
+    LouisCRUD.prototype.addValidator = function (func) {
         this.validateFunctions.push(func);
     };
     LouisCRUD.prototype.addErrorMsg = function (msg) {

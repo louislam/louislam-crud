@@ -10,8 +10,16 @@ use LouisLam\CRUD\LouisCRUD;
 $crud->addScript(<<< HTML
 <script>
     crud.setAjaxFormCallback(function (result) {
-        var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
-        $("#msg").html(box)
+
+        $("#msg").html("");
+
+        if (result.class == "callout-danger") {
+                alertError(result.msg);
+        } else {
+                var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
+                $("#msg").html(box)
+        }
+
     });
 </script>
 HTML
@@ -22,7 +30,7 @@ $this->layout($layoutName, [
 ]);
 ?>
 
-<form action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="<?=$crud->getEditSubmitMethod() ?>" class="ajax">
+<form id="louis-form" action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="<?=$crud->getEditSubmitMethod() ?>" class="ajax">
 
     <?=$crud->getData("header") ?>
 

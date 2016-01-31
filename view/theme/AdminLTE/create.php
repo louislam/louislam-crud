@@ -21,7 +21,7 @@ $this->layout($layoutName, [
 ]);
 ?>
 
-<form action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
+<form id="louis-form" action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
 
     <div class="row">
         <!-- left column -->
