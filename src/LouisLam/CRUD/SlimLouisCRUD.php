@@ -771,18 +771,7 @@ HTML;
         return $temp;
     }
 
-    public function getMenuItems() {
-        $tempList = [];
 
-        foreach ($this->routeNameList as $routeName) {
-            $item = [];
-            $item["url"] = $this->slim->urlFor("_louisCRUD_" . $routeName);
-            $item["name"] = $this->getTableDisplayName($routeName);
-            $item["routeName"] = $routeName;
-            $tempList[] = $item;
-        }
-        return $tempList;
-    }
 
     public function enableMenu($menuItems = []) {
         $plates = $this->getTemplateEngine();

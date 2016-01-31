@@ -7,6 +7,15 @@ use LouisLam\CRUD\Field;
 /** @var LouisCRUD $crud */
 /** @var string $layoutName*/
 
+$crud->addScript(<<< HTML
+<script>
+    crud.setAjaxFormCallback(function (result) {
+        location.href = "<?=$crud->getListViewLink() ?>";
+    });
+</script>
+HTML
+);
+
 $this->layout($layoutName, [
     "crud" => $crud
 ]);
@@ -46,8 +55,3 @@ $this->layout($layoutName, [
 </form>
 
 
-<script>
-    crud.setAjaxFormCallback(function (result) {
-        location.href = "<?=$crud->getListViewLink() ?>";
-    });
-</script>

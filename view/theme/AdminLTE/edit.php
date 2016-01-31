@@ -7,6 +7,16 @@ use LouisLam\CRUD\LouisCRUD;
 /** @var LouisCRUD $crud */
 /** @var string $layoutName */
 
+$crud->addScript(<<< HTML
+<script>
+    crud.setAjaxFormCallback(function (result) {
+        var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
+        $("#msg").html(box)
+    });
+</script>
+HTML
+);
+
 $this->layout($layoutName, [
     "crud" => $crud
 ]);
@@ -57,9 +67,3 @@ $this->layout($layoutName, [
 
 
 
-<script>
-    crud.setAjaxFormCallback(function (result) {
-        var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
-        $("#msg").html(box)
-    });
-</script>

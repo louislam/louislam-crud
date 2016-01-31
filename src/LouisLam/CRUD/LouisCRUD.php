@@ -1486,4 +1486,9 @@ HTML;
         return $this->script;
     }
 
+    public function getMenuItems()
+    {
+        return [];
+    }
+
 }
