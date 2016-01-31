@@ -17,7 +17,6 @@ use Slim\Slim;
 class SlimLouisCRUD extends LouisCRUD
 {
 
-
     protected $checkLogin = false;
 
     private $groupName;
@@ -27,7 +26,7 @@ class SlimLouisCRUD extends LouisCRUD
     private $slim;
 
     /** @var callable */
-    private $configFunction;
+    protected $configFunction;
 
     /** @var callable */
     protected $listviewFunction = null;
@@ -39,10 +38,10 @@ class SlimLouisCRUD extends LouisCRUD
     protected $editFunction = null;
 
     /** @var callable */
-    private $deleteFunction = null;
+    protected $deleteFunction = null;
 
     /** @var callable */
-    private $exportFunction = null;
+    protected $exportFunction = null;
 
     /** @var string[] */
     private $tableList = [];

@@ -112,7 +112,11 @@ class LouisCRUD
 
     private $exportFilename = null;
 
+    /** @var StandardDebugBar */
     private $debugbar;
+
+
+    private $cacheVersion = 2;
 
     /**
      * @param string $tableName Table Name
@@ -139,7 +143,9 @@ class LouisCRUD
             $this->debugbar = new StandardDebugBar();
             $debugbarRenderer = $this->debugbar->getJavascriptRenderer(Util::res("vendor/maximebf/debugbar/src/DebugBar/Resources"));
 
+            // Template Default Data
             $this->template->addData([
+                "cacheVersion" => $this->cacheVersion,
                 "debugbar" => $this->debugbar,
                 "debugbarRenderer" => $debugbarRenderer
             ]);
@@ -181,6 +187,7 @@ class LouisCRUD
     /**
      * @param $name
      * @param string $dataType
+     * @throws Exception
      */
     public function addField($name, $dataType = "varchar(255)")
     {
@@ -1081,7 +1088,7 @@ HTML;
         }
 
         try {
-            return $this->template->exists("layout") ? "layout" : $this->theme . "::layout";
+            return $this->template->exists("backend_layout") ? "layout" : $this->theme . "::layout";
         } catch (\LogicException $ex) {
             return $this->theme . "::layout";
         }

@@ -29,7 +29,7 @@ use LouisLam\CRUD\LouisCRUD;
 
         <nav class="navbar navbar-static-top" role="navigation">
             <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-                <span class="sr-only">Toggle navigation</span>
+                <span class="sr-only">Toggle</span>
             </a>
             <div class="navbar-custom-menu">
 

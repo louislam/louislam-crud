@@ -40,7 +40,7 @@ $this->layout($layoutName, [
                             Column Filter
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu column-selector">
 
                             <?php
                             $i =1;

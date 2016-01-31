@@ -24,7 +24,8 @@
         "components/jqueryui": "1.11.4",
         "ckeditor/ckeditor": "4.5.4",
         "soundintheory/php-sql-parser": "1.0",
-        "maximebf/debugbar": "1.*"
+        "maximebf/debugbar": "1.*",
+        "kriswallsmith/assetic": "^1.3"
     },
     "autoload": {
         "psr-4": {
