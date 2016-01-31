@@ -105,9 +105,7 @@ HTML;
         });
 
         $this->slim->get("/auth/login", function () {
-
             echo $this->getTemplateEngine()->render("adminlte::login");
-
         });
 
         $app = $this->slim;
@@ -121,6 +119,8 @@ HTML;
                 $app->redirect(Util::url("auth/login"));
             }
         });
+
+
 
     }
 
@@ -745,6 +745,7 @@ HTML;
 
     public function run()
     {
+        $this->enableMenu();
         $this->slim->run();
     }
 
@@ -758,6 +759,7 @@ HTML;
 
     /**
      * @return string
+     * @deprecated
      */
     public function generateMenu() {
         $temp = "<nav><ul>";
@@ -771,12 +773,29 @@ HTML;
         return $temp;
     }
 
+    public function getMenuItems() {
+        $tempList = [];
 
+        foreach ($this->routeNameList as $routeName) {
+            $item = [];
+            $item["url"] = $this->slim->urlFor("_louisCRUD_" . $routeName);
+            $item["name"] = $this->getTableDisplayName($routeName);
+            $item["routeName"] = $routeName;
+            $tempList[] = $item;
+        }
+        return $tempList;
+    }
 
     public function enableMenu($menuItems = []) {
         $plates = $this->getTemplateEngine();
 
-        $menu = $plates->render($this->getFullViewName("menu"), [
+        if ($plates->exists("backend_menu")) {
+            $name = "backend_menu";
+        } else {
+            $name = $this->getFullViewName("menu");
+        }
+
+        $menu = $plates->render($name, [
             "menuItems" => array_merge($this->getMenuItems(), $menuItems)
         ]);
 

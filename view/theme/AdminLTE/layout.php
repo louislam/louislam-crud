@@ -63,9 +63,7 @@ use LouisLam\Util;
             </div>
 
             <ul class="sidebar-menu">
-                <?php foreach($crud->getMenuItems() as $item) : ?>
-                    <li><a href="<?=$item["url"] ?>"><?=$item["name"] ?></a></li>
-                <?php endforeach; ?>
+                <?=@$crud->getData("menu") ?>
             </ul>
         </section>
 

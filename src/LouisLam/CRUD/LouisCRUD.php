@@ -154,22 +154,22 @@ class LouisCRUD
         try {
             $this->template = new Engine($viewDir);
         } catch(\LogicException $ex) {
-            $this->template = new Engine();
-
-            // Debug Bar
-            $this->debugbar = new StandardDebugBar();
-            $debugbarRenderer = $this->debugbar->getJavascriptRenderer(Util::res("vendor/maximebf/debugbar/src/DebugBar/Resources"));
-
-            // Template Default Data
-            $this->template->addData([
-                "crud" => $this,
-                "cacheVersion" => $this->cacheVersion,
-                "debugbar" => $this->debugbar,
-                "debugbarRenderer" => $debugbarRenderer,
-                "headAssets" => $this->headAssets,
-                "bodyEndAssets" => $this->bodyEndAssets
-            ]);
+            throw new Exception("The view folder is not existing.");
         }
+
+        // Debug Bar
+        $this->debugbar = new StandardDebugBar();
+        $debugbarRenderer = $this->debugbar->getJavascriptRenderer(Util::res("vendor/maximebf/debugbar/src/DebugBar/Resources"));
+
+        // Template Default Data
+        $this->template->addData([
+            "crud" => $this,
+            "cacheVersion" => $this->cacheVersion,
+            "debugbar" => $this->debugbar,
+            "debugbarRenderer" => $debugbarRenderer,
+            "headAssets" => $this->headAssets,
+            "bodyEndAssets" => $this->bodyEndAssets
+        ]);
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
         $this->setCurrentTheme("adminlte");
@@ -586,7 +586,6 @@ HTML;
         $html = $this->template->render($this->getListViewTemplate(), [
             "fields" => $this->getShowFields(),
             "list" => $list,
-            "crud" => $this,
             "layoutName" => $this->getLayoutName()
         ]);
 
@@ -1486,9 +1485,6 @@ HTML;
         return $this->script;
     }
 
-    public function getMenuItems()
-    {
-        return [];
-    }
+
 
 }
