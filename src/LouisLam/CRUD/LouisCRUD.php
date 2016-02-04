@@ -763,7 +763,6 @@ HTML;
 
         $html = $this->template->render($this->getCreateTemplate(), [
             "fields" => $this->getShowFields(),
-            "crud" => $this,
             "layoutName" => $this->getLayoutName()
         ]);
 

@@ -6,11 +6,11 @@ use LouisLam\CRUD\Field;
 /** @var array $list */
 /** @var LouisCRUD $crud */
 /** @var string $layoutName*/
-
+$listViewLink = $crud->getListViewLink();
 $crud->addScript(<<< HTML
 <script>
     crud.setAjaxFormCallback(function (result) {
-        location.href = "<?=$crud->getListViewLink() ?>";
+        location.href = "$listViewLink";
     });
 </script>
 HTML
