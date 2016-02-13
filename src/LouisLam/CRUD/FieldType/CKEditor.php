@@ -45,7 +45,8 @@ HTML;
                 width: "100%",
                 extraPlugins: 'uploadimage',
                 imageUploadUrl: '$uploadURL/json',
-                filebrowserImageUploadUrl: '$uploadURL/js'
+                filebrowserImageUploadUrl: '$uploadURL/js',
+                allowedContent: true
             } );
 
             element.ckeditor().resize("100%");
