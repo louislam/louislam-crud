@@ -13,6 +13,9 @@ class CKEditor extends FieldType
 {
     // TODO: Check 777 for uploading images
 
+
+    private $fullFeatures = false;
+
     /**
      * Render Field for Create/Edit
      * @param bool|true $echo
@@ -36,20 +39,61 @@ class CKEditor extends FieldType
         <textarea id="field-$name" class="editor" name="$name" $readOnly $required style="width:100%">$value</textarea>
 HTML;
 
-        $crud->addScript(<<< HTML
-        <script>
-             var element = $( 'textarea.editor[name=$name]' );
+        $fullFeatures = ($this->fullFeatures) ? "true" : "false";
 
-            element.ckeditor( {
-                height: 600,
-                width: "100%",
-                extraPlugins: 'uploadimage',
-                imageUploadUrl: '$uploadURL/json',
-                filebrowserImageUploadUrl: '$uploadURL/js',
-                allowedContent: true
-            } );
+        $crud->addScript(<<< HTML
+
+        <script>
+        $(document).ready(function () {
+                var element = $( 'textarea.editor[name=$name]' );
+                var fullFeatures = $fullFeatures;
+
+              var ckConfig = {
+                    height: 600,
+                    width: "100%",
+                    extraPlugins: 'uploadimage',
+                    imageUploadUrl: '$uploadURL/json',
+                    filebrowserImageUploadUrl: '$uploadURL/js',
+                    allowedContent: true
+                };
+
+                if (fullFeatures) {
+                        ckConfig.plugins = "dialogui,dialog,a11yhelp,about,basicstyles,bidi,blockquote,clipboard," +
+"button,panelbutton,panel,floatpanel,colorbutton,colordialog,menu," +
+"contextmenu,dialogadvtab,div,elementspath,enterkey,entities,popup," +
+"filebrowser,find,fakeobjects,flash,floatingspace,listblock,richcombo," +
+"font,format,forms,horizontalrule,htmlwriter,iframe,image,indent," +
+"indentblock,indentlist,justify,link,list,liststyle,magicline," +
+"maximize,newpage,pagebreak,pastefromword,pastetext,preview,print," +
+"removeformat,resize,save,menubutton,scayt,selectall,showblocks," +
+"showborders,smiley,sourcearea,specialchar,stylescombo,tab,table," +
+"tabletools,templates,toolbar,undo,wsc,wysiwygarea";
+                        ckConfig.toolbar = 'Full';
+
+                        ckConfig.toolbar_Full = [
+                            { name: 'document', items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
+                            { name: 'clipboard', items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+                            { name: 'editing', items : [ 'Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt' ] },
+                            { name: 'forms', items : [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton',
+                            'HiddenField' ] },
+                            '/',
+                            { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                            { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv',
+                            '-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+                            { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                            { name: 'insert', items : [ 'Image','Flash','Table','HorizontalRule','Smiley','SpecialChar','PageBreak','Iframe' ] },
+                            '/',
+                            { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+                            { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                            { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                    ];
+                }
+
+            element.ckeditor(ckConfig);
 
             element.ckeditor().resize("100%");
+        });
+
         </script>
 HTML
 );
@@ -61,7 +105,6 @@ HTML
     }
 
     public static function upload() {
-
         $output = '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(' . $callback . ', "' . $image_url . '","' . $msg . '");</script>';
         echo $output;
     }
@@ -73,4 +116,7 @@ HTML
         return mb_strimwidth($value, 0, 60, "...", "UTF-8");
     }
 
+    public function fullFeatures() {
+        $this->fullFeatures = true;
+    }
 }
