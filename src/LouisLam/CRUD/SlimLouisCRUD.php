@@ -108,17 +108,27 @@ HTML;
             echo $this->getTemplateEngine()->render("adminlte::login");
         });
 
+
         $app = $this->slim;
 
         $this->slim->post("/auth/login", function () use ($app) {
             $result=  Auth::login($_POST["username"], $_POST["password"]);
 
             if ($result) {
-                @$app->redirect($_SESSION["redirect"]);
+                //echo $_SESSION["redirect"];
+                //echo $_SESSION["redirect"];
+                //echo Util::fullURL($_SESSION["redirect"]);
+                @$app->redirect(Util::fullURL($_SESSION["redirect"]) );
             } else {
-                $app->redirect(Util::url("auth/login"));
+                $app->redirect(Util::fullURL("auth/login"));
             }
         });
+
+        $this->slim->get("/auth/logout", function () use ($app) {
+            Auth::logout();
+            $app->redirect(Util::fullURL("auth/login"));
+        });
+
 
 
 
@@ -889,9 +899,8 @@ HTML;
 //Get resource URI
             $resourceUri = $req->getResourceUri();
 
-            $_SESSION["redirect"] = $rootUri . $resourceUri;
-
-            $crud->getSlim()->redirect(Util::url("auth/login"));
+            $_SESSION["redirect"] = $resourceUri;
+           $crud->getSlim()->redirect(Util::fullURL("auth/login"));
         });
     }
 }

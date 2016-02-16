@@ -19,18 +19,12 @@ class Auth
 
     public static function login($username, $password) {
 
-        if (Auth::$encryptPasswordFunction != null) {
-            $encrypt = Auth::$encryptPasswordFunction;
-            $password = $encrypt($password);
-        } else {
-            $password = password_hash($password, PASSWORD_DEFAULT);
-        }
-
-        $row = R::getRow("SELECT * FROM `user` WHERE username = ? AND password = ?", array(
-            $username, $password
+        $row = R::getRow("SELECT * FROM `user` WHERE username = ? ", array(
+            $username
         ));
 
-        if ($row != null) {
+        if ($row != null && password_verify($password, $row["password"]) ) {
+
             $_SESSION["username"] = $username;
             $_SESSION["password"] = $password;
             return true;
@@ -52,10 +46,18 @@ class Auth
         }
 
         if ($force || Auth::$user == null) {
-            return R::findOne("user", " username = ? AND password = ? ", array(
-                $_SESSION["username"],
-                $_SESSION["password"]
+
+            $bean = R::findOne("user", " username = ? ", array(
+                $_SESSION["username"]
             ));
+
+
+            if ($bean != null && password_verify($_SESSION["password"], $bean->password) ) {
+                return true;
+            } else {
+                return false;
+            }
+
         } else {
             return Auth::$user;
         }
