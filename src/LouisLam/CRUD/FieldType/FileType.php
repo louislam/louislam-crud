@@ -10,6 +10,7 @@ namespace LouisLam\CRUD\FieldType;
 
 
 use LouisLam\CRUD\Exception\DirectoryPermissionException;
+use LouisLam\Util;
 
 class FileType extends FieldType
 {
@@ -25,7 +26,6 @@ class FileType extends FieldType
         if (! file_exists($this->getUploadPath())) {
             mkdir($this->getUploadPath(), 0777);
         } else {
-            // Just Kidding, I cannot do this
             //chmod($this->getUploadPath(), 0777);
         }
 
@@ -35,13 +35,6 @@ class FileType extends FieldType
         }
     }
 
-    public function renderCell($value) {
-        $url = \LouisLam\Util::res($this->getUploadPath() . $value);
-
-        return <<< HTML
-    <a href="$url" target="_blank">Open File</a>
-HTML;
-    }
 
     public function render($echo = false)
     {
@@ -50,27 +43,100 @@ HTML;
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
-        $type = $this->type;
+        $crud = $this->field->getCRUD();
+
+
+        $uploadURL = Util::url("louislam-crud/upload/json");
+
+
+        if ($value != "" && $value != null) {
+            $imgURL = Util::res($value);
+            $imgTag = <<< HTML
+<a href="$imgURL" target="_blank" class="btn btn-primary">Open ($imgURL)</a>
+HTML;
+            $hideRemoveButton = "";
+        } else {
+            $imgTag = "";
+            $hideRemoveButton = 'style="display: none"';
+        }
 
         $html = <<< HTML
 <div class="form-group">
-    <label for="field-$name">$display</label>
-    <input id="field-$name" class="form-control file"  type="$type" name="$name" value="$value" $readOnly $required />
+    <label for="upload-$name">$display</label>
 
+    <input id="upload-$name" class="form-control" type="file" $readOnly $required data-required="$required"  />
+    <input id="field-$name" type="hidden" name="$name" value="$value"  />
+
+    <div id="image-preview-$name" class="image-preview">
+                $imgTag
+        </div>
+
+        <a id="image-remove-$name" href="javascript:void(0)" class="btn btn-danger" $hideRemoveButton>Remove File</a>
+   <br/>   <br/>
 HTML;
+
+        $crud->addScript(<<< HTML
+
+        <!-- Remove Required for the upload field -->
+    <script>
+     $("#upload-$name").removeAttr("required");
+    </script>
+
+    <script>
+
+        $("#image-remove-$name").click(function () {
+                $("#image-preview-$name").html("");
+                $("#field-$name").val("");
+
+                var required = $("#upload-$name").data("required");
+
+                if (required == "required") {
+                         $("#upload-$name").attr("required", true);
+                }
+
+                $(this).hide();
+        });
+
+       $("#upload-$name").change(function () {
+
+            if ($(this).val() == "") {
+                return;
+            }
+
+           var data = new FormData();
+
+            jQuery.each($(this)[0].files, function(i, file) {
+                data.append("upload", file);
+            });
+
+             $.ajax({
+                url: '$uploadURL',
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                type: 'POST',
+                success: function(data){
+                        var img = $("<a target=\"_blank\" class=\"btn btn-primary\">Open</a>");
+                        img.attr("href", RES_URL + data.url);
+
+                        $("#image-preview-$name").html(img);
+                        $("#field-$name").val(data.url);
+                        $("#image-remove-$name").show();
+
+                         $("#upload-$name").removeAttr("required");
+                }
+            });
+       });
+    </script>
+
+HTML
+        );
 
         if ($echo)
             echo $html;
 
         return $html;
-    }
-
-    public function beforeStoreValue($valueFromUser)
-    {
-        $targetFilename = $this->uploadPath . $valueFromUser;
-        move_uploaded_file($_FILES[$this->field->getName()]["tmp_name"], $targetFilename);
-
-        return $valueFromUser;
     }
 
     /**
@@ -88,6 +154,21 @@ HTML;
     {
         // TODO: Append slash if no end slash
         $this->uploadPath = $uploadPath;
+    }
+
+    public function renderCell($value)
+    {
+        $imgURL = Util::res($value);
+
+        if ($value != null && $value != "") {
+            return <<< HTML
+<a target="_blank" href="$value"><img src="$imgURL" alt="" style="max-width: 200px; max-height:70px;"></a>
+HTML;
+        } else {
+            return "";
+        }
+
+
     }
 
 
