@@ -1254,7 +1254,7 @@ HTML;
 
         if (isset($_FILES[$fieldName])) {
 
-            $filename = dechex(rand(1, 99999999999999)) . "-" . $_FILES[$fieldName]["name"];
+            $filename = dechex(rand(1, 99999999999999)) . "-" . urlencode($_FILES[$fieldName]["name"]);
 
             $relativePath = $folder . $filename;
             move_uploaded_file($_FILES[$fieldName]["tmp_name"], $relativePath);
