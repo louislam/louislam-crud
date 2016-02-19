@@ -75,6 +75,7 @@ class SlimLouisCRUD extends LouisCRUD
         // Upload function
         $this->slim->post("/louislam-crud/upload/:type", function ($type) {
             $result = $this->upload();
+            $result["url"] = \LouisLam\Util::fullURL($result["url"]);
 
             if ($type == "js") {
                 $url = $result["url"];
