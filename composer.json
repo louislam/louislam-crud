@@ -24,7 +24,8 @@
         "ckeditor/ckeditor": "4.5.4",
         "soundintheory/php-sql-parser": "1.0",
         "maximebf/debugbar": "1.*",
-        "stolz/assets": "0.1.8"
+        "stolz/assets": "0.1.8",
+        "ircmaxell/password-compat" : "1.0.4",
     },
     "autoload": {
         "psr-4": {
