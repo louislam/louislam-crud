@@ -46,7 +46,7 @@ class Image extends FieldType
         $crud = $this->field->getCRUD();
 
 
-        $uploadURL = Util::url("louislam-crud/upload/json");
+        $uploadURL = Util::url("louislam-crud/upload/json?fullpath=no");
 
 
         if ($value != "" && $value != null) {
