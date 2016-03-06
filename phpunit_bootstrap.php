@@ -5,7 +5,8 @@ require "vendor/autoload.php";
 $source = "view";
 $dest= "vendor/louislam/louislam-crud/view";
 
-rrmdir("vendor/louislam/louislam-crud/view");
+rrmdir($dest);
+
 mkdir($dest, 0777, true);
 foreach (
     $iterator = new \RecursiveIteratorIterator(
