@@ -31,7 +31,7 @@ class Bootstrap {
             foreach ($objects as $object) {
                 if ($object != "." && $object != "..") {
                     if (is_dir($dir."/".$object))
-                        rrmdir($dir."/".$object);
+                        Bootstrap::removeDir($dir."/".$object);
                     else
                         unlink($dir."/".$object);
                 }

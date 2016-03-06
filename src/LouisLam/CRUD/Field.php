@@ -415,6 +415,7 @@ class Field
     /**
      * @param int|string $value
      * @param bool $force
+     * @return $this
      */
     public function setValue($value, $force = false)
     {
