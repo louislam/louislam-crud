@@ -1,5 +1,7 @@
 # Louis Lam's CRUD
 
+[![Build Status](https://travis-ci.org/louislam/louislam-crud.svg?branch=master)](https://travis-ci.org/louislam/louislam-crud)
+
 Love GroceryCRUD, but don't like CodeIgniter? LouisLam's CRUD is a CRUD Library which is heavily influenced by Grocery CRUD. It provides similar features of GroceryCRUD, but it is not based on CodeIgniter.
 
 LouisLam's CRUD Library is managed by Composer. It sticks to nowadays php standard and works well with other libraries.
