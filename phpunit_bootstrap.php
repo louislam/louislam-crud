@@ -7,7 +7,7 @@ class Bootstrap {
         $source = "view";
         $dest= "vendor/louislam/louislam-crud/view";
 
-        rrmdir($dest);
+        Bootstrap::removeDir($dest);
 
         mkdir($dest, 0777, true);
         foreach (
@@ -22,19 +22,21 @@ class Bootstrap {
             }
         }
 
-        function rrmdir($dir) {
-            if (is_dir($dir)) {
-                $objects = scandir($dir);
-                foreach ($objects as $object) {
-                    if ($object != "." && $object != "..") {
-                        if (is_dir($dir."/".$object))
-                            rrmdir($dir."/".$object);
-                        else
-                            unlink($dir."/".$object);
-                    }
+
+    }
+
+    public static function removeDir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir."/".$object))
+                        rrmdir($dir."/".$object);
+                    else
+                        unlink($dir."/".$object);
                 }
-                rmdir($dir);
             }
+            rmdir($dir);
         }
     }
 }
