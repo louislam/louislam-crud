@@ -17,4 +17,7 @@ matrix:
     - php: 7.0
     - php: hhvm
 
+install:
+    - composer install
+
 script: phpunit --bootstrap "phpunit_bootstrap.php" --no-configuration
