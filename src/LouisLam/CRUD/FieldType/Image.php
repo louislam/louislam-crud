@@ -45,9 +45,7 @@ class Image extends FieldType
         $required = $this->getRequiredString();
         $crud = $this->field->getCRUD();
 
-
         $uploadURL = Util::url("louislam-crud/upload/json?fullpath=no");
-
 
         if ($value != "" && $value != null) {
             $imgURL = Util::res($value);
@@ -162,7 +160,7 @@ HTML
 
         if ($value != null && $value != "") {
             return <<< HTML
-<a target="_blank" href="$value"><img src="$imgURL" alt="" style="max-width: 200px; max-height:70px;"></a>
+<a target="_blank" href="$imgURL"><img src="$imgURL" alt="" style="max-width: 200px; max-height:70px;"></a>
 HTML;
         } else {
             return "";
