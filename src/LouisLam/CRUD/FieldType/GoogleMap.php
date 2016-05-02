@@ -54,6 +54,10 @@ class GoogleMap extends FieldType
 HTML;
 
         $crud->addScript(<<< HTML
+        
+
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        
   <script>
         $(document).ready(function () {
 

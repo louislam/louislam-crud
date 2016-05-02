@@ -214,5 +214,9 @@ class LouisCRUD {
             }
         }).addClass("ok");
     }
+
+    public field(name) {
+        return $("#field-" + name);
+    }
 }
 

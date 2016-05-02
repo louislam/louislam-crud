@@ -161,6 +161,9 @@ var LouisCRUD = (function () {
             }
         }).addClass("ok");
     };
+    LouisCRUD.prototype.field = function (name) {
+        return $("#field-" + name);
+    };
     return LouisCRUD;
-})();
+}());
 //# sourceMappingURL=LouisCRUD.js.map

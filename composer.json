@@ -18,13 +18,12 @@
         "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
         "almasaeed2010/adminlte": "2.3.0",
-        "fortawesome/font-awesome": "4.4.0",
+        "fortawesome/font-awesome": "4.4.*",
         "phpoffice/phpexcel": "1.8.1",
         "components/jqueryui": "1.11.4",
         "ckeditor/ckeditor": "4.5.4",
         "soundintheory/php-sql-parser": "1.0",
         "maximebf/debugbar": "1.*",
-        "stolz/assets": "0.1.8",
         "ircmaxell/password-compat" : "1.0.4"
     },
     "autoload": {

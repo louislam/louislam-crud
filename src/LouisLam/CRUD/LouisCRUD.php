@@ -17,8 +17,9 @@ use PHPSQL\Parser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 
-
 /**
+ * LouisCRUD
+ *
  * Created by PhpStorm.
  * User: Louis Lam
  * Date: 8/13/2015
@@ -35,7 +36,7 @@ class LouisCRUD
      */
     private $packageName = "louislam/louislam-crud";
 
-    /**`
+    /**
      * @var string Table Name
      */
     private $tableName = null;
@@ -81,6 +82,9 @@ class LouisCRUD
      */
     private $currentBean = null;
 
+    /*
+     * Flag for controlling the function enable/disable
+     */
     private $enableListView = true;
     private $enableEdit = true;
     private $enableDelete = true;
@@ -115,17 +119,13 @@ class LouisCRUD
 
     private $cacheVersion = 2;
 
-    /** @var \Stolz\Assets\Manager Assets Manager  */
-    private $headAssets;
-
-    /** @var \Stolz\Assets\Manager Assets Manager  */
-    private $bodyEndAssets;
-
-    private $script = "";
+    private $bodyEndHTML = "";
+    private $headHTML = "";
 
     /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
+     * @throws Exception
      * @throws TableNameException
      * @throws \RedBeanPHP\RedException
      */
@@ -138,18 +138,6 @@ class LouisCRUD
         if ($tableName != null) {
             $this->setTable($tableName);
         }
-
-        // Init Assets Manager
-        $this->headAssets = new \Stolz\Assets\Manager([
-            'css_dir' => '',
-            'js_dir' => '',
-        ]);
-
-        $this->bodyEndAssets = new \Stolz\Assets\Manager([
-            'css_dir' => '',
-            'js_dir' => '',
-        ]);
-
 
         try {
             $this->template = new Engine($viewDir);
@@ -167,12 +155,11 @@ class LouisCRUD
             "cacheVersion" => $this->cacheVersion,
             "debugbar" => $this->debugbar,
             "debugbarRenderer" => $debugbarRenderer,
-            "headAssets" => $this->headAssets,
-            "bodyEndAssets" => $this->bodyEndAssets
         ]);
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
         $this->setCurrentTheme("adminlte");
+        
 
         // Enable helper?
         if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
@@ -193,6 +180,12 @@ class LouisCRUD
         $this->template->setDirectory($viewDir);
     }
 
+    /**
+     * Get or Create a field with a name
+     * @param string $name The Field Name
+     * @return Field The field object
+     * @throws Exception
+     */
     public function field($name)
     {
         if (!isset($this->fieldList[$name])) {
@@ -203,8 +196,9 @@ class LouisCRUD
     }
 
     /**
+     * Create a field with a name
      * @param $name
-     * @param string $dataType
+     * @param string $dataType it can be varchar/int/text
      * @throws Exception
      */
     public function addField($name, $dataType = "varchar(255)")
@@ -219,6 +213,7 @@ class LouisCRUD
     }
 
     /**
+     * Get an array of Field(s) which is/are going to be shown.
      * @return Field[]
      */
     public function getShowFields()
@@ -235,7 +230,8 @@ class LouisCRUD
     }
 
     /**
-     * @param $fieldNameList
+     * Show and order field(s)
+     * @param string[] $fieldNameList An array of field name(s).
      */
     public function showFields($fieldNameList)
     {
@@ -273,6 +269,10 @@ class LouisCRUD
 
     }
 
+    /**
+     * Hide fields, useful if you want to keep the field in the database but not show on the curd page.
+     * @param string[] $fieldNameList An array of field name(s).
+     */
     public function hideFields($fieldNameList)
     {
 
@@ -290,6 +290,9 @@ class LouisCRUD
         }
     }
 
+    /**
+     * Hide all fields.
+     */
     public function hideAllFields() {
         foreach ($this->fieldList as $field) {
             $field->hide();
@@ -297,6 +300,7 @@ class LouisCRUD
     }
 
     /**
+     *
      * @param string[]|string $fieldNameList
      */
     public function requiredFields($fieldNameList)
@@ -403,6 +407,11 @@ class LouisCRUD
         }
     }
 
+    /**
+     * Create Table
+     * Problem: The first ID is always start from 2.
+     * TODO: Create table with pure SQL, but be careful it may not support for all databases.
+     */
     public function createTable()
     {
         $bean = R::xdispense($this->tableName);
@@ -437,7 +446,7 @@ HTML;
         return $html;
     }
 
-    protected function beforeRender()
+    private function beforeRender()
     {
         // if there is a ID field only, no other fields, then throw an Exception
         if (count($this->fieldList) <= 1) {
@@ -447,8 +456,14 @@ HTML;
 
     /**
      * Get List view data
-     * @param null $start
-     * @param null $rowPerPage
+     *
+     * TODO: Sort by multiple fields?
+     *
+     * @param int $start
+     * @param int $rowPerPage
+     * @param string $keyword
+     * @param string $sortField
+     * @param null $sortOrder ASC/DESC
      * @return array List of beans
      * @throws \RedBeanPHP\RedException\SQL
      */
@@ -1484,14 +1499,42 @@ HTML;
         return $this->headAssets;
     }
 
+    /**
+     * @deprecated
+     * @param $script
+     */
     public function addScript($script) {
-        $this->script .= $script;
+        $this->bodyEndHTML .= $script;
     }
 
+    /**
+     * @deprecated
+     * @return string
+     */
     public function getScript() {
-        return $this->script;
+        return $this->bodyEndHTML;
     }
 
+    public function addBodyEndHTML($html) {
+        $this->bodyEndHTML .= $html;
+    }
 
+    public function getBodyEndHTML() {
+        return $this->bodyEndHTML;
+    }
+
+    /**
+     * @param $html
+     */
+    public function addHeadHTML($html) {
+        $this->headHTML .= $html;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeadHTML() {
+        return $this->headHTML;
+    }
 
 }

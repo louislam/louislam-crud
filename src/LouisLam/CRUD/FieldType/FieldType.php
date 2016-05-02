@@ -86,14 +86,6 @@ abstract class FieldType
         $this->fieldRelation = $fieldRelation;
     }
 
-    public function beforeStoreValue($valueFromUser) {
-        return $valueFromUser;
-    }
-
-    public function beforeRenderValue($valueFromDatabase) {
-        return $valueFromDatabase;
-    }
-
     public function addAttribute($key, $value) {
         $this->attributeList[$key] = $value;
     }
@@ -110,4 +102,13 @@ abstract class FieldType
         unset($this->classList[$key]);
     }
 
+    public function beforeStoreValue($valueFromUser) {
+        return $valueFromUser;
+    }
+
+    public function beforeRenderValue($valueFromDatabase) {
+        return $valueFromDatabase;
+    }
+
+  
 }

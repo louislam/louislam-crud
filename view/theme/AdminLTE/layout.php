@@ -7,8 +7,7 @@ use LouisLam\Util;
 /** @var \Stolz\Assets\Manager $bodyEndAssets */
 /** @var \DebugBar\JavascriptRenderer $debugbarRenderer */
 
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -27,10 +26,10 @@ use LouisLam\Util;
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
 
     <?php
-        echo $headAssets->css();
         echo $debugbarRenderer->renderHead();
-        echo $headAssets->js();
     ?>
+
+    <?=$crud->getHeadHTML(); ?>
 
     <?=@$crud->getData("head") ?>
 </head>
@@ -106,8 +105,6 @@ use LouisLam\Util;
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>dist/js/app.min.js"></script>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-
 <script>
     var crud = new LouisCRUD();
 
@@ -115,14 +112,11 @@ use LouisLam\Util;
     var RES_URL = "<?=Util::res("") ?>";
 </script>
 
-<?=@$crud->getScript(); ?>
+<?=$crud->getBodyEndHTML(); ?>
 
 <?=@$crud->getData("bodyBeforeEnd") ?>
 
-<?php
-    echo $bodyEndAssets->js();
-    echo $debugbarRenderer->render();
-?>
+<?= $debugbarRenderer->render(); ?>
 
 
 </body>
