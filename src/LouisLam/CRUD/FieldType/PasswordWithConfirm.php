@@ -19,11 +19,12 @@ class PasswordWithConfirm extends FieldType
      */
     private $encryptionClosure = null;
 
-    public function  __construct() {
+    public function __construct()
+    {
 
         // Use MD5 by default
         $this->encryptionClosure = function ($v) {
-            return md5($v);
+            return password_hash($v, PASSWORD_DEFAULT);
         };
 
     }
@@ -43,7 +44,7 @@ class PasswordWithConfirm extends FieldType
         $type = $this->type;
         $crud = $this->field->getCRUD();
 
-        $html  = <<< HTML
+        $html = <<< HTML
         <div class="form-group">
             <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
         </div>
@@ -70,8 +71,9 @@ HTML;
 HTML
         );
 
-        if ($echo)
+        if ($echo) {
             echo $html;
+        }
 
         return $html;
     }
@@ -79,13 +81,15 @@ HTML
     /**
      * @param callback $c function ($value) { return md5($value); }
      */
-    public function setEncryptionClosure($c) {
+    public function setEncryptionClosure($c)
+    {
         $this->encryptionClosure = $c;
     }
 
     public function beforeStoreValue($valueFromUser)
     {
-        $c =  $this->encryptionClosure;
+        $c = $this->encryptionClosure;
+
         return $c($valueFromUser);
     }
 
