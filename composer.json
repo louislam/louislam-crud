@@ -32,5 +32,5 @@
             "LouisLam\\" : "src/LouisLam"
         }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

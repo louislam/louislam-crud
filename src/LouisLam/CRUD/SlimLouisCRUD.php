@@ -112,6 +112,46 @@ HTML;
 
         });
 
+        // Upload Image function
+        $this->slim->post("/louislam-crud/upload-image/:type", function ($type) {
+            $result = $this->uploadImage("upload", "upload/", 1000);
+
+            if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
+
+            } else {
+                $result["url"] = \LouisLam\Util::fullURL($result["url"]);
+            }
+
+
+
+            if ($type == "js") {
+                $url = $result["url"];
+
+                if ($result["uploaded"]) {
+                    echo <<< HTML
+<script type="text/javascript">
+    window.parent.CKEDITOR.tools.callFunction("0", "$url", "");
+</script>
+HTML;
+                } else {
+                    $msg = $result["msg"];
+
+                    echo <<< HTML
+<script type="text/javascript">
+    alert("$msg");
+</script>
+HTML;
+                }
+
+
+
+            } else {
+                $this->enableJSONResponse();
+                echo json_encode($result);
+            }
+
+        });
+
         $this->slim->get("/auth/login", function () {
             echo $this->getTemplateEngine()->render("adminlte::login");
         });
@@ -856,7 +896,7 @@ HTML;
         $list = $this->getListViewData();
 
         $helper = new ExcelHelper();
-
+ 
         $helper->setHeaderClosure(function ($key, $value) {
             $this->getSlim()->response()->header($key, $value);
         });

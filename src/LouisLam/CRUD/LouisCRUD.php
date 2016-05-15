@@ -16,6 +16,9 @@ use PHPSQL\Creator;
 use PHPSQL\Parser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
+use JBZoo\Image\Image;
+use JBZoo\Image\Filter;
+
 
 /**
  * LouisCRUD
@@ -446,7 +449,7 @@ HTML;
         return $html;
     }
 
-    private function beforeRender()
+    protected function beforeRender()
     {
         // if there is a ID field only, no other fields, then throw an Exception
         if (count($this->fieldList) <= 1) {
@@ -1267,7 +1270,7 @@ HTML;
 
     public function upload($fieldName = "upload", $folder = "upload/") {
 
-        if (isset($_FILES[$fieldName])) {
+        if (isset($_FILES[$fieldName])) { 
 
             $filenameArray = explode(".", $_FILES[$fieldName]["name"]);
 
@@ -1299,6 +1302,29 @@ HTML;
         }
 
 
+        return $output;
+    }
+
+    public function uploadImage($fieldName = "upload", $folder = "upload/", $width = null, $height = null) {
+        $output = $this->upload($fieldName, $folder);
+        $path = $output["url"];
+        
+        $img = new Image($path);
+
+        if ($width == null && $height == null) {
+            return $output;
+
+        } else if ($width == null) {
+            $img->fitToHeight($height);
+
+        } else  if ($height == null) {
+            $img->fitToWidth($width);
+
+        } else {
+            $img = $img->resize($width, $height);
+        }
+
+        $img->save();
         return $output;
     }
 

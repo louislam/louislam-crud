@@ -41,11 +41,11 @@ class Camera extends FieldType
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
         $value = $this->getValue();
-        $readOnly = $this->getReadOnlyString();
+        $readOnly = $this->getReadOnlyString(); 
         $required = $this->getRequiredString();
         $crud = $this->field->getCRUD();
 
-        $uploadURL = Util::url("louislam-crud/upload/json?fullpath=no");
+        $uploadURL = Util::url("louislam-crud/upload-image/json?fullpath=no");
 
         if ($value != "" && $value != null) {
             $imgURL = Util::res($value);
