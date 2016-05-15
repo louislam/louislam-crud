@@ -14,7 +14,7 @@
         "slim/slim": "2.6.2",
         "league/plates": "3.1.1",
         "gabordemooij/redbean": "4.2.1",
-        "louislam/louislam-utilities": "dev-master",
+        "louislam/louislam-utilities": "1.0.2",
         "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
         "almasaeed2010/adminlte": "2.3.0",
@@ -24,7 +24,8 @@
         "ckeditor/ckeditor": "4.5.4",
         "soundintheory/php-sql-parser": "1.0",
         "maximebf/debugbar": "1.*",
-        "ircmaxell/password-compat" : "1.0.4"
+        "ircmaxell/password-compat" : "1.0.4",
+        "jbzoo/image":"^3.0"
     },
     "autoload": {
         "psr-4": {
