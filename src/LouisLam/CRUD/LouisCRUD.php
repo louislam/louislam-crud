@@ -1122,7 +1122,7 @@ HTML;
         }
 
         try {
-            return $this->template->exists("backend_layout") ? "layout" : $this->theme . "::layout";
+            return $this->template->exists("backend_layout") ? "backend_layout" : $this->theme . "::layout";
         } catch (\LogicException $ex) {
             return $this->theme . "::layout";
         }
