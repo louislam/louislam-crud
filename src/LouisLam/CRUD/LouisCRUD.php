@@ -961,7 +961,7 @@ HTML;
 
         if ($this->afterInsertBean != null) {
             $callable = $this->afterInsertBean;
-            $callable();
+            $callable($bean, $result);
         }
 
         return $result;
@@ -970,7 +970,7 @@ HTML;
     /**
      * @param callable $afterUpdateBean
      */
-    public function setAfterUpdateBean($afterUpdateBean)
+    public function afterUpdate($afterUpdateBean)
     {
         $this->afterUpdateBean = $afterUpdateBean;
     }
@@ -978,7 +978,7 @@ HTML;
     /**
      * @param callable $afterInsertBean
      */
-    public function setAfterInsertBean($afterInsertBean)
+    public function afterInsert($afterInsertBean)
     {
         $this->afterInsertBean = $afterInsertBean;
     }
@@ -1006,7 +1006,7 @@ HTML;
 
         if ($this->afterUpdateBean != null) {
             $callable = $this->afterUpdateBean;
-            $callable();
+            $callable($this->currentBean, $result);
         }
 
         return $result;
