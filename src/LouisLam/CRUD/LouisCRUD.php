@@ -126,6 +126,16 @@ class LouisCRUD
     private $headHTML = "";
 
     /**
+     * @var callable
+     */
+    private $afterUpdateBean = null;
+
+    /**
+     * @var callable
+     */
+    private $afterInsertBean = null;
+
+    /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
      * @throws Exception
@@ -949,8 +959,30 @@ HTML;
             $result->ok = false;
         }
 
+        if ($this->afterInsertBean != null) {
+            $callable = $this->afterInsertBean;
+            $callable();
+        }
+
         return $result;
     }
+
+    /**
+     * @param callable $afterUpdateBean
+     */
+    public function setAfterUpdateBean($afterUpdateBean)
+    {
+        $this->afterUpdateBean = $afterUpdateBean;
+    }
+
+    /**
+     * @param callable $afterInsertBean
+     */
+    public function setAfterInsertBean($afterInsertBean)
+    {
+        $this->afterInsertBean = $afterInsertBean;
+    }
+
 
     /**
      * Update a bean.
@@ -970,6 +1002,11 @@ HTML;
         if (!isset($result->msg)) {
             $result->msg = "Saved.";
             $result->class = "callout-info";
+        }
+
+        if ($this->afterUpdateBean != null) {
+            $callable = $this->afterUpdateBean;
+            $callable();
         }
 
         return $result;
