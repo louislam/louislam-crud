@@ -953,7 +953,7 @@ HTML;
             $resourceUri = $req->getResourceUri();
 
             $_SESSION["redirect"] = $resourceUri;
-           $crud->getSlim()->redirect(Util::fullURL("auth/login"));
+           header("Location: " . Util::fullURL("auth/login"));
         });
     }
 
