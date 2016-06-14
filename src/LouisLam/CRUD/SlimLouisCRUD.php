@@ -50,6 +50,7 @@ class SlimLouisCRUD extends LouisCRUD
 
     private $currentRouteName = "";
 
+    protected $firstPageURL = "";
 
 
     /**
@@ -163,10 +164,14 @@ HTML;
             $result=  Auth::login($_POST["username"], $_POST["password"]);
 
             if ($result) {
-                //echo $_SESSION["redirect"];
-                //echo $_SESSION["redirect"];
-                //echo Util::fullURL($_SESSION["redirect"]);
-                @$app->redirect(Util::fullURL($_SESSION["redirect"]) );
+
+                if (isset($_SESSION["redirect"])) {
+                    $app->redirect(Util::fullURL($_SESSION["redirect"]) );
+                } else {
+                    $app->redirect($this->getFirstPageURL());
+                }
+
+
             } else {
                 $app->redirect(Util::fullURL("auth/login"));
             }
@@ -951,4 +956,22 @@ HTML;
            $crud->getSlim()->redirect(Util::fullURL("auth/login"));
         });
     }
+
+    /**
+     * @return string
+     */
+    public function getFirstPageURL()
+    {
+        return $this->firstPageURL;
+    }
+
+    /**
+     * @param string $firstPageURL
+     */
+    public function setFirstPageURL($firstPageURL)
+    {
+        $this->firstPageURL = $firstPageURL;
+    }
+
+
 }
