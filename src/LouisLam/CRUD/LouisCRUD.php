@@ -1305,7 +1305,7 @@ HTML;
         $this->actionClosure = $actionClosure;
     }
 
-    public function upload($fieldName = "upload", $folder = "upload/") {
+    public function upload($fieldName = "upload", $folder = "upload" . DIRECTORY_SEPARATOR) {
 
         if (isset($_FILES[$fieldName])) { 
 
