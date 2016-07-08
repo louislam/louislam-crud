@@ -118,9 +118,10 @@ var LouisCRUD = (function () {
             // Apply the search
             self.table.columns().every(function () {
                 var that = this;
-                $('input', this.footer()).on('keyup change', function () {
-                    that.search(this.value).draw();
-                });
+                // TODO: Should not bind all input...
+                /* $('input', this.footer()).on('keyup change', function () {
+                     that.search(this.value).draw();
+                 });*/
             });
             // Column Filter
             self.columnFilter();
