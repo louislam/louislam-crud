@@ -146,6 +146,11 @@ class LouisCRUD
     private $beforeInsertBean = null;
 
     /**
+     * @var callable
+     */
+    private $beforeStoreEachField = null;
+
+    /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
      * @throws Exception
@@ -1006,12 +1011,19 @@ HTML;
         $this->beforeUpdateBean = $beforeUpdateBean;
     }
 
+
+
     /**
      * @param $beforeInsertBean
      */
     public function beforeInsert($beforeInsertBean)
     {
         $this->beforeInsertBean = $beforeInsertBean;
+    }
+
+    public function beforeStoreEachField($closure)
+    {
+        $this->beforeStoreEachField = $closure;
     }
 
     /**
@@ -1025,7 +1037,7 @@ HTML;
         if ($this->currentBean ==null) {
             throw new NoBeanException();
         }
-        
+
         if ($this->beforeUpdateBean != null) {
             $callable = $this->beforeUpdateBean;
             $callable($this->currentBean);
@@ -1147,6 +1159,12 @@ HTML;
                     $result->fieldName = $field->getName();
                     $result->class = "callout-danger";
                     return $result;
+                }
+
+                // Callback
+                if ($this->beforeStoreEachField != null) {
+                    $callable = $this->beforeStoreEachField;
+                    $value = $callable($field->getName(), $bean, $value);
                 }
 
                 // Set the value to the current bean directly
