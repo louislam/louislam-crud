@@ -136,6 +136,16 @@ class LouisCRUD
     private $afterInsertBean = null;
 
     /**
+     * @var callable
+     */
+    private $beforeUpdateBean = null;
+
+    /**
+     * @var callable
+     */
+    private $beforeInsertBean = null;
+
+    /**
      * @param string $tableName Table Name
      * @param string $viewDir User Template directory
      * @throws Exception
@@ -949,6 +959,12 @@ HTML;
     public function insertBean($data)
     {
         $bean = R::xdispense($this->tableName);
+
+        if ($this->beforeInsertBean != null) {
+            $callable = $this->beforeInsertBean;
+            $callable($bean);
+        }
+
         $result =  $this->saveBean($bean, $data);
 
         if (!isset($result->msg)) {
@@ -983,6 +999,20 @@ HTML;
         $this->afterInsertBean = $afterInsertBean;
     }
 
+    /**
+     */
+    public function beforeUpdate($beforeUpdateBean)
+    {
+        $this->beforeUpdateBean = $beforeUpdateBean;
+    }
+
+    /**
+     * @param $beforeInsertBean
+     */
+    public function beforeInsert($beforeInsertBean)
+    {
+        $this->beforeInsertBean = $beforeInsertBean;
+    }
 
     /**
      * Update a bean.
@@ -994,6 +1024,11 @@ HTML;
     {
         if ($this->currentBean ==null) {
             throw new NoBeanException();
+        }
+        
+        if ($this->beforeUpdateBean != null) {
+            $callable = $this->beforeUpdateBean;
+            $callable($this->currentBean);
         }
 
         $result = $this->saveBean($this->currentBean, $data);
