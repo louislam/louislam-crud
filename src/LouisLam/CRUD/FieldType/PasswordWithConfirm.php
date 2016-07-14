@@ -46,7 +46,7 @@ class PasswordWithConfirm extends FieldType
 
         $html = <<< HTML
         <div class="form-group">
-            <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
+            <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="" $readOnly $required />
         </div>
 
          <div class="form-group">
@@ -88,8 +88,11 @@ HTML
 
     public function beforeStoreValue($valueFromUser)
     {
-        $c = $this->encryptionClosure;
+        if ($valueFromUser == "") {
+            return $this->field->getBean()->{$this->field->getName()};
+        }
 
+        $c = $this->encryptionClosure;
         return $c($valueFromUser);
     }
 

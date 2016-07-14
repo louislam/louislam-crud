@@ -1161,13 +1161,6 @@ HTML;
                     return $result;
                 }
 
-                // Callback
-                // TODO: Also make this for fieldtype?
-                if ($this->beforeStoreEachField != null) {
-                    $callable = $this->beforeStoreEachField;
-                    $value = $callable($field->getName(), $bean, $value);
-                }
-
                 // Set the value to the current bean directly
                 $bean->{$field->getName()} = $value;
 
