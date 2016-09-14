@@ -925,9 +925,10 @@ HTML;
         }
 
         $crud = $this;
-
-        $content = $callback();
-        $this->getSlim()->get($route, function () use ($content, $crud) {
+        
+        $this->getSlim()->get($route, function () use ($crud, $callback) {
+            $content = $callback();
+            
             $this->render($crud->getThemeName() . "::page", [
                 "content" => $content
             ], true);
@@ -942,18 +943,18 @@ HTML;
         $crud = $this;
 
         Auth::checkLogin(function () use ($crud) {
-
             // Get request object
             $req = $crud->getSlim()->request;
 
-//Get root URI
+            //Get root URI
             $rootUri = $req->getRootUri();
 
-//Get resource URI
+            //Get resource URI
             $resourceUri = $req->getResourceUri();
 
             $_SESSION["redirect"] = $resourceUri;
-           $crud->getSlim()->redirect(Util::fullURL("auth/login"));
+           header("Location: " . Util::fullURL("auth/login"));
+            
         });
     }
 
