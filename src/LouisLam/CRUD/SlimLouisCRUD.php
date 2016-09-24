@@ -954,7 +954,7 @@ HTML;
 
             $_SESSION["redirect"] = $resourceUri;
            header("Location: " . Util::fullURL("auth/login"));
-            
+            die();
         });
     }
 
