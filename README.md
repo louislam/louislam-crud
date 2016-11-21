@@ -35,7 +35,7 @@ Note: The library is under development and not tested very well currently.
 
     ```json
     "require": {
-        "louislam/louislam-crud": "dev-master"
+        "louislam/louislam-crud": "1.*"
     },
     "minimum-stability": "dev"
     ```
