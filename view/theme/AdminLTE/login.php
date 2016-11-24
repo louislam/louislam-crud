@@ -25,8 +25,9 @@ use LouisLam\Util;
     <!-- /.login-logo -->
     <div class="login-box-body">
 
-        <?php if (isset($msg)) : ?>
-            <p class="login-box-msg" style="color: red"><?= $msg ?></p>
+        <?php if (isset($_SESSION['msg'])) : ?>
+            <p class="login-box-msg" style="color: red"><?= $_SESSION['msg'] ?></p>
+            <?php unset($_SESSION['msg']); ?>
         <?php endif; ?>
 
 
