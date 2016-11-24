@@ -173,6 +173,7 @@ HTML;
 
 
             } else {
+                $_SESSION['msg'] = "Username or password invalid";
                 $app->redirect(Util::fullURL("auth/login"));
             }
         });
