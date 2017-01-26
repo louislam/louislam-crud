@@ -11,21 +11,19 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "slim/slim": "2.6.2",
-        "league/plates": "3.1.1",
-        "gabordemooij/redbean": "4.2.1",
+        "slim/slim": "2.6.3",
+        "league/plates": "3.3.0",
+        "gabordemooij/redbean": "4.3.3",
         "louislam/louislam-utilities": "1.0.*",
         "datatables/datatables": "1.10.8",
         "components/jquery": "1.11.3",
-        "almasaeed2010/adminlte": "2.3.0",
+        "almasaeed2010/adminlte": "2.3.11",
         "fortawesome/font-awesome": "4.4.*",
         "phpoffice/phpexcel": "1.8.1",
         "components/jqueryui": "1.11.4",
         "ckeditor/ckeditor": "4.5.4",
         "soundintheory/php-sql-parser": "1.0",
-        "maximebf/debugbar": "1.12.0",
-        "ircmaxell/password-compat" : "1.0.4",
-        "jbzoo/image":"3.0.4"
+        "ircmaxell/password-compat" : "1.0.4"
     },
     "autoload": {
         "psr-4": {
