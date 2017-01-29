@@ -2,7 +2,6 @@
 
 namespace LouisLam\CRUD;
 
-use DebugBar\StandardDebugBar;
 use Exception;
 use League\Plates\Engine;
 use LouisLam\CRUD\Exception\BeanNotNullException;
@@ -170,19 +169,19 @@ class LouisCRUD
         try {
             $this->template = new Engine($viewDir);
         } catch(\LogicException $ex) {
-            throw new Exception("The view folder is not existing.");
-        }
+            mkdir("view");
 
-        // Debug Bar
-        $this->debugbar = new StandardDebugBar();
-        $debugbarRenderer = $this->debugbar->getJavascriptRenderer(Util::res("vendor/maximebf/debugbar/src/DebugBar/Resources"));
+            try {
+                $this->template = new Engine($viewDir);
+            } catch (\LogicException $ex) {
+                throw new Exception("The \"view\" folder is not existing.");
+            }
+        }
 
         // Template Default Data
         $this->template->addData([
             "crud" => $this,
-            "cacheVersion" => $this->cacheVersion,
-            "debugbar" => $this->debugbar,
-            "debugbarRenderer" => $debugbarRenderer,
+            "cacheVersion" => $this->cacheVersion
         ]);
 
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
@@ -200,7 +199,7 @@ class LouisCRUD
      * @param $msg
      */
     public function log($msg) {
-        $this->debugbar["messages"]->addMessage($msg);
+
     }
 
     public function setViewDirectory($viewDir)

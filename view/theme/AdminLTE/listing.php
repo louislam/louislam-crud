@@ -10,7 +10,7 @@ use LouisLam\CRUD\Field;
 $isAjax = ($crud->isAjaxListView()) ? "true" : "false";
 $jsonLink = $crud->getListViewJSONLink();
 
-$crud->addScript(<<< JS
+$crud->addBodyEndHTML(<<< JS
 <script>
     var isAjax = $isAjax;
     var ajaxUrl = "$jsonLink";

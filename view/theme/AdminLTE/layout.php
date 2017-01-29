@@ -3,9 +3,8 @@ use LouisLam\CRUD\LouisCRUD;
 use LouisLam\Util;
 
 /** @var LouisCRUD $crud */
-/** @var \Stolz\Assets\Manager $headAssets */
-/** @var \Stolz\Assets\Manager $bodyEndAssets */
-/** @var \DebugBar\JavascriptRenderer $debugbarRenderer */
+
+$adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 
 ?><!DOCTYPE html>
 <html>
@@ -24,16 +23,10 @@ use LouisLam\Util;
 
     <script src="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
-
-    <?php
-        echo $debugbarRenderer->renderHead();
-    ?>
-
     <?=$crud->getHeadHTML(); ?>
-
     <?=@$crud->getData("head") ?>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition sidebar-mini <?=$adminLTESetting->getSkin() ?>">
 <div class="wrapper">
 
     <header class="main-header">
@@ -54,7 +47,6 @@ use LouisLam\Util;
     </header>
 
     <aside class="main-sidebar">
-
         <section class="sidebar">
 
             <div class="user-panel">
@@ -65,9 +57,7 @@ use LouisLam\Util;
                 <?=@$crud->getData("menu") ?>
             </ul>
         </section>
-
     </aside>
-
 
     <div class="content-wrapper">
         <section class="content-header"> </section>
@@ -77,14 +67,10 @@ use LouisLam\Util;
         </section>
     </div>
 
-
     <footer class="main-footer">
         <?=@$crud->getData("footer") ?>
     </footer>
-
-
 </div>
-
 
 <script src="<?=Util::res("vendor/components/jquery/jquery.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/components/jqueryui/jquery-ui.min.js") ?>"></script>
@@ -93,9 +79,7 @@ use LouisLam\Util;
     $.widget.bridge('uibutton', $.ui.button);
 </script>
 
-<!-- Bootstrap 3.3.5 -->
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>bootstrap/js/bootstrap.min.js"></script>
-
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/jquery.dataTables.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/dataTables.bootstrap.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>"></script>
@@ -104,10 +88,8 @@ use LouisLam\Util;
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>dist/js/app.min.js"></script>
 
-
 <script>
     var crud = new LouisCRUD();
-
     var BASE_URL = "<?="http://" . $_SERVER['SERVER_NAME'] ?>";
     var RES_URL = "<?=Util::res("") ?>";
 </script>
@@ -115,9 +97,6 @@ use LouisLam\Util;
 <?=$crud->getBodyEndHTML(); ?>
 
 <?=@$crud->getData("bodyBeforeEnd") ?>
-
-<?= $debugbarRenderer->render(); ?>
-
 
 </body>
 </html>
