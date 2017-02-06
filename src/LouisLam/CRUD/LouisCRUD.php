@@ -481,10 +481,31 @@ HTML;
         }
     }
 
+
+    /**
+     * Count Total List view data
+     * @return int
+     */
+    protected function countTotalListViewData() {
+        $count = 0;
+
+        $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
+
+            // For RedBean Case
+            $count = R::count($tableName, $findClause . $limit, $bindingData);
+
+        }, function ($sql, $limit, $bindingData) use (&$count) {
+
+            // For SQL Case
+            $count = R::getRow("SELECT Count(*) as count FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
+
+        });
+
+        return $count;
+    }
+
     /**
      * Get List view data
-     *
-     * TODO: Sort by multiple fields?
      *
      * @param int $start
      * @param int $rowPerPage
@@ -494,7 +515,39 @@ HTML;
      * @return array List of beans
      * @throws \RedBeanPHP\RedException\SQL
      */
-    protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null)
+    protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null) {
+        $list = [];
+
+        $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
+
+            // For RedBean Case
+            $list = R::find($tableName, $findClause . $limit, $bindingData);
+
+        }, function ($sql, $limit, $bindingData) use (&$list) {
+
+            // For SQL Case
+            $list = R::getAll($sql . $limit, $bindingData);
+
+        }, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
+
+        return $list;
+    }
+
+    /**
+     * Prepare the SQL or parameter for RedBean
+     *
+     * TODO: Sort by multiple fields?
+     *
+     * @param int $start
+     * @param int $rowPerPage
+     * @param string $keyword
+     * @param string $sortField
+     * @param null $sortOrder ASC/DESC
+     * @param callable $callbackRedBean
+     * @param callable $callbackSQL
+     * @throws \RedBeanPHP\RedException\SQL
+     */
+    protected function beforeGetListViewData($callbackRedBean, $callbackSQL, $start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null)
     {
         try {
 
@@ -509,7 +562,7 @@ HTML;
                 // Custom SQL
 
                 $list = [];
-                $tempList = R::getAll($this->sql . $limit, $this->bindingData);
+                $tempList = $callbackSQL($this->sql . $limit, $this->bindingData);
 
                 // Array convert to object
                 foreach ($tempList as $row) {
@@ -557,8 +610,7 @@ HTML;
                     $findClause = str_replace($fakeSelect, "", (new Creator($sqlArray))->created);
                 }
 
-
-                $list = R::find($this->tableName, $findClause . $limit, $bindingData);
+                $callbackRedBean($this->tableName, $findClause, $limit, $bindingData);
             }
         } catch (\RedBeanPHP\RedException\SQL $ex) {
 
@@ -568,10 +620,9 @@ HTML;
 
             // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
-            return $this->getListViewData($start, $rowPerPage);
+            $this->beforeGetListViewData($callbackRedBean, $callbackSQL, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
         }
 
-        return $list;
     }
 
     protected function buildSearchingClause() {
@@ -691,8 +742,7 @@ HTML;
         $obj = new AjaxResult();
 
         // Get the total number of record
-        // TODO: Can improve performance?
-        $obj->recordsTotal = count($this->getListViewData());
+        $obj->recordsTotal = $this->countTotalListViewData();
         $obj->recordsFiltered = $obj->recordsTotal;
 
         if (isset($_POST["draw"])) {
