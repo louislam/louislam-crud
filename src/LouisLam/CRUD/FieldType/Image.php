@@ -24,7 +24,7 @@ class Image extends FieldType
 
         // Create a directory for Upload Path
         if (! file_exists($this->getUploadPath())) {
-            mkdir($this->getUploadPath(), 0777);
+            mkdir($this->getUploadPath(), 0777, true);
         } else {
             //chmod($this->getUploadPath(), 0777);
         }
@@ -106,6 +106,9 @@ HTML;
             jQuery.each($(this)[0].files, function(i, file) {
                 data.append("upload", file);
             });
+            
+            //add custom path
+            data.append("uploadpath", "$this->uploadPath");
 
              $.ajax({
                 url: '$uploadURL',
