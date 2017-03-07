@@ -61,7 +61,10 @@ class SlimLouisCRUD extends LouisCRUD
      */
     public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null)
     {
-        session_start();
+
+        if(session_id() == '') {
+            session_start();
+        }
 
         parent::__construct();
         $this->groupName = $groupName;
@@ -154,9 +157,8 @@ HTML;
         });
 
         $this->slim->get("/auth/login", function () {
-            echo $this->getTemplateEngine()->render("adminlte::login");
-        });
-
+        echo $this->getTemplateEngine()->render("adminlte::login");
+    });
 
         $app = $this->slim;
 
