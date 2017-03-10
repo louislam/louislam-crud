@@ -94,9 +94,12 @@ class SlimLouisCRUD extends LouisCRUD
                 $url = $result["url"];
 
                 if ($result["uploaded"]) {
+
+                    $funcNum = isset($_GET['CKEditorFuncNum']) ? $_GET['CKEditorFuncNum'] : 0;
+
                     echo <<< HTML
 <script type="text/javascript">
-    window.parent.CKEDITOR.tools.callFunction("0", "$url", "");
+    window.parent.CKEDITOR.tools.callFunction("$funcNum", "$url", "");
 </script>
 HTML;
                 } else {
