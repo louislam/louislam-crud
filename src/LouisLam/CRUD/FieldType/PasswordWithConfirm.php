@@ -96,5 +96,10 @@ HTML
         return $c($valueFromUser);
     }
 
+    public function renderCell($value)
+    {
+        return "***";
+    }
+
 
 }
