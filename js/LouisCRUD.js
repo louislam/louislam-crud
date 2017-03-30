@@ -108,13 +108,15 @@ var LouisCRUD = (function () {
         }
         $(document).ready(function () {
             self.table = $('#louis-crud-table').DataTable(data);
+            /* TODO: Too hard to do.
             $('#louis-crud-table tfoot th').each(function () {
                 if ($(this).index() == 0) {
                     return;
                 }
+
                 var title = $('#louis-crud-table thead th').eq($(this).index()).text();
                 $(this).html('<input type="text" placeholder="Search ' + title + '" class="filter-box" />');
-            });
+            });*/
             // Apply the search
             self.table.columns().every(function () {
                 var that = this;
