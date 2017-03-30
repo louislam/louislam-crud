@@ -71,6 +71,8 @@ HTML;
 
         <a id="image-remove-$name" href="javascript:void(0)" class="btn btn-danger" $hideRemoveButton>Remove Image</a>
    <br/>   <br/>
+     </div>
+
 HTML;
 
         $crud->addScript(<<< HTML
