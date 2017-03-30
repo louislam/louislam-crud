@@ -78,7 +78,12 @@ class SlimLouisCRUD extends LouisCRUD
 
         // Upload function
         $this->slim->post("/louislam-crud/upload/:type", function ($type) {
-            $result = $this->upload();
+
+            if (!empty($_POST['uploadpath'])) {
+                $result = $this->upload("upload", $_POST['uploadpath']);
+            } else {
+                $result = $this->upload();
+            }
 
             if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
 
@@ -92,9 +97,12 @@ class SlimLouisCRUD extends LouisCRUD
                 $url = $result["url"];
 
                 if ($result["uploaded"]) {
+
+                    $funcNum = isset($_GET['CKEditorFuncNum']) ? $_GET['CKEditorFuncNum'] : 0;
+
                     echo <<< HTML
 <script type="text/javascript">
-    window.parent.CKEDITOR.tools.callFunction("0", "$url", "");
+    window.parent.CKEDITOR.tools.callFunction("$funcNum", "$url", "");
 </script>
 HTML;
                 } else {
