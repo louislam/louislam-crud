@@ -155,8 +155,6 @@ HTML;
 HTML;
                 }
 
-
-
             } else {
                 $this->enableJSONResponse();
                 echo json_encode($result);
@@ -165,8 +163,8 @@ HTML;
         });
 
         $this->slim->get("/auth/login", function () {
-        echo $this->getTemplateEngine()->render("adminlte::login");
-    });
+            echo $this->getTemplateEngine()->render("adminlte::login");
+        });
 
         $app = $this->slim;
 
