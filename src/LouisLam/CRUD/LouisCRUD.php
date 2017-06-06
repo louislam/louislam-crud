@@ -15,8 +15,15 @@ use PHPSQL\Creator;
 use PHPSQL\Parser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
-use JBZoo\Image\Image;
-use JBZoo\Image\Filter;
+use Stringy\Stringy;
+
+/**
+ * @param $str
+ * @return Stringy
+ */
+function s($str) {
+    return Stringy::create($str);
+}
 
 
 /**
@@ -117,8 +124,6 @@ class LouisCRUD
 
     private $exportFilename = null;
 
-    private $debugbar;
-
     private $cacheVersion = 2;
 
     private $bodyEndHTML = "";
@@ -148,6 +153,27 @@ class LouisCRUD
      * @var callable
      */
     private $beforeStoreEachField = null;
+
+    /**
+     * @var string
+     */
+    private $duplicateEntryErrorMsg = null;
+
+    /**
+     * @return string
+     */
+    public function getDuplicateEntryErrorMsg()
+    {
+        return $this->duplicateEntryErrorMsg;
+    }
+
+    /**
+     * @param string $duplicateEntryErrorMsg
+     */
+    public function setDuplicateEntryErrorMsg($duplicateEntryErrorMsg)
+    {
+        $this->duplicateEntryErrorMsg = $duplicateEntryErrorMsg;
+    }
 
     /**
      * @param string $tableName Table Name
@@ -821,14 +847,13 @@ HTML;
 
 
     /**
-     * @param bool echo?
+     * @param bool $echo echo?
+     * @return string
      */
     public function getJSON($echo = true) {
         $bean = $this->getBean();
 
         $fields = $this->getShowFields();
-
-        $output = "";
         $array = [];
 
         foreach ($fields as $field) {
@@ -1005,7 +1030,6 @@ HTML;
 
 
     /**
-     * TODO: Update to similar to updateBean
      * Store Data into Database
      * @param $data
      * @return int|string
@@ -1089,15 +1113,21 @@ HTML;
 
         if ($this->beforeUpdateBean != null) {
             $callable = $this->beforeUpdateBean;
-            $callable($this->currentBean);
+            $callableResult = $callable($this->currentBean);
+
+            if (! $callableResult->ok) {
+                return $callableResult;
+            }
         }
 
         $result = $this->saveBean($this->currentBean, $data);
 
         // Return result
-        if (!isset($result->msg)) {
+        if ($result->ok) {
             $result->msg = "Saved.";
             $result->class = "callout-info";
+        } else {
+            $result->class = "callout-danger";
         }
 
         if ($this->afterUpdateBean != null) {
@@ -1138,7 +1168,7 @@ HTML;
                 $duplicateBeans = R::find($bean->getMeta('type'), " $fieldName = ? ", [$data[$field->getName()]]);
 
                 if (count($duplicateBeans) > 0) {
-                    $validateResult = "Email 已存在！";
+                    // TODO
                 }
             }
 
@@ -1217,10 +1247,26 @@ HTML;
         }
 
         // Store
-        // TODO: Return result object
-        $id = R::store($bean);
+        // Return result object
         $result = new Result();
-        $result->id = $id;
+
+        try {
+            $id = R::store($bean);
+            $result->id = $id;
+        } catch (\Exception $ex) {
+            $result->ok = false;
+            $result->class = "callout-danger";
+
+            if (Stringy::create($ex->getMessage())->contains("1062 Duplicate entry") && $this->getDuplicateEntryErrorMsg() != null) {
+                $result->msg = $this->getDuplicateEntryErrorMsg();
+            } else {
+                $result->msg = $ex->getMessage();
+            }
+
+
+        }
+
+
         return $result;
     }
 
@@ -1262,7 +1308,7 @@ HTML;
     }
 
     /**
-     * @return mixed
+     * @param boolean $bool
      */
     public function enableListView($bool)
     {
@@ -1277,9 +1323,8 @@ HTML;
         return $this->enableListView;
     }
 
-
     /**
-     * @return mixed
+     * @param boolean $bool
      */
     public function enableEdit($bool)
     {
@@ -1442,27 +1487,16 @@ HTML;
         return $output;
     }
 
+    /**
+     * TODO
+     * @param string $fieldName
+     * @param string $folder
+     * @param null $width
+     * @param null $height
+     * @return null
+     */
     public function uploadImage($fieldName = "upload", $folder = "upload/", $width = null, $height = null) {
-        $output = $this->upload($fieldName, $folder);
-        $path = $output["url"];
-        
-        $img = new Image($path);
-
-        if ($width == null && $height == null) {
-            return $output;
-
-        } else if ($width == null) {
-            $img->fitToHeight($height);
-
-        } else  if ($height == null) {
-            $img->fitToWidth($width);
-
-        } else {
-            $img = $img->resize($width, $height);
-        }
-
-        $img->save();
-        return $output;
+        return null;
     }
 
     public function getTemplateEngine() {
@@ -1647,19 +1681,21 @@ HTML;
     }
 
     /**
-     * @return \Stolz\Assets\Manager
+     * @deprecated
+     * @return null
      */
     public function getBodyEndAssets()
     {
-        return $this->bodyEndAssets;
+        return null;
     }
 
     /**
-     * @return \Stolz\Assets\Manager
+     * @deprecated
+     * @return null
      */
     public function getHeadAssets()
     {
-        return $this->headAssets;
+        return null;
     }
 
     /**

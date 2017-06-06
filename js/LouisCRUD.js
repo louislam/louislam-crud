@@ -30,7 +30,8 @@ var LouisCRUD = (function () {
                 self.errorMsgs = [];
                 var ok = true;
                 var data = {};
-                $.each($('#louis-form').serializeArray(), function () {
+                var serialArray = $("#louis-form").serializeArray();
+                $.each(serialArray, function () {
                     data[this.name] = this.value;
                 });
                 // Validate
@@ -108,23 +109,6 @@ var LouisCRUD = (function () {
         }
         $(document).ready(function () {
             self.table = $('#louis-crud-table').DataTable(data);
-            /* TODO: Too hard to do.
-            $('#louis-crud-table tfoot th').each(function () {
-                if ($(this).index() == 0) {
-                    return;
-                }
-
-                var title = $('#louis-crud-table thead th').eq($(this).index()).text();
-                $(this).html('<input type="text" placeholder="Search ' + title + '" class="filter-box" />');
-            });*/
-            // Apply the search
-            self.table.columns().every(function () {
-                var that = this;
-                // TODO: Should not bind all input...
-                /* $('input', this.footer()).on('keyup change', function () {
-                     that.search(this.value).draw();
-                 });*/
-            });
             // Column Filter
             self.columnFilter();
         });
@@ -145,18 +129,17 @@ var LouisCRUD = (function () {
         this.ajaxFormCallback = callback;
     };
     LouisCRUD.prototype.refresh = function () {
-        var self = this;
         // Delete Button
         $(".btn-delete:not(.ok)").click(function () {
             var result = window.confirm("Are you sure?");
             if (result) {
-                var btn = $(this);
+                var btn_1 = $(this);
                 var deleteLink = $(this).data("url");
                 $.ajax({
                     url: deleteLink,
                     type: "DELETE"
                 }).done(function (data) {
-                    btn.parents('tr').remove();
+                    btn_1.parents('tr').remove();
                     // self.table.ajax.reload();
                 }).fail(function (data) {
                     console.log(data);

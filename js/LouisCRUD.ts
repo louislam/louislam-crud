@@ -50,25 +50,25 @@ class LouisCRUD {
                 // Clear all msgs
                 self.errorMsgs = [];
 
-                var ok = true;
+                let ok = true;
 
-                var data = {};
+                let data = {};
+                let serialArray = $("#louis-form").serializeArray();
 
-                $.each($('#louis-form')​.serializeArray(), function () {
+                $.each(serialArray, function () {
                     data[this.name] = this.value;
                 });
 
-
                 // Validate
-                for (var i = 0; i < self.validateFunctions.length; i++) {
+                for (let i = 0; i < self.validateFunctions.length; i++) {
                     if (self.validateFunctions[i](data) === false) {
                         ok = false;
                     }
                 }
 
                if (!ok) {
-                   var str = "";
-                   for (var i = 0; i < self.errorMsgs.length; i++) {
+                   let str = "";
+                   for (let i = 0; i < self.errorMsgs.length; i++) {
                         str += self.errorMsgs[i]  +"\n";
                    }
                    alertError(str);
@@ -113,9 +113,9 @@ class LouisCRUD {
     }
 
     public initListView($isAjax, tableURL) {
-        var self = this;
+        let self = this;
 
-        var data = {
+        let data = {
             "pageLength": 25,
             "paging": true,
             "ordering": true,
@@ -146,36 +146,13 @@ class LouisCRUD {
         $(document).ready(function () {
             self.table = $('#louis-crud-table').DataTable(data);
 
-            /* TODO: Too hard to do.
-            $('#louis-crud-table tfoot th').each(function () {
-                if ($(this).index() == 0) {
-                    return;
-                }
-
-                var title = $('#louis-crud-table thead th').eq($(this).index()).text();
-                $(this).html('<input type="text" placeholder="Search ' + title + '" class="filter-box" />');
-            });*/
-
-            // Apply the search
-            self.table.columns().every(function () {
-                var that = this;
-
-                // TODO: Should not bind all input...
-               /* $('input', this.footer()).on('keyup change', function () {
-                    that.search(this.value).draw();
-                });*/
-            });
-
-
-
-
             // Column Filter
             self.columnFilter();
         });
     }
 
     public columnFilter() {
-        var self = this;
+        let self = this;
 
         $(".column-filter a").click(function (e) {
             e.stopPropagation();
@@ -184,9 +161,9 @@ class LouisCRUD {
         $(".column-filter [type=checkbox]").change(function (e) {
             e.preventDefault();
 
-            var checked = $(this).is(":checked");
+            let checked = $(this).is(":checked");
 
-            var column = self.table.column($(this).data('column'));
+            let column = self.table.column($(this).data('column'));
             column.visible(checked);
         });
     }
@@ -196,15 +173,14 @@ class LouisCRUD {
     }
 
     public refresh() {
-        var self = this;
         // Delete Button
         $(".btn-delete:not(.ok)").click(function () {
 
-            var result = window.confirm("Are you sure?");
+            let result = window.confirm("Are you sure?");
 
             if (result) {
-                var btn = $(this);
-                var deleteLink = $(this).data("url");
+                let btn = $(this);
+                let deleteLink = $(this).data("url");
 
                 $.ajax({
                     url: deleteLink,

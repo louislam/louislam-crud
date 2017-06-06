@@ -10,7 +10,15 @@ $listViewLink = $crud->getListViewLink();
 $crud->addScript(<<< HTML
 <script>
     crud.setAjaxFormCallback(function (result) {
-        location.href = "$listViewLink";
+
+        
+        if (result.ok) {
+                    location.href = "$listViewLink";
+        } else {
+                var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
+                $("#msg").html(box);
+        }
+        
     });
 </script>
 HTML
@@ -24,14 +32,13 @@ $this->layout($layoutName, [
 <form id="louis-form" action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
 
     <div class="row">
-        <!-- left column -->
+
         <div class="col-md-10">
-            <!-- general form elements -->
+
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Create</h3>
-                </div><!-- /.box-header -->
-                <!-- form start -->
+                </div>
 
                     <div class="box-body">
                         <?php foreach($fields as $field) : ?>
@@ -49,6 +56,11 @@ $this->layout($layoutName, [
                     </div>
 
             </div>
+
+            <div id="msg" >
+
+            </div>
+
         </div>
     </div>
 

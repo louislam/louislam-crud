@@ -11,6 +11,8 @@ namespace LouisLam\CRUD;
 
 class Result
 {
+    public $ok = true;
     public $id;
-    public $msg;
+    public $msg = "";
+    public $class = "";
 }
