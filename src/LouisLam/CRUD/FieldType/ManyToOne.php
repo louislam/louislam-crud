@@ -15,6 +15,8 @@ use RedBeanPHP\R;
 class ManyToOne extends Dropdown
 {
 
+    private static $optionsCacheList;
+
     /**
      * ManyToOne constructor.
      * @param string $tableName
@@ -25,26 +27,30 @@ class ManyToOne extends Dropdown
      * @param bool $nullOption
      */
     public function __construct( $tableName,  $clause = null,  $data = [],  $nameClosure = null,  $valueField = "id", $nullOption = true) {
-        $beans = R::find($tableName, $clause, $data);
 
-        $options = [];
+        $cacheKey = md5($tableName . "|" . $clause . "|"  . json_encode($data) . "|"  . $nameClosure . "|"  . $valueField . "|"  .  json_encode($data) . "|"  . $nullOption);
 
-        if ($nullOption) {
-            $options[LouisCRUD::NULL] = "--";
-        }
+        if (! isset(self::$optionsCacheList[$cacheKey])) {
+            $beans = R::find($tableName, $clause, $data);
 
-        foreach ($beans as $bean) {
+            $options = [];
 
-            if ($nameClosure != null) {
-                $options[$bean->{$valueField}] = $nameClosure($bean);
-            } else {
-                $options[$bean->{$valueField}] = $bean->name;
+            if ($nullOption) {
+                $options[LouisCRUD::NULL] = "--";
             }
 
+            foreach ($beans as $bean) {
+                if ($nameClosure != null) {
+                    $options[$bean->{$valueField}] = $nameClosure($bean);
+                } else {
+                    $options[$bean->{$valueField}] = $bean->name;
+                }
+            }
 
+            self::$optionsCacheList[$cacheKey] = $options;
         }
 
-        parent::__construct($options);
+        parent::__construct(self::$optionsCacheList[$cacheKey]);
     }
 
 }
