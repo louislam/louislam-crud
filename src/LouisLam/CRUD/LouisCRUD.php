@@ -160,6 +160,16 @@ class LouisCRUD
     private $duplicateEntryErrorMsg = null;
 
     /**
+     * @var bool
+     */
+    private $enableFieldGroup = false;
+
+    /**
+     * @var FieldGroup[]
+     */
+    private $fieldGroupList = [];
+
+    /**
      * @return string
      */
     public function getDuplicateEntryErrorMsg()
@@ -889,6 +899,22 @@ HTML;
         return $html;
     }
 
+    public function addFieldGroup($groupName, $fieldNameList) {
+        $this->enableFieldGroup = true;
+        $fieldGroup = new FieldGroup();
+        $fieldGroup->setGroupName($groupName);
+
+        foreach ($fieldNameList as $fieldName => $width) {
+            $fieldGroup->addField($this->fieldList[$fieldName], $width);
+        }
+
+        $this->fieldGroupList[] = $fieldGroup;
+    }
+
+    public function getFieldGroupList() {
+        return $this->fieldGroupList;
+    }
+
 
     public function renderEditView($echo = true)
     {
@@ -1085,7 +1111,6 @@ HTML;
     }
 
 
-
     /**
      * @param $beforeInsertBean
      */
@@ -1093,6 +1118,7 @@ HTML;
     {
         $this->beforeInsertBean = $beforeInsertBean;
     }
+
 
     public function beforeStoreEachField($closure)
     {
@@ -1398,7 +1424,11 @@ HTML;
         if ($this->editTemplate != null)
             return $this->editTemplate;
 
-        return $this->theme . "::edit";
+        if ($this->enableFieldGroup) {
+            return $this->theme . "::edit2";
+        } else {
+            return $this->theme . "::edit";
+        }
     }
 
     /**
