@@ -13,6 +13,8 @@ class TextField extends FieldType
 {
 
     protected $type = "text";
+    protected $prefix = null;
+    protected $postfix = null;
 
     /**
      * Render Field for Create/Edit
@@ -29,9 +31,35 @@ class TextField extends FieldType
         $type = $this->type;
 
 
+        if ($this->prefix == null && $this->postfix == null) {
+            $inputGroupOpenTag = "";
+            $inputGroupEndTag = "";
+        } else {
+            $inputGroupOpenTag = "<div class=\"input-group\">";
+            $inputGroupEndTag = "</div>";
+        }
+
+
+        if ($this->prefix != null) {
+            $prefixHTML = " <span class=\"input-group-addon\" >$this->prefix</span>";
+        } else {
+            $prefixHTML = "";
+        }
+
+        if ($this->postfix != null) {
+            $postfixHTML = " <span class=\"input-group-addon\" >$this->postfix</span>";
+        } else {
+            $postfixHTML = "";
+        }
+
         $html  = <<< EOF
         <div class="form-group">
-            <label for="field-$name">$display</label> <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
+            <label for="field-$name">$display</label> 
+             $inputGroupOpenTag
+                $prefixHTML
+                <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
+                $postfixHTML
+            $inputGroupEndTag
         </div>
 EOF;
 
