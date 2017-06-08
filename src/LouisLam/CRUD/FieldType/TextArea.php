@@ -29,7 +29,9 @@ class TextArea extends FieldType
 
 
         $html  = <<< EOF
+                <div class="form-group">
         <label for="field-$name">$display</label><textarea class="form-control" id="field-$name" name="$name" $readOnly $required>$value</textarea>
+</div>
 EOF;
 
         if ($echo)

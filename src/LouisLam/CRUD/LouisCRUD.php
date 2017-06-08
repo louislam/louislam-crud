@@ -905,7 +905,7 @@ HTML;
         $fieldGroup->setGroupName($groupName);
 
         foreach ($fieldNameList as $fieldName => $width) {
-            $fieldGroup->addField($this->fieldList[$fieldName], $width);
+            $fieldGroup->addField($this->field($fieldName), $width);
         }
 
         $this->fieldGroupList[] = $fieldGroup;
