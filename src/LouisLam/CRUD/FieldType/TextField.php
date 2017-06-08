@@ -69,5 +69,24 @@ EOF;
         return $html;
     }
 
+    /**
+     * @param null $prefix
+     */
+    public function setPrefix($prefix)
+    {
+        $this->prefix = $prefix;
+        return $this;
+    }
+
+    /**
+     * @param null $postfix
+     */
+    public function setPostfix($postfix)
+    {
+        $this->postfix = $postfix;
+        return $this;
+    }
+
+
 
 }
