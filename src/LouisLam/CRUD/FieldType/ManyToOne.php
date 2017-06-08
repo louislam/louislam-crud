@@ -28,7 +28,7 @@ class ManyToOne extends Dropdown
      */
     public function __construct( $tableName,  $clause = null,  $data = [],  $nameClosure = null,  $valueField = "id", $nullOption = true) {
 
-        $cacheKey = md5($tableName . "|" . $clause . "|"  . json_encode($data) . "|"  . $nameClosure . "|"  . $valueField . "|"  .  json_encode($data) . "|"  . $nullOption);
+        $cacheKey = md5($tableName . "|" . $clause . "|"  . json_encode($data) . "|"  . $valueField . "|"  .  json_encode($data) . "|"  . $nullOption);
 
         if (! isset(self::$optionsCacheList[$cacheKey])) {
             $beans = R::find($tableName, $clause, $data);
