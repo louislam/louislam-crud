@@ -9,6 +9,8 @@
 namespace LouisLam\CRUD\FieldType;
 
 
+use LouisLam\CRUD\LouisCRUD;
+
 class Dropdown extends FieldType
 {
 
@@ -54,6 +56,10 @@ TAG;
                 $selected  = "selected";
             } else {
                 $selected = "";
+            }
+
+            if ($this->field->isRequired() && $v == LouisCRUD::NULL) {
+                $v = "";
             }
 
             $html  .= <<< EOF
