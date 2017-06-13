@@ -169,6 +169,10 @@ class LouisCRUD
      */
     private $fieldGroupList = [];
 
+    protected $editName = "Edit";
+    protected $deleteName = "Delete";
+    protected $createName = "New";
+
     /**
      * @return string
      */
@@ -488,16 +492,18 @@ class LouisCRUD
 
         if ($this->isEnabledEdit()) {
             $url = $this->getEditLink($bean->id);
+            $editName = $this->editName;
             $html .= <<< HTML
-<a href="$url" class="btn btn-default">Edit</a>
+<a href="$url" class="btn btn-default">$editName</a>
 HTML;
 
         }
 
         if ($this->isEnabledDelete()) {
             $url = $this->getDeleteLink($bean->id);
+            $deleteName = $this->deleteName;
             $html .= <<< HTML
- <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">Delete</a>
+ <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="$bean->id" data-url="$url">$deleteName</a>
 HTML;
         }
 
@@ -1765,5 +1771,55 @@ HTML;
     public function getHeadHTML() {
         return $this->headHTML;
     }
+
+    /**
+     * @return string
+     */
+    public function getEditName()
+    {
+        return $this->editName;
+    }
+
+    /**
+     * @param string $editName
+     */
+    public function setEditName($editName)
+    {
+        $this->editName = $editName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeleteName()
+    {
+        return $this->deleteName;
+    }
+
+    /**
+     * @param string $deleteName
+     */
+    public function setDeleteName($deleteName)
+    {
+        $this->deleteName = $deleteName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreateName()
+    {
+        return $this->createName;
+    }
+
+    /**
+     * @param string $createName
+     */
+    public function setCreateName($createName)
+    {
+        $this->createName = $createName;
+    }
+
+
 
 }

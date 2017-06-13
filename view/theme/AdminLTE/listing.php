@@ -34,7 +34,7 @@ $this->layout($layoutName);
 
                     <?php if ($crud->isEnabledCreate()) : ?>
                         <!-- Create Button -->
-                        <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>">New</a>
+                        <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>"><?=$crud->getCreateName(); ?></a>
                     <?php endif; ?>
 
                     <!-- Filter -->
@@ -117,12 +117,12 @@ $this->layout($layoutName);
                             <!-- Action TD -->
                             <td>
                                 <?php if ($crud->isEnabledEdit()) : ?>
-                                    <a href="<?=$crud->getEditLink($bean->id) ?>" class="btn btn-default">Edit</a>
+                                    <a href="<?=$crud->getEditLink($bean->id) ?>" class="btn btn-default"><?=$crud->getEditName() ?></a>
                                 <?php endif; ?>
 
 
                                 <?php if ($crud->isEnabledDelete()) : ?>
-                                    <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="<?=$bean->id ?>" data-url="<?=$this->e($crud->getDeleteLink($bean->id)) ?>">Delete</a>
+                                    <a class="btn-delete btn btn-danger" href="javascript:void(0)" data-id="<?=$bean->id ?>" data-url="<?=$this->e($crud->getDeleteLink($bean->id)) ?>"><?=$crud->getDeleteName() ?></a>
                                 <?php endif; ?>
 
                                 <!-- Action Closure -->
