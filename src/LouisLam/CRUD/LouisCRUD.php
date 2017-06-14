@@ -1735,7 +1735,6 @@ HTML;
     }
 
     /**
-     * @deprecated
      * @param $script
      */
     public function addScript($script) {

@@ -175,7 +175,6 @@ class LouisCRUD {
     public refresh() {
         // Delete Button
         $(".btn-delete:not(.ok)").click(function () {
-
             let result = window.confirm("Are you sure?");
 
             if (result) {
