@@ -39,7 +39,8 @@ class Dropdown extends FieldType
         $display = $this->field->getDisplayName();
         $bean = $this->field->getBean();
         $value = $this->getValue();
-        $readOnly = $this->getDisabledString();
+        $readOnly = $this->getReadOnlyString();
+        $disabled = $this->getDisabledString();
         $required = $this->getRequiredString();
 
         $html = <<<TAG
@@ -47,7 +48,7 @@ class Dropdown extends FieldType
 TAG;
 
         $html .= <<<TAG
-<select id="field-$name" name="$name" $required $readOnly class="form-control">
+<select id="field-$name" name="$name" $required $readOnly $disabled class="form-control">
 TAG;
 
         foreach ($this->options as $v =>$optionName) {

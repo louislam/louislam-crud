@@ -285,6 +285,10 @@ class Field
         return $this;
     }
 
+    /**
+     * @param $yes
+     * @return Field
+     */
     public function setReadOnly($yes)
     {
         $this->readOnly = $yes;
@@ -302,9 +306,11 @@ class Field
 
     /**
      * @param bool $val
+     * @return Field
      */
     public function setDisabled($val) {
         $this->disabled = $val;
+        return $this;
     }
 
     public function isDisabled()
@@ -461,6 +467,7 @@ class Field
 
     /**
      * @param callable $cellClosure
+     * @return Field
      */
     public function setCellHTML($cellClosure)
     {
