@@ -119,6 +119,7 @@ class LouisCRUD {
             "pageLength": 25,
             "paging": true,
             "ordering": true,
+            "autoWidth": false,
             "info": true,
             "drawCallback": function( settings ) {
               self.refresh();
@@ -192,6 +193,18 @@ class LouisCRUD {
                 });
             }
         }).addClass("ok");
+
+        // Confirm Button
+        $(".btn-confirm").click(function (e) {
+            e.preventDefault();
+
+            let result = window.confirm($(this).data("msg"));
+
+            if (result) {
+                location.href = $(this).attr("href");
+            }
+        });
+
     }
 
     public field(name) {

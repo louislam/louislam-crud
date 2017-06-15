@@ -86,6 +86,7 @@ var LouisCRUD = (function () {
             "pageLength": 25,
             "paging": true,
             "ordering": true,
+            "autoWidth": false,
             "info": true,
             "drawCallback": function (settings) {
                 self.refresh();
@@ -146,6 +147,14 @@ var LouisCRUD = (function () {
                 });
             }
         }).addClass("ok");
+        // Confirm Button
+        $(".btn-confirm").click(function (e) {
+            e.preventDefault();
+            var result = window.confirm($(this).data("msg"));
+            if (result) {
+                location.href = $(this).attr("href");
+            }
+        });
     };
     LouisCRUD.prototype.field = function (name) {
         return $("#field-" + name);
