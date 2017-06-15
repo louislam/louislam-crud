@@ -70,6 +70,11 @@ class Field
     /**
      * @var bool
      */
+    protected $disabled = false;
+
+    /**
+     * @var bool
+     */
     protected $storable = true;
 
     /**
@@ -294,6 +299,19 @@ class Field
     {
         return $this->readOnly;
     }
+
+    /**
+     * @param bool $val
+     */
+    public function setDisabled($val) {
+        $this->disabled = $val;
+    }
+
+    public function isDisabled()
+    {
+        return $this->disabled;
+    }
+
 
     /**
      * @param $bean

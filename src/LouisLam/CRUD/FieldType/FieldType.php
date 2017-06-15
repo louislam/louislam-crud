@@ -46,7 +46,7 @@ abstract class FieldType
     }
 
     protected function getDisabledString() {
-        if ($this->field->isReadOnly()) {
+        if ($this->field->isDisabled()) {
             return "disabled";
         } else {
             return "";
