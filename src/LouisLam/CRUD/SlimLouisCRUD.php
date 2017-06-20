@@ -209,7 +209,7 @@ HTML;
             $paramName = "p$i";
 
             if ($$paramName != null) {
-                $params .= "/$p1";
+                $params .= "/" . $$paramName;
             } else {
                 break;
             }
