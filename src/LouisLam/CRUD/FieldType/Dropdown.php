@@ -64,7 +64,7 @@ TAG;
             }
 
             $html  .= <<< EOF
-     <option value="$v"   $selected /> $optionName</option>
+     <option value="$v" $selected> $optionName</option>
 EOF;
         }
 
