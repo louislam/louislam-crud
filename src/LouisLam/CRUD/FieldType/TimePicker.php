@@ -9,7 +9,7 @@
 namespace LouisLam\CRUD\FieldType;
 
 
-class DateTimePicker extends TextField
+class TimePicker extends TextField
 {
     /**
      * Email constructor.
@@ -25,13 +25,8 @@ class DateTimePicker extends TextField
         $this->field->getCRUD()->addBodyEndHTML(<<< HTML
             <script type="text/javascript">
                 $(function () {
-                    $('#field-$name').daterangepicker({
-                        singleDatePicker: true,
-                        timePicker: true,
-                        timePickerIncrement: 30,
-                        locale: {
-                            format: 'YYYY-MM-DD hh:mm A'
-                        }
+                    $('#field-$name').timepicker({
+           
                     });
                 });
             </script>

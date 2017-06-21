@@ -23,6 +23,11 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 
     <script src="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
+
+    <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/plugins/daterangepicker/daterangepicker.css"); ?>">
+    <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/plugins/datepicker/datepicker3.css"); ?>">
+    <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/plugins/timepicker/bootstrap-timepicker.min.css"); ?>">
+
     <?=$crud->getHeadHTML(); ?>
     <?=@$crud->getData("head") ?>
 </head>
@@ -86,6 +91,12 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/daterangepicker/daterangepicker.js"></script>
+<script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/datepicker/bootstrap-datepicker.js"></script>
+<script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/timepicker/bootstrap-timepicker.min.js"></script>
+
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>dist/js/app.min.js"></script>
 
 <script>
