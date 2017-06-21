@@ -9,6 +9,8 @@
 namespace LouisLam\CRUD\FieldType;
 
 
+use RedBeanPHP\R;
+
 class DateTimePicker extends TextField
 {
     /**
@@ -45,5 +47,11 @@ HTML
     {
         return date("Y-m-d h:i A", strtotime($valueFromDatabase));
     }
+
+    public function beforeStoreValue($valueFromUser)
+    {
+        return R::isoDateTime(strtotime($valueFromUser));
+    }
+
 
 }

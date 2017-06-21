@@ -21,17 +21,10 @@ class TimePicker extends TextField
 
     public function render($echo = false)
     {
+        $this->setPostfix("<i class=\"glyphicon glyphicon-time\"></i>");
+
         $name = $this->field->getName();
-        $this->field->getCRUD()->addBodyEndHTML(<<< HTML
-            <script type="text/javascript">
-                $(function () {
-                    $('#field-$name').timepicker({
-           
-                    });
-                });
-            </script>
-HTML
-);
+
         return parent::render($echo);
     }
 
