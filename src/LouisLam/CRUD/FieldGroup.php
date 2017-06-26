@@ -13,6 +13,10 @@ class FieldGroup
 {
 
     private $groupName;
+
+    /**
+     * @var Field[]
+     */
     private $fieldList = [];
 
     private $widthList = [];
@@ -39,6 +43,9 @@ class FieldGroup
         $this->widthList[$field->getName()] = $width;
     }
 
+    /**
+     * @return Field[]
+     */
     public function getFieldList() {
         return $this->fieldList;
     }
