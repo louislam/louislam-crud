@@ -34,6 +34,12 @@ class LouisCRUD {
 
         $(document).ready(function () {
 
+            // Init Select2 !
+            $(".select2").select2();
+
+            // To style only <select>s with the selectpicker class
+            $('.selectpicker').selectpicker();
+
             // Disable Datatables' alert!
             $.fn.dataTableExt.sErrMode = 'throw';
 

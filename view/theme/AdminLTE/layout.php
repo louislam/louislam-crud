@@ -20,6 +20,8 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
     <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/dist/css/skins/_all-skins.min.css") ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/datatables/datatables/media/css/dataTables.bootstrap.min.css") ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/css/louis-crud.css"); ?>">
+    <link rel="stylesheet" type="text/css" href="<?=Util::res("vendor/select2/select2/dist/css/select2.min.css") ?>" />
+    <link rel="stylesheet" type="text/css" href="<?=Util::res("vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.min.css") ?>" />
 
     <script src="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
     <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
@@ -91,8 +93,9 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+<script src="<?=Util::res("vendor/select2/select2/dist/js/select2.min.js") ?>"></script>
+<script src="<?=Util::res("vendor/bootstrap-select/bootstrap-select/dist/js/bootstrap-select.min.js") ?>"></script>
+<script src="<?=Util::res("vendor/louislam/louislam-crud/js/moment.min.js") ?>"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/daterangepicker/daterangepicker.js"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/datepicker/bootstrap-datepicker.js"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/timepicker/bootstrap-timepicker.min.js"></script>

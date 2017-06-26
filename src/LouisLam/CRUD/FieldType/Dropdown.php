@@ -14,6 +14,8 @@ use LouisLam\CRUD\LouisCRUD;
 class Dropdown extends FieldType
 {
 
+    protected $class = "";
+
     /**
      * @var string[]
      */
@@ -27,6 +29,23 @@ class Dropdown extends FieldType
         $this->options = $options;
     }
 
+    /**
+     * @param bool $val No Use
+     */
+    public function enableSelect2($val = null) {
+        $this->class = "select2";
+    }
+
+    /**
+     * @param bool $val
+     */
+    public function enableBootstrapSelect() {
+        $this->class = "selectpicker";
+    }
+
+    public function disableLibrary() {
+        $this->class = "";
+    }
 
     /**
      * Render Field for Create/Edit
@@ -42,13 +61,16 @@ class Dropdown extends FieldType
         $readOnly = $this->getReadOnlyString();
         $disabled = $this->getDisabledString();
         $required = $this->getRequiredString();
+        $class = $this->class;
 
         $html = <<<TAG
 <label for="field-$name" >$display</label>
 TAG;
 
+        // data-live-search="true"   Search box for bootstrap-select
+
         $html .= <<<TAG
-<select id="field-$name" name="$name" $required $readOnly $disabled class="form-control">
+<select id="field-$name" name="$name" $required $readOnly $disabled class="form-control $class" data-live-search="true">
 TAG;
 
         foreach ($this->options as $v =>$optionName) {
