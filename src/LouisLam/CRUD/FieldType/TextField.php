@@ -28,6 +28,7 @@ class TextField extends FieldType
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
         $required = $this->getRequiredString();
+        $star = $this->getRequiredStar();
         $type = $this->type;
 
 
@@ -52,9 +53,11 @@ class TextField extends FieldType
             $postfixHTML = "";
         }
 
+
+
         $html  = <<< EOF
         <div class="form-group">
-            <label for="field-$name">$display</label> 
+            <label for="field-$name">$star $display</label> 
              $inputGroupOpenTag
                 $prefixHTML
                 <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
@@ -86,6 +89,7 @@ EOF;
         $this->postfix = $postfix;
         return $this;
     }
+
 
 
 

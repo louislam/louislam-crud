@@ -62,6 +62,15 @@ abstract class FieldType
         }
     }
 
+    protected function getRequiredStar()
+    {
+        if ($this->field->isRequired()) {
+            return "<strong style='color: red;'>*</strong>";
+        } else {
+            return "";
+        }
+    }
+
     /**
      * @return array|string
      */
