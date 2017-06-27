@@ -29,14 +29,23 @@ class DateTimePicker extends TextField
                 $(function () {
                     $('#field-$name').daterangepicker({
                         singleDatePicker: true,
+                        autoApply: true,
                         timePicker: true,
                         timePickerIncrement: 30,
                         autoUpdateInput: false,
                         locale: {
-                            format: 'YYYY-MM-DD hh:mm A',
-                            cancelLabel: 'Clear'
+                            format: 'YYYY-MM-DD hh:mm A'
                         }
                     });
+                    
+                   $('#field-$name').on('apply.daterangepicker', function(ev, picker) {
+                      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                  });
+
+                  $('#field-$name').on('cancel.daterangepicker', function(ev, picker) {
+                      $(this).val('');
+                  });
+                  
                 });
             </script>
 HTML
