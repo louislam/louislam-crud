@@ -27,6 +27,8 @@ class DateTimePicker extends TextField
         $this->field->getCRUD()->addBodyEndHTML(<<< HTML
             <script type="text/javascript">
                 $(function () {
+                    var format = 'YYYY-MM-DD hh:mm A';
+                    
                     $('#field-$name').daterangepicker({
                         singleDatePicker: true,
                         autoApply: true,
@@ -34,12 +36,12 @@ class DateTimePicker extends TextField
                         timePickerIncrement: 30,
                         autoUpdateInput: false,
                         locale: {
-                            format: 'YYYY-MM-DD hh:mm A'
+                            format: format
                         }
                     });
                     
                    $('#field-$name').on('apply.daterangepicker', function(ev, picker) {
-                      $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                      $(this).val(picker.startDate.format(format));
                   });
 
                   $('#field-$name').on('cancel.daterangepicker', function(ev, picker) {
@@ -56,7 +58,6 @@ HTML
 
     public function beforeRenderValue($valueFromDatabase)
     {
-
         if (empty($valueFromDatabase) || strtotime($valueFromDatabase) <= 0) {
             return "";
         }
@@ -68,6 +69,7 @@ HTML
     {
         return R::isoDateTime(strtotime($valueFromUser));
     }
+
 
 
 }
