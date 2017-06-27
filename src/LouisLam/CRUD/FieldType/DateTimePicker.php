@@ -31,8 +31,10 @@ class DateTimePicker extends TextField
                         singleDatePicker: true,
                         timePicker: true,
                         timePickerIncrement: 30,
+                        autoUpdateInput: false,
                         locale: {
-                            format: 'YYYY-MM-DD hh:mm A'
+                            format: 'YYYY-MM-DD hh:mm A',
+                            cancelLabel: 'Clear'
                         }
                     });
                 });
@@ -45,6 +47,11 @@ HTML
 
     public function beforeRenderValue($valueFromDatabase)
     {
+
+        if (empty($valueFromDatabase) || strtotime($valueFromDatabase) <= 0) {
+            return "";
+        }
+
         return date("Y-m-d h:i A", strtotime($valueFromDatabase));
     }
 
