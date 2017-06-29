@@ -289,7 +289,9 @@ class LouisCRUD
 
         foreach ($this->fieldList as $field) {
             if (! $field->isHidden()) {
-                $fields[$field->getName()] =  $field;
+
+                // Must be number index
+                $fields[] =  $field;
             }
         }
 
