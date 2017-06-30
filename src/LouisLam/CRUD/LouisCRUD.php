@@ -1145,15 +1145,6 @@ HTML;
             throw new NoBeanException();
         }
 
-        if ($this->beforeUpdateBean != null) {
-            $callable = $this->beforeUpdateBean;
-            $callableResult = $callable($this->currentBean);
-
-            if (! $callableResult->ok) {
-                return $callableResult;
-            }
-        }
-
         $result = $this->saveBean($this->currentBean, $data);
 
         // Return result
@@ -1285,6 +1276,11 @@ HTML;
         $result = new Result();
 
         try {
+            if ($this->beforeUpdateBean != null) {
+                $callable = $this->beforeUpdateBean;
+                $callable($this->currentBean);
+            }
+
             $id = R::store($bean);
             $result->id = $id;
         } catch (\Exception $ex) {
