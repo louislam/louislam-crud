@@ -52,6 +52,8 @@ class LouisCRUD
 
     private $fieldsInfoFromDatabase = null;
 
+
+
     /*
      * URLs
      */
@@ -174,6 +176,16 @@ class LouisCRUD
     protected $createName = "New";
 
     /**
+     * @var \Closure This will be called if error.
+     */
+    private $onInsertError;
+
+    /**
+     * @var \Closure This will be called if error.
+     */
+    private $onUpdateError;
+
+    /**
      * @return string
      */
     public function getDuplicateEntryErrorMsg()
@@ -233,6 +245,10 @@ class LouisCRUD
             //setGlobalCRUD($this);
         }
 
+        // Default on error callback
+        $this->onUpdateError = $this->onInsertError = function ($internalErrorMsg) {
+            return $internalErrorMsg;
+        };
     }
 
     /**
@@ -1072,10 +1088,7 @@ HTML;
     {
         $bean = R::xdispense($this->tableName);
 
-        if ($this->beforeInsertBean != null) {
-            $callable = $this->beforeInsertBean;
-            $callable($bean);
-        }
+
 
         $result =  $this->saveBean($bean, $data);
 
@@ -1085,6 +1098,8 @@ HTML;
             $result->ok = true;
         } else {
             $result->ok = false;
+            $result->class = "callout-danger";
+
         }
 
         if ($this->afterInsertBean != null) {
@@ -1172,12 +1187,10 @@ HTML;
      */
     private function saveBean($bean, $data)
     {
-
         // Handle File Field that may not in the $data, because Filename always go into $_FILES.
         foreach ($_FILES as $fieldName => $file) {
             $data[$fieldName] = $file["name"];
         }
-
 
         // Store Showing fields only
         $fields = $this->getShowFields();
@@ -1276,9 +1289,21 @@ HTML;
         $result = new Result();
 
         try {
-            if ($this->beforeUpdateBean != null) {
-                $callable = $this->beforeUpdateBean;
-                $callable($this->currentBean);
+
+            if ($bean->id > 0) {
+
+                if ($this->beforeUpdateBean != null) {
+                    $callable = $this->beforeUpdateBean;
+                    $callable($this->currentBean);
+                }
+
+            } else {
+
+                if ($this->beforeInsertBean != null) {
+                    $callable = $this->beforeInsertBean;
+                    $callable($bean);
+                }
+
             }
 
             $id = R::store($bean);
@@ -1287,15 +1312,16 @@ HTML;
             $result->ok = false;
             $result->class = "callout-danger";
 
-            if (Stringy::create($ex->getMessage())->contains("1062 Duplicate entry") && $this->getDuplicateEntryErrorMsg() != null) {
-                $result->msg = $this->getDuplicateEntryErrorMsg();
+
+            if ($bean->id > 0) {
+                $callback = $this->onUpdateError;
+                $result->msg = $callback($ex->getMessage());
             } else {
-                $result->msg = $ex->getMessage();
+                $callback = $this->onInsertError;
+                $result->msg = $callback($ex->getMessage());
             }
 
-
         }
-
 
         return $result;
     }
@@ -1815,6 +1841,38 @@ HTML;
     public function setCreateName($createName)
     {
         $this->createName = $createName;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function getOnInsertError()
+    {
+        return $this->onInsertError;
+    }
+
+    /**
+     * @param \Closure $onInsertError
+     */
+    public function setOnInsertError($onInsertError)
+    {
+        $this->onInsertError = $onInsertError;
+    }
+
+    /**
+     * @return \Closure
+     */
+    public function getOnUpdateError()
+    {
+        return $this->onUpdateError;
+    }
+
+    /**
+     * @param \Closure $onUpdateError
+     */
+    public function setOnUpdateError($onUpdateError)
+    {
+        $this->onUpdateError = $onUpdateError;
     }
 
 
