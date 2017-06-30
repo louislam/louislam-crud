@@ -10,15 +10,11 @@ $listViewLink = $crud->getListViewLink();
 $crud->addScript(<<< HTML
 <script>
     crud.setAjaxFormCallback(function (result) {
-
-        
-        if (result.ok) {
-                    location.href = "$listViewLink";
+        if (result.class == "callout-danger") {
+                alertError(result.msg);
         } else {
-                var box = $(' <div id="msg-callout" class="callout">'+result.msg+'</div>').addClass(result.class);
-                $("#msg").html(box);
+               location.href = "$listViewLink";
         }
-        
     });
 </script>
 HTML

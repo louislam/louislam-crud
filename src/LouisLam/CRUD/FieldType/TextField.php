@@ -27,6 +27,7 @@ class TextField extends FieldType
         $display = $this->field->getDisplayName();
         $value = $this->getValue();
         $readOnly = $this->getReadOnlyString();
+        $disabled = $this->getDisabledString();
         $required = $this->getRequiredString();
         $star = $this->getRequiredStar();
         $type = $this->type;
@@ -60,7 +61,7 @@ class TextField extends FieldType
             <label for="field-$name">$star $display</label> 
              $inputGroupOpenTag
                 $prefixHTML
-                <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required />
+                <input id="field-$name" class="form-control"  type="$type" name="$name" value="$value" $readOnly $required $disabled />
                 $postfixHTML
             $inputGroupEndTag
         </div>

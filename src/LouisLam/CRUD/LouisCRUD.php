@@ -651,7 +651,7 @@ HTML;
                     $findClause = $searchClause . $findClause;
 
                     // Merge Array
-                    $bindingData = $searchData + $bindingData;
+                    $bindingData = array_merge($searchData, $bindingData);
                 }
 
                 // Sorting

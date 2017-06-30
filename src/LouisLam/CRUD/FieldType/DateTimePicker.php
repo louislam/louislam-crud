@@ -9,6 +9,7 @@
 namespace LouisLam\CRUD\FieldType;
 
 
+use LouisLam\Util;
 use RedBeanPHP\R;
 
 class DateTimePicker extends TextField
@@ -23,6 +24,7 @@ class DateTimePicker extends TextField
 
     public function render($echo = false)
     {
+
         $name = $this->field->getName();
         $this->field->getCRUD()->addBodyEndHTML(<<< HTML
             <script type="text/javascript">
