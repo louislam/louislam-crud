@@ -25,14 +25,12 @@ Note: The library is under development and not tested very well currently.
 ### Method 1: add louislam-crud to your composer.json
 
 1. Require the library.
-
     ```json
-
-"require": {
-    "louislam/louislam-crud": "1.0.*"
-}
-
+    "require": {
+        "louislam/louislam-crud": "1.0.*"
+    }
     ```
+    
 1. Compose the project with PHP Composer.
 
 ### Method 2: Start a new project with bootstrap project.
