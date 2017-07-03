@@ -1163,7 +1163,7 @@ HTML;
         $result = $this->saveBean($this->currentBean, $data);
 
         // Return result
-        if ($result->ok) {
+        if (! isset($result->msg)) {
             $result->msg = "Saved.";
             $result->class = "callout-info";
         } else {
