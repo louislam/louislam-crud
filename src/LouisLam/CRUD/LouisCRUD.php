@@ -557,7 +557,7 @@ HTML;
         }, function ($sql, $limit, $bindingData) use (&$count) {
 
             // For SQL Case
-            $count = R::getRow("SELECT Count(*) as count FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
+            $count = R::getRow("SELECT COUNT(*) AS `count` FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
 
         });
 
@@ -622,7 +622,7 @@ HTML;
                 // Custom SQL
 
                 $list = [];
-                $tempList = $callbackSQL($this->sql . $limit, $this->bindingData);
+                $tempList = $callbackSQL($this->sql, $limit, $this->bindingData);
 
                 // Array convert to object
                 foreach ($tempList as $row) {
@@ -698,7 +698,7 @@ HTML;
                 $searchClause .= " OR ";
             }
 
-            $searchClause .= $searchField->getName() . " LIKE ? ";
+            $searchClause .= "UPPER(" . $searchField->getName() . ")" . " LIKE BINARY UPPER(?) ";
         }
 
         $searchClause .= " ) AND ";
