@@ -57,20 +57,24 @@ class LouisCRUD
     /*
      * URLs
      */
-    private $listViewLink = "";
-    private $createLink = "";
-    private $createSubmitLink = "";
-    private $editLink = "";
-    private $editSubmitLink = "";
-    private $deleteLink = "";
-    private $exportLink = "";
-    private $listViewJSONLink = "";
-    private $createSuccURL = "";
+    protected $listViewLink = "";
+    protected $createLink = "";
+    protected $createSubmitLink = "";
+    protected $editLink = "";
+    protected $editSubmitLink = "";
+    protected $deleteLink = "";
+    protected $exportLink = "";
+    protected $listViewJSONLink = "";
+
+    /**
+     * @var string If it is null, the getter will return getListViewLink() instead of ths var.
+     */
+    protected $createSuccURL = null;
 
     /*
      * Submit Methods
      */
-    private $editSubmitMethod = "put";
+    protected $editSubmitMethod = "put";
 
     /** @var Field[] */
     private $fieldList = [];
@@ -1092,7 +1096,7 @@ HTML;
 
         $result =  $this->saveBean($bean, $data);
 
-        if (!isset($result->msg)) {
+        if (empty($result->msg)) {
             $result->msg = "The record has been created successfully.";
             $result->class = "callout-info";
             $result->ok = true;
@@ -1163,7 +1167,7 @@ HTML;
         $result = $this->saveBean($this->currentBean, $data);
 
         // Return result
-        if (! isset($result->msg)) {
+        if (empty($result->msg)) {
             $result->msg = "Saved.";
             $result->class = "callout-info";
         } else {
@@ -1308,6 +1312,7 @@ HTML;
 
             $id = R::store($bean);
             $result->id = $id;
+            $result->redirect_url = Stringy::create($this->getCreateSuccURL())->replace("{id}", $id)->__toString();
         } catch (\Exception $ex) {
             $result->ok = false;
             $result->class = "callout-danger";
@@ -1729,7 +1734,10 @@ HTML;
      */
     public function getCreateSuccURL()
     {
-        return $this->createSuccURL;
+        if ($this->createSuccURL != null)
+            return $this->createSuccURL;
+        else
+            return $this->getListViewLink();
     }
 
     /**

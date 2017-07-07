@@ -15,4 +15,5 @@ class Result
     public $id;
     public $msg = "";
     public $class = "";
+    public $redirect_url;
 }
