@@ -77,6 +77,9 @@ class Field
      */
     protected $storable = true;
 
+
+    protected $searchable = true;
+
     /**
      * The highest priority value
      * @var null
@@ -545,6 +548,22 @@ class Field
     public function setUnique($isUnique)
     {
         $this->isUnique = $isUnique;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return $this->searchable;
+    }
+
+    /**
+     * @param bool $searchable
+     */
+    public function setSearchable($searchable)
+    {
+        $this->searchable = $searchable;
     }
 
 

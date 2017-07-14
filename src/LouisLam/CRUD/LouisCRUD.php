@@ -695,14 +695,15 @@ HTML;
         $searchFields = $this->getShowFields();
         $isFirstSearchField = true;
         foreach ($searchFields as $searchField) {
+            if ($searchField->isSearchable()) {
+                if ($isFirstSearchField) {
+                    $isFirstSearchField = false;
+                } else {
+                    $searchClause .= " OR ";
+                }
 
-            if ($isFirstSearchField) {
-                $isFirstSearchField = false;
-            } else {
-                $searchClause .= " OR ";
+                $searchClause .= "UPPER(" . $searchField->getName() . ")" . " LIKE BINARY UPPER(?) ";
             }
-
-            $searchClause .= "UPPER(" . $searchField->getName() . ")" . " LIKE BINARY UPPER(?) ";
         }
 
         $searchClause .= " ) AND ";
@@ -716,7 +717,9 @@ HTML;
         $searchFields = $this->getShowFields();
 
         foreach ($searchFields as $searchField) {
-            $searchData[] = "%$keyword%";
+            if ($searchField->isSearchable()) {
+                $searchData[] = "%$keyword%";
+            }
         }
 
         return $searchData;
