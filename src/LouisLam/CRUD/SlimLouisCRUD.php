@@ -225,10 +225,10 @@ HTML;
         $this->setExportLink(Util::url($this->groupName . "/" . $routeName . "/export" . $params));
 
         // API Url
-        $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName));
+        $this->setCreateSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . $params));
         $this->setListViewJSONLink(Util::url($this->apiGroupName . "/" . $routeName . "/datatables" . $params));
-        $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
-        $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id"));
+        $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id" . $params));
+        $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id" . $params));
 
     }
 
