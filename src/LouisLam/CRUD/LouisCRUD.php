@@ -104,6 +104,8 @@ class LouisCRUD
     private $enableEdit = true;
     private $enableDelete = true;
     private $enableCreate = true;
+    private $enableSearch = true;
+    private $enableSorting = true;
 
     /** @var Engine */
     private $template;
@@ -1884,6 +1886,38 @@ HTML;
     public function setOnUpdateError($onUpdateError)
     {
         $this->onUpdateError = $onUpdateError;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledSearch()
+    {
+        return $this->enableSearch;
+    }
+
+    /**
+     * @param bool $enableSearch
+     */
+    public function enableSearch($enableSearch)
+    {
+        $this->enableSearch = $enableSearch;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isEnabledSorting()
+    {
+        return $this->enableSorting;
+    }
+
+    /**
+     * @param bool $enableSorting
+     */
+    public function enableSorting($enableSorting)
+    {
+        $this->enableSorting = $enableSorting;
     }
 
 

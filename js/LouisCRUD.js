@@ -84,13 +84,26 @@ var LouisCRUD = (function () {
     LouisCRUD.prototype.addErrorMsg = function (msg) {
         this.errorMsgs.push(msg);
     };
-    LouisCRUD.prototype.initListView = function ($isAjax, tableURL) {
+    LouisCRUD.prototype.getDataTable = function () {
+        return this.table;
+    };
+    /**
+     *
+     * @param isAjax
+     * @param tableURL
+     * @param enableSearch
+     * @param enableSorting
+     */
+    LouisCRUD.prototype.initListView = function (isAjax, tableURL, enableSearch, enableSorting) {
+        if (enableSearch === void 0) { enableSearch = true; }
+        if (enableSorting === void 0) { enableSorting = true; }
         var self = this;
         var data = {
             "pageLength": 25,
             "paging": true,
-            "ordering": true,
+            "ordering": enableSorting,
             "autoWidth": false,
+            "searching": enableSearch,
             "info": true,
             "drawCallback": function (settings) {
                 self.refresh();
@@ -103,7 +116,7 @@ var LouisCRUD = (function () {
                 return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
             }
         };
-        if ($isAjax) {
+        if (isAjax) {
             data.serverSide = true;
             data.processing = true;
             //data.searching = true;

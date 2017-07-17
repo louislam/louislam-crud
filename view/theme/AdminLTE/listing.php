@@ -9,12 +9,16 @@ use LouisLam\CRUD\Field;
 
 $isAjax = ($crud->isAjaxListView()) ? "true" : "false";
 $jsonLink = $crud->getListViewJSONLink();
+$enableSearch = $crud->isEnabledSearch() ? "true" : "false";
+$enableSorting = $crud->isEnabledSorting() ? "true" : "false";
 
 $crud->addBodyEndHTML(<<< JS
 <script>
     var isAjax = $isAjax;
     var ajaxUrl = "$jsonLink";
-    crud.initListView(isAjax, ajaxUrl);
+    var enableSearch = $enableSearch;
+    var enableSorting = $enableSorting;
+    crud.initListView(isAjax, ajaxUrl, enableSearch, enableSorting);
 </script>
 JS
 );
@@ -30,7 +34,6 @@ $this->layout($layoutName);
     	<div class="col-xs-12">
             <div class="box">
                 <div class="box-body">
-
 
                     <?php if ($crud->isEnabledCreate()) : ?>
                         <!-- Create Button -->

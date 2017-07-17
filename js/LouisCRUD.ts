@@ -118,14 +118,26 @@ class LouisCRUD {
         this.errorMsgs.push(msg);
     }
 
-    public initListView($isAjax, tableURL) {
+    public getDataTable() {
+        return this.table;
+    }
+
+    /**
+     *
+     * @param isAjax
+     * @param tableURL
+     * @param enableSearch
+     * @param enableSorting
+     */
+    public initListView(isAjax : boolean, tableURL : string, enableSearch : boolean = true , enableSorting : boolean = true) {
         let self = this;
 
         let data = {
             "pageLength": 25,
             "paging": true,
-            "ordering": true,
+            "ordering": enableSorting,
             "autoWidth": false,
+            "searching": enableSearch,
             "info": true,
             "drawCallback": function( settings ) {
               self.refresh();
@@ -139,7 +151,7 @@ class LouisCRUD {
             }
         };
 
-        if ($isAjax) {
+        if (isAjax) {
             data.serverSide = true;
             data.processing =  true;
             //data.searching = true;

@@ -89,7 +89,7 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>bootstrap/js/bootstrap.min.js"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/jquery.dataTables.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/dataTables.bootstrap.min.js") ?>"></script>
-<script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>"></script>
+<script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>?v=2"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
