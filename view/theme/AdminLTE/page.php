@@ -18,7 +18,7 @@ $this->layout($layoutName, [
 
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title"><?=@$title ?></h3>
+            <h3 class="box-title"><?=$crud->getData("pageTitle") ?></h3>
         </div>
 
 
