@@ -13,11 +13,11 @@
         "php": ">=5.4.0",
         "slim/slim": "2.6.3",
         "league/plates": "3.3.0",
-        "gabordemooij/redbean": "4.3.3",
+        "gabordemooij/redbean": "4.3.*",
         "louislam/louislam-utilities": "1.0.*",
-        "datatables/datatables": "1.10.8",
+        "datatables/datatables": "1.10.*",
         "components/jquery": "1.11.3",
-        "almasaeed2010/adminlte": "2.3.11",
+        "almasaeed2010/adminlte": "2.3.*",
         "fortawesome/font-awesome": "4.4.*",
         "phpoffice/phpexcel": "1.8.1",
         "components/jqueryui": "1.11.4",
@@ -25,7 +25,6 @@
         "soundintheory/php-sql-parser": "1.0",
         "ircmaxell/password-compat" : "1.0.4",
         "danielstjules/stringy": "^3.1",
-        "select2/select2": "^4.0",
         "bootstrap-select/bootstrap-select": "^1.12"
     },
     "autoload": {
