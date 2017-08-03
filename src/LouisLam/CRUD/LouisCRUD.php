@@ -704,7 +704,7 @@ HTML;
                     $searchClause .= " OR ";
                 }
 
-                $searchClause .= "UPPER(" . $searchField->getName() . ")" . " LIKE BINARY UPPER(?) ";
+                $searchClause .= "UPPER(`" . $searchField->getName() . "`)" . " LIKE BINARY UPPER(?) ";
             }
         }
 
@@ -714,6 +714,7 @@ HTML;
     }
 
     protected function buildSearchingData($keyword) {
+        $keyword = trim($keyword);
         $searchData = [];
 
         $searchFields = $this->getShowFields();
