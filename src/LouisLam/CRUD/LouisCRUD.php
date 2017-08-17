@@ -1638,7 +1638,11 @@ HTML;
      */
     public function getListViewJSONLink()
     {
-        return $this->listViewJSONLink;
+        if (! empty($_SERVER["QUERY_STRING"])) {
+            return $this->listViewJSONLink . "?" . $_SERVER["QUERY_STRING"];
+        } else {
+            return $this->listViewJSONLink;
+        }
     }
 
     /**
