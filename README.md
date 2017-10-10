@@ -1,7 +1,5 @@
 # Louis Lam's CRUD
 
-[![Build Status](https://travis-ci.org/louislam/louislam-crud.svg?branch=master)](https://travis-ci.org/louislam/louislam-crud)
-
 ## Features
 * "Write Less, Do More". 
 * Create/Update/Delete/ListView web interface.
