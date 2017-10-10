@@ -558,7 +558,7 @@ HTML;
         $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
 
             // For RedBean Case
-            $count = R::getCell("SELECT COUNT(*) FROM `$tableName` WHERE $findClause . $limit", $bindingData);
+            $count = R::getCell("SELECT COUNT(*) FROM `$tableName` WHERE $findClause $limit", $bindingData);
 
         }, function ($sql, $limit, $bindingData) use (&$count) {
 
