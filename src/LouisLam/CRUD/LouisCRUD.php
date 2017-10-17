@@ -628,10 +628,14 @@ HTML;
                 // For SQL Case
                 $list = R::getAll($sql . $limit, $bindingData);
 
+                try {
+                    $list = R::convertToBeans($this->tableName, $list);
+                } catch (\Exception $ex) {
+
+                }
+
             }, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
         }
-
-
 
         return $list;
     }
@@ -665,13 +669,7 @@ HTML;
                 // Custom SQL
 
                 $list = [];
-                $tempList = $callbackSQL($this->sql, $limit, $this->bindingData);
-
-                // Array convert to object
-                foreach ($tempList as $row) {
-                    $list[] = (object)$row;
-                }
-
+                $callbackSQL($this->sql, $limit, $this->bindingData);
             } else {
 
                 $bindingData = $this->bindingData;
