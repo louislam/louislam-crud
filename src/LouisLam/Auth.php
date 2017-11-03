@@ -7,88 +7,62 @@ use RedBeanPHP\R;
 class Auth
 {
 
-    /**
-     * @var
-     */
-    private static $user = null;
 
     /**
-     * @var callable
+     * @var AuthBasic
      */
-    private static $encryptPasswordFunction = null;
+    private static $authLogic = null;
 
-    public static function login($username, $password) {
-
-        $row = R::getRow("SELECT * FROM `user` WHERE username = ? ", array(
-            $username
-        ));
-
-        if ($row != null && password_verify($password, $row["password"]) ) {
-
-            $_SESSION["username"] = $username;
-            $_SESSION["password"] = $password;
-            return true;
-        } else {
-            unset( $_SESSION["username"]);
-            unset($_SESSION["password"] );
-            return false;
+    /**
+     * @return AuthBasic
+     */
+    public static function getAuthLogic()
+    {
+        if (self::$authLogic == null) {
+            self::$authLogic = new LouisAuth();
         }
+
+        return self::$authLogic;
+    }
+
+    /**
+     * @param AuthBasic $authLogic
+     */
+    public static function setAuthLogic($authLogic)
+    {
+        self::$authLogic = $authLogic;
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return mixed
+     */
+    public static function login($username, $password) {
+        return self::getAuthLogic()->login($username, $password);
     }
 
     public static function setEncryptPasswordFunction($func) {
-        Auth::$encryptPasswordFunction = $func;
+        self::getAuthLogic()->setEncryptPasswordFunction($func);
     }
 
+    /**
+     * @param bool $force
+     * @return mixed
+     */
     public static function getUser($force = false) {
-
-        if (!isset($_SESSION["username"]) || !isset($_SESSION["password"])) {
-            return null;
-        }
-
-        if ($force || Auth::$user == null) {
-
-            $bean = R::findOne("user", " username = ? ", array(
-                $_SESSION["username"]
-            ));
-
-
-            if ($bean != null && password_verify($_SESSION["password"], $bean->password) ) {
-                return true;
-            } else {
-                return false;
-            }
-
-        } else {
-            return Auth::$user;
-        }
+        return self::getAuthLogic()->getUser($force);
     }
-
 
     public static function isLoggedIn() {
-
-        if (!isset($_SESSION["username"]) || !isset($_SESSION["password"])) {
-            return false;
-        }
-
-        $row = Auth::getUser(true);
-
-        if ($row != null) {
-            return true;
-        } else {
-            unset( $_SESSION["username"]);
-            unset($_SESSION["password"] );
-            return false;
-        }
+        return self::getAuthLogic()->isLoggedIn();
     }
 
     public static function checkLogin($callback) {
-        if (! Auth::isLoggedIn()) {
-            $callback();
-        }
+        self::getAuthLogic()->checkLogin($callback);
     }
 
     public static function logout() {
-        unset( $_SESSION["username"]);
-        unset($_SESSION["password"] );
+        self::getAuthLogic()->logout();
     }
 }

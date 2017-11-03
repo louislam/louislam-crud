@@ -182,6 +182,16 @@ class LouisCRUD
     protected $createName = "New";
 
     /**
+     * @var callable
+     */
+    protected $searchClosure = null;
+
+    /**
+     * @var callable
+     */
+    protected $searchResultCountClosure = null;
+
+    /**
      * @var \Closure This will be called if error.
      */
     private $onInsertError;
@@ -550,22 +560,40 @@ HTML;
 
     /**
      * Count Total List view data
+     * @param string $keyword
      * @return int
      */
-    protected function countTotalListViewData() {
+    protected function countTotalListViewData($keyword = null) {
         $count = 0;
 
-        $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
+        // For Custom Searching
+        if ($keyword != null && trim($keyword) != "") {
 
-            // For RedBean Case
-            $count = R::count($tableName, $findClause . $limit, $bindingData);
+            if ($this->searchResultCountClosure != null) {
+                $c = $this->searchResultCountClosure;
+                return $c($keyword);
 
-        }, function ($sql, $limit, $bindingData) use (&$count) {
+            } else {
+                return 1;
+            }
 
-            // For SQL Case
-            $count = R::getRow("SELECT COUNT(*) AS `count` FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
+        } else {
 
-        });
+            $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
+
+                // For RedBean Case
+                $count = R::getCell("SELECT COUNT(*) FROM `$tableName` WHERE $findClause $limit", $bindingData);
+
+            }, function ($sql, $limit, $bindingData) use (&$count) {
+
+                // For SQL Case
+                $count = R::getRow("SELECT COUNT(*) AS `count` FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
+
+            });
+
+        }
+
+
 
         return $count;
     }
@@ -577,24 +605,37 @@ HTML;
      * @param int $rowPerPage
      * @param string $keyword
      * @param string $sortField
-     * @param null $sortOrder ASC/DESC
+     * @param string $sortOrder ASC/DESC
      * @return array List of beans
      * @throws \RedBeanPHP\RedException\SQL
      */
     protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null) {
         $list = [];
 
-        $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
 
-            // For RedBean Case
-            $list = R::find($tableName, $findClause . $limit, $bindingData);
+        // For Custom Searching
+        if ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {
+            $c = $this->searchClosure;
+            $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
+        } else {
+            $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
 
-        }, function ($sql, $limit, $bindingData) use (&$list) {
+                // For RedBean Case
+                $list = R::find($tableName, $findClause . $limit, $bindingData);
 
-            // For SQL Case
-            $list = R::getAll($sql . $limit, $bindingData);
+            }, function ($sql, $limit, $bindingData) use (&$list) {
 
-        }, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
+                // For SQL Case
+                $list = R::getAll($sql . $limit, $bindingData);
+
+                try {
+                    $list = R::convertToBeans($this->tableName, $list);
+                } catch (\Exception $ex) {
+
+                }
+
+            }, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
+        }
 
         return $list;
     }
@@ -628,13 +669,7 @@ HTML;
                 // Custom SQL
 
                 $list = [];
-                $tempList = $callbackSQL($this->sql, $limit, $this->bindingData);
-
-                // Array convert to object
-                foreach ($tempList as $row) {
-                    $list[] = (object)$row;
-                }
-
+                $callbackSQL($this->sql, $limit, $this->bindingData);
             } else {
 
                 $bindingData = $this->bindingData;
@@ -682,7 +717,7 @@ HTML;
 
                 throw $ex;
         } catch(\Exception $ex) {
-            // TODO: This should be for not existing test only, not other exceptions.
+            // TODO: This should be for not existing table only, not other exceptions.
 
             // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
@@ -784,7 +819,7 @@ HTML;
         }
 
         if (isset($_POST["search"]["value"])) {
-            $keyword = $_POST["search"]["value"];
+            $keyword = trim($_POST["search"]["value"]);
         } else {
             $keyword = null;
         }
@@ -812,7 +847,7 @@ HTML;
         $obj = new AjaxResult();
 
         // Get the total number of record
-        $obj->recordsTotal = $this->countTotalListViewData();
+        $obj->recordsTotal = $this->countTotalListViewData($keyword);
         $obj->recordsFiltered = $obj->recordsTotal;
 
         if (isset($_POST["draw"])) {
@@ -1923,6 +1958,38 @@ HTML;
     public function enableSorting($enableSorting)
     {
         $this->enableSorting = $enableSorting;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getSearchClosure()
+    {
+        return $this->searchClosure;
+    }
+
+    /**
+     * @param callable $searchClosure  function ()
+     */
+    public function setSearchClosure($searchClosure)
+    {
+        $this->searchClosure = $searchClosure;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getSearchResultCountClosure()
+    {
+        return $this->searchResultCountClosure;
+    }
+
+    /**
+     * @param callable $searchResultCountClosure
+     */
+    public function setSearchResultCountClosure($searchResultCountClosure)
+    {
+        $this->searchResultCountClosure = $searchResultCountClosure;
     }
 
 
