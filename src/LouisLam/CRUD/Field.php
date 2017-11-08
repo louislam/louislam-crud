@@ -106,6 +106,15 @@ class Field
     private $isUnique = false;
 
     /**
+     * @var callable $searchingClosure
+     */
+    protected $searchingClosure = null;
+    /**
+     * @var callable $searchingDataClosure
+     */
+    protected $searchingDataClosure = null;
+
+    /**
      * @param LouisCRUD $crud
      * @param string $name
      * @param string $dataType
@@ -566,6 +575,40 @@ class Field
         $this->searchable = $searchable;
     }
 
+    /**
+     * @return callable
+     */
+    public function getSearchingClosure()
+    {
+        return $this->searchingClosure;
+    }
 
+    /**
+     * @param callable $searchingClosure
+     * @return Field
+     */
+    public function setSearchingClosure($searchingClosure)
+    {
+        $this->searchingClosure = $searchingClosure;
+        return $this;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getSearchingDataClosure()
+    {
+        return $this->searchingDataClosure;
+    }
+
+    /**
+     * @param callable $searchingDataClosure
+     *  @return Field
+     */
+    public function setSearchingDataClosure($searchingDataClosure)
+    {
+        $this->searchingDataClosure = $searchingDataClosure;
+        return $this;
+    }
 
 }
