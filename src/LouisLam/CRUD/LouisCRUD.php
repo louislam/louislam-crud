@@ -739,7 +739,12 @@ HTML;
                     $searchClause .= " OR ";
                 }
 
-                $searchClause .= "UPPER(`" . $searchField->getName() . "`)" . " LIKE BINARY UPPER(?) ";
+                $fieldSearhingClosure = $searchField->getSearchingClosure();
+                if($fieldSearhingClosure != null) {
+                    $searchClause .= $fieldSearhingClosure($searchField) . ' ';
+                } else {
+                    $searchClause .= "UPPER(`" . $searchField->getName() . "`)" . " LIKE BINARY UPPER(?) ";
+                }
             }
         }
 
@@ -756,11 +761,16 @@ HTML;
 
         foreach ($searchFields as $searchField) {
             if ($searchField->isSearchable()) {
-                $searchData[] = "%$keyword%";
+                $fieldSearhingDataClosure = $searchField->getSearchingDataClosure();
+                if($fieldSearhingDataClosure != null) {
+                    $searchData[] = $fieldSearhingDataClosure($searchField, $keyword);
+                } else {
+                    $searchData[] = "%$keyword%";
+                }
             }
         }
 
-        return $searchData;
+        return R::flat($searchData);
     }
 
     public function renderExcel()
