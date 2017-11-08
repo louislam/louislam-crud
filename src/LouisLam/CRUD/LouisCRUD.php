@@ -11,8 +11,8 @@ use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
 use LouisLam\Util;
-use PHPSQL\Creator;
-use PHPSQL\Parser;
+use PHPSQLParser\PHPSQLCreator;
+use PHPSQLParser\PHPSQLParser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 use Stringy\Stringy;
@@ -699,7 +699,7 @@ HTML;
                 if ($sortField != null) {
                     $fakeSelect = "SELECT * FROM louislamcrud_fake_table WHERE ";
 
-                    $parser = new Parser($fakeSelect . $findClause);
+                    $parser = new PHPSQLParser($fakeSelect . $findClause);
 
                     $sqlArray = $parser->parsed;
 
@@ -708,7 +708,7 @@ HTML;
                     $sqlArray["ORDER"][0]["sub_tree"] = null;
                     $sqlArray["ORDER"][0]["direction"] = $sortOrder;
 
-                    $findClause = str_replace($fakeSelect, "", (new Creator($sqlArray))->created);
+                    $findClause = str_replace($fakeSelect, "", (new PHPSQLCreator($sqlArray))->created);
                 }
 
                 $callbackRedBean($this->tableName, $findClause, $limit, $bindingData);
