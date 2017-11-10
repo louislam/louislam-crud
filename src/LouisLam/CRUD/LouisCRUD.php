@@ -181,6 +181,18 @@ class LouisCRUD
     protected $deleteName = "Delete";
     protected $createName = "New";
 
+
+    /**
+     * First Priority Closure for getListViewData()
+     * @var callable
+     */
+    protected $listViewDataClosure = null;
+
+    /**
+     * @var callable
+     */
+    protected $countListViewDataClosure = null;
+
     /**
      * @var callable
      */
@@ -566,8 +578,16 @@ HTML;
     protected function countTotalListViewData($keyword = null) {
         $count = 0;
 
-        // For Custom Searching
-        if ($keyword != null && trim($keyword) != "") {
+        if ($this->listViewDataClosure != null) {
+
+            if ($this->countListViewDataClosure != null) {
+                $c = $this->countListViewDataClosure;
+                return  $c($keyword);
+            } else {
+                return 100000;
+            }
+
+        } elseif ($keyword != null && trim($keyword) != "") {            // For Custom Searching
 
             if ($this->searchResultCountClosure != null) {
                 $c = $this->searchResultCountClosure;
@@ -612,11 +632,14 @@ HTML;
     protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null) {
         $list = [];
 
+        if ($this->listViewDataClosure != null) {
+            $c = $this->listViewDataClosure;
+            $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
 
-        // For Custom Searching
-        if ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {
+        } elseif ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {         // For Custom Searching
             $c = $this->searchClosure;
             $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
+
         } else {
             $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
 
@@ -2000,6 +2023,22 @@ HTML;
     public function setSearchResultCountClosure($searchResultCountClosure)
     {
         $this->searchResultCountClosure = $searchResultCountClosure;
+    }
+
+    /**
+     * @param callable $listViewDataClosure
+     */
+    public function setListViewDataClosure($listViewDataClosure)
+    {
+        $this->listViewDataClosure = $listViewDataClosure;
+    }
+
+    /**
+     * @param callable $countListViewDataClosure
+     */
+    public function setCountListViewDataClosure($countListViewDataClosure)
+    {
+        $this->countListViewDataClosure = $countListViewDataClosure;
     }
 
 
