@@ -83,14 +83,14 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
     $.widget.bridge('uibutton', $.ui.button);
 </script>
 
-<script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>bootstrap/js/bootstrap.min.js"></script>
+<script src="<?= Util::res("vendor/moment/moment/min/moment.min.js") ?>"></script>
+<script src="<?= Util::res("vendor/almasaeed2010/adminlte/bootstrap/js/bootstrap.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/jquery.dataTables.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/dataTables.bootstrap.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>?v=2"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>
-<script src="<?=Util::res("vendor/select2/select2/dist/js/select2.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/bootstrap-select/bootstrap-select/dist/js/bootstrap-select.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/almasaeed2010/adminlte/plugins/select2/select2.min.js") ?>"></script>
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/") ?>plugins/daterangepicker/daterangepicker.js"></script>

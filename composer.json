@@ -25,7 +25,8 @@
         "greenlion/php-sql-parser": "4.*",
         "ircmaxell/password-compat" : "1.0.*",
         "danielstjules/stringy": "3.*",
-        "bootstrap-select/bootstrap-select": "1.12.*"
+        "bootstrap-select/bootstrap-select": "1.12.*",
+        "moment/moment": "2.19.*"
     },
     "autoload": {
         "psr-4": {
