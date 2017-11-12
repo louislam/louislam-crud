@@ -126,7 +126,7 @@ class LouisCRUD
     private $tableDisplayName = null;
 
     /** @var array Data for layout */
-    private $data = "";
+    private $data = [];
 
     private $ajaxListView = true;
 
