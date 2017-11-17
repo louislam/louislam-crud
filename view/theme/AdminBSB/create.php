@@ -1,4 +1,7 @@
 <?php
+
+use LouisLam\CRUD\FieldType\IntegerType;
+use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\CRUD\LouisCRUD;
 use LouisLam\CRUD\Field;
 
@@ -38,7 +41,19 @@ $this->layout($layoutName, [
 
                     <div class="body">
                         <?php foreach($fields as $field) : ?>
-                            <?= $field->render(false) ?>
+                            <?php
+                                $html = $field->render(false);
+
+                                if (
+                                    $field->getFieldType() instanceof TextField ||
+                                    $field->getFieldType() instanceof IntegerType
+                                ) {
+                                    phpQuery::newDocumentHTML("<div id='main'>$html</div>");
+                                    $element = pq(".form-group");
+                                    $innerHTML = $element->html();
+                                    echo "<div class='form-group'><div class='form-line'>$innerHTML</div></div>";
+                                }
+                            ?>
                         <?php endforeach; ?>
 
                         <input type="submit" value="Create" class="btn btn-primary" />

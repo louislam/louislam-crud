@@ -16,18 +16,18 @@
         "gabordemooij/redbean": "4.3.*",
         "louislam/louislam-utilities": "1.0.*",
         "datatables/datatables": "1.10.*",
-        "components/jquery": "1.11.3",
+        "components/jquery": "1.11.*",
         "almasaeed2010/adminlte": "2.3.*",
         "fortawesome/font-awesome": "4.4.*",
         "phpoffice/phpexcel": "1.8.*",
-        "components/jqueryui": "1.11.4",
+        "components/jqueryui": "1.11.*",
         "ckeditor/ckeditor": "4.7.*",
         "greenlion/php-sql-parser": "4.*",
         "ircmaxell/password-compat" : "1.0.*",
         "danielstjules/stringy": "3.*",
         "bootstrap-select/bootstrap-select": "1.12.*",
         "moment/moment": "2.19.*",
-        "paquettg/php-html-parser": "^1.7"
+        "electrolinux/phpquery": "0.9.6"
     },
     "autoload": {
         "psr-4": {
