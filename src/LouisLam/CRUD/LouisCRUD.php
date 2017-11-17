@@ -264,9 +264,13 @@ class LouisCRUD
             "cacheVersion" => $this->cacheVersion
         ]);
 
+        // Keep old name
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
-        $this->setCurrentTheme("adminlte");
-        
+
+        $this->addTheme("AdminLTE", "vendor/$this->packageName/view/theme/AdminLTE");
+        $this->addTheme("AdminBSB", "vendor/$this->packageName/view/theme/AdminBSB");
+
+        $this->setCurrentTheme("AdminLTE");
 
         // Enable helper?
         if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
@@ -314,6 +318,9 @@ class LouisCRUD
      */
     public function addField($name, $dataType = "varchar(255)")
     {
+        if ($name == "") {
+            throw new Exception("Field name cannot be empty.");
+        }
 
         // Check if the name whether is satisfied
         if (ctype_upper($name[0])) {

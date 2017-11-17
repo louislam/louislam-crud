@@ -26,7 +26,8 @@
         "ircmaxell/password-compat" : "1.0.*",
         "danielstjules/stringy": "3.*",
         "bootstrap-select/bootstrap-select": "1.12.*",
-        "moment/moment": "2.19.*"
+        "moment/moment": "2.19.*",
+        "paquettg/php-html-parser": "^1.7"
     },
     "autoload": {
         "psr-4": {
