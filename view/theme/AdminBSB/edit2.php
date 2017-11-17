@@ -42,8 +42,6 @@ $fieldGroupList = $crud->getFieldGroupList();
     <?=$crud->getData("header") ?>
 
     <div class="row">
-
-        <!-- 客戶資料表 -->
         <?php foreach($fieldGroupList as $fieldGroup) : ?>
             <div class="col-md-10 col-xs-12 col-lg-8">
 
@@ -66,9 +64,6 @@ $fieldGroupList = $crud->getFieldGroupList();
 
 
                 </div>
-
-
-
 
             </div>
         <?php endforeach; ?>

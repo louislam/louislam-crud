@@ -51,16 +51,24 @@ $this->layout($layoutName, [
                                     phpQuery::newDocumentHTML("<div id='main'>$html</div>");
                                     $element = pq(".form-group");
                                     $innerHTML = $element->html();
-                                    echo "<div class='form-group'><div class='form-line'>$innerHTML</div></div>";
+                                    $html = "<div class='form-group'><div class='form-line'>$innerHTML</div></div>";
                                 }
+
+                            echo $html;
                             ?>
                         <?php endforeach; ?>
 
-                        <input type="submit" value="Create" class="btn btn-primary" />
 
-                        <?php if ($crud->isEnabledListView()) : ?>
-                            <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
-                        <?php endif; ?>
+                        <div class="btn-group">
+                            <input type="submit" value="Create" class="btn btn-primary btn-lg" />
+                            <?php if ($crud->isEnabledListView()) : ?>
+                                <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default btn-lg">Back</a>
+                            <?php endif; ?>
+                        </div>
+
+
+
+
 
                     </div>
             </div>

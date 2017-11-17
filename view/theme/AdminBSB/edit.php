@@ -1,5 +1,7 @@
 <?php
 use LouisLam\CRUD\Field;
+use LouisLam\CRUD\FieldType\IntegerType;
+use LouisLam\CRUD\FieldType\TextField;
 use LouisLam\CRUD\LouisCRUD;
 
 /** @var Field[] $fields */
@@ -35,31 +37,42 @@ $this->layout($layoutName, [
     <?=$crud->getData("header") ?>
 
     <div class="row">
-        <!-- left column -->
-        <div class="col-md-10">
 
-            <div class="box box-primary">
-                <div class="box-header with-border">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-lg-6">
+
+            <div class="card">
+                <div class="header bg-amber">
                     <h3 class="box-title">Edit</h3>
                 </div>
-                <!-- /.box-header -->
-                <!-- form start -->
 
-                <div class="box-body">
-                    <?php foreach ($fields as $field) : ?>
-                        <?= $field->render(false) ?>
+
+                <div class="body">
+                    <?php foreach($fields as $field) : ?>
+                        <?php
+                        $html = $field->render(false);
+
+                        if (
+                            $field->getFieldType() instanceof TextField ||
+                            $field->getFieldType() instanceof IntegerType
+                        ) {
+                            phpQuery::newDocumentHTML("<div id='main'>$html</div>");
+                            $element = pq(".form-group");
+                            $innerHTML = $element->html();
+                            $html =  "<div class='form-group'><div class='form-line'>$innerHTML</div></div>";
+                        }
+
+                        echo $html;
+                        ?>
                     <?php endforeach; ?>
+
+                    <div class="btn-group">
+                        <input type="submit" value="Save" class="btn btn-primary  btn-lg"/>
+
+                        <?php if ($crud->isEnabledListView()) : ?>
+                            <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default btn-lg">Back</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
-
-                <div class="box-footer">
-                    <input type="submit" value="Save" class="btn btn-primary"/>
-
-                    <?php if ($crud->isEnabledListView()) : ?>
-                        <a  href="<?=$crud->getListViewLink() ?>" class="btn btn-default">Back</a>
-                    <?php endif; ?>
-
-                </div>
-
 
             </div>
 

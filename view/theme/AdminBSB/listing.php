@@ -39,14 +39,15 @@ $this->layout($layoutName);
 
                     <?=$crud->getTableDisplayName() ?>
 
+                <div class="btn-group">
                     <?php if ($crud->isEnabledCreate()) : ?>
                         <!-- Create Button -->
-                        <a class="btn btn-primary" href="<?=$crud->getCreateLink() ?>"><?=$crud->getCreateName(); ?></a>
+                        <a class="btn btn-primary btn-lg" href="<?=$crud->getCreateLink() ?>"><?=$crud->getCreateName(); ?></a>
                     <?php endif; ?>
 
                     <!-- Filter -->
                     <div class="dropdown column-filter" style="display: inline-block">
-                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
+                        <button class="btn btn-default dropdown-toggle  btn-lg" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" >
                             Column Filter
                             <span class="caret"></span>
                         </button>
@@ -72,7 +73,8 @@ $this->layout($layoutName);
                     </div>
 
                     <!-- Export Button -->
-                    <a class="btn btn-default" href="<?=$crud->getExportLink() ?>">Export Excel</a>
+                    <a class="btn btn-default  btn-lg" href="<?=$crud->getExportLink() ?>">Export Excel</a>
+                </div>
             </div>
 
             <div class="body" style="overflow-x: auto;">
