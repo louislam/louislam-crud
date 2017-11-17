@@ -232,24 +232,103 @@ HTML;
 
     }
 
+    private function loadMainClosure($customCRUDFunction, BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+        $result = true;
 
-    /**
-     * @param Route $route
-     */
-    public function addRoute($route)
-    {
-        $route->setCRUD($this);
-        $route->addToCRUD();
+        if ($customCRUDFunction != null) {
+            if ($controller != null) {
+                $result = $controller->main($this);
+                $controller->setParam(0, $p1);
+                $controller->setParam(1, $p2);
+                $controller->setParam(2, $p3);
+                $controller->setParam(3, $p4);
+                $controller->setParam(4, $p5);
+            } else {
+                $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+            }
+        }
+
+        return $result;
+    }
+
+    private function loadListViewClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+        $result = true;
+
+        if ($controller != null) {
+            $result = $controller->listView($this);
+            $controller->setParam(0, $p1);
+            $controller->setParam(1, $p2);
+            $controller->setParam(2, $p3);
+            $controller->setParam(3, $p4);
+            $controller->setParam(4, $p5);
+
+        } elseif ($this->listviewFunction != null) {
+            $listviewFunction = $this->listviewFunction;
+            $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+
+        }
+
+        return $result;
+    }
+
+    private function loadCreateClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+        $result = true;
+
+        if ($controller != null) {
+            $result = $controller->create($this);
+            $controller->setParam(0, $p1);
+            $controller->setParam(1, $p2);
+            $controller->setParam(2, $p3);
+            $controller->setParam(3, $p4);
+            $controller->setParam(4, $p5);
+
+        } elseif ($this->createFunction != null) {
+            $func = $this->createFunction;
+            $result = $func($p1, $p2, $p3, $p4, $p5);
+
+        }
+
+        return $result;
+    }
+
+    private function loadEditClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+        $result = true;
+
+        if ($controller != null) {
+            $result = $controller->edit($this);
+            $controller->setParam(0, $p1);
+            $controller->setParam(1, $p2);
+            $controller->setParam(2, $p3);
+            $controller->setParam(3, $p4);
+            $controller->setParam(4, $p5);
+
+        } elseif ($this->editFunction != null) {
+            $func = $this->editFunction;
+            $result = $func($p1, $p2, $p3, $p4, $p5);
+
+        }
+
+        return $result;
     }
 
     /**
      * @param string $routeName
      * @param string $tableName
-     * @param callable $customCRUDFunction
+     * @param callable|BaseCRUDController $customCRUDFunction
      * @param string $displayName
      */
     public function add($routeName, $customCRUDFunction = null, $tableName = null, $displayName = null)
     {
+
+        /**
+         * @var BaseCRUDController
+         */
+        $controller = null;
+
+        if ($customCRUDFunction instanceof BaseCRUDController) {
+            $controller = $customCRUDFunction;
+            $controller->setCRUD($this);
+        }
 
         if ($tableName == null) {
             $tableName = $routeName;
@@ -262,7 +341,7 @@ HTML;
         /*
          * Page Group (ListView, CreateView, EditView)
          */
-        $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
+        $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
             $this->slim->get("/", function () use ($routeName)  {
                 $this->slim->redirectTo("_louisCRUD_" . $routeName);
@@ -271,8 +350,7 @@ HTML;
             /*
              * ListView
              */
-            $this->slim->get("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
-
+            $this->slim->get("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -286,23 +364,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
+                $result = $this->loadListViewClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-
-                if ($this->listviewFunction != null) {
-                    $listviewFunction = $this->listviewFunction;
-                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
-
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 if ($this->isEnabledListView()) {
@@ -314,7 +385,7 @@ HTML;
             /*
              * Create
              */
-            $this->slim->get("/create(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/create(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -328,21 +399,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                if ($this->createFunction != null) {
-                    $createFunction = $this->createFunction;
-                    $result = $createFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadCreateClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // Force Hide ID field
@@ -356,7 +422,7 @@ HTML;
             /*
              * Edit
              */
-            $this->slim->get("/edit/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/edit/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -376,21 +442,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                if ($this->editFunction != null) {
-                    $editFunction = $this->editFunction;
-                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadEditClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // If user show the ID field, force set it to readonly
@@ -404,7 +465,7 @@ HTML;
             /*
              * Export Excel
              */
-            $this->slim->map("/export(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->map("/export(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -418,21 +479,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                if ($this->listviewFunction != null) {
-                    $listviewFunction = $this->listviewFunction;
-                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadListViewClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 if ($this->exportFunction != null) {
@@ -454,12 +510,12 @@ HTML;
         /*
          * API Group, RESTful style.
          */
-        $this->slim->group("/" . $this->apiGroupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName) {
+        $this->slim->group("/" . $this->apiGroupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
             /*
              * JSON for Listview
              */
-            $this->slim->map("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->map("/list(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
                 $this->enableJSONResponse();
 
                 // MUST INIT FIRST
@@ -474,21 +530,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                if ($this->listviewFunction != null) {
-                    $listviewFunction = $this->listviewFunction;
-                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadListViewClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 if ($this->isEnabledListView()) {
@@ -500,7 +551,7 @@ HTML;
             /*
              * For Datatables
              */
-            $this->slim->map("/datatables(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->map("/datatables(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
                 $this->enableJSONResponse();
 
                 // MUST INIT FIRST
@@ -515,21 +566,16 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                if ($this->listviewFunction != null) {
-                    $listviewFunction = $this->listviewFunction;
-                    $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadListViewClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 if ($this->isEnabledListView()) {
@@ -543,7 +589,7 @@ HTML;
          * View a bean
          * PUT /api/{tableName}/{id}
          */
-            $this->slim->get("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->get("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -561,22 +607,16 @@ HTML;
                 }
 
                 // Custom Global Function
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
-                // Custom Edit Function
-                if ($this->editFunction != null) {
-                    $editFunction = $this->editFunction;
-                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadEditClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // Force hide ID
@@ -597,7 +637,7 @@ HTML;
              * Insert a bean
              * POST /api/{tableName}
              */
-            $this->slim->post("(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->post("(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -611,26 +651,14 @@ HTML;
                     }
                 }
 
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
-
-                    if ($result === false) {
-                        return;
-                    }
-                }
-
-                // Custom Global Function
-                $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
                 if ($result === false) {
                     return;
                 }
 
                 // Custom Create Function
-                if ($this->createFunction != null) {
-                    $createFunction = $this->createFunction;
-                    $result = $createFunction($p1, $p2, $p3, $p4, $p5);
-                }
+                $result = $this->loadCreateClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
                 if ($result === false) {
                     return;
@@ -656,7 +684,7 @@ HTML;
              * Update a bean
              * PUT /crud/{tableName}/{id}
              */
-            $this->slim->put("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->put("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -674,22 +702,17 @@ HTML;
                 }
 
                 // Custom Global Function
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // Custom Create Function
-                if ($this->editFunction != null) {
-                    $editFunction = $this->editFunction;
-                    $result = $editFunction($id, $p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadEditClosure($controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // Force hide ID
@@ -708,7 +731,7 @@ HTML;
              * Delete a bean
              * DELETE /crud/{tableName}/{id}
              */
-            $this->slim->delete("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName) {
+            $this->slim->delete("/:id(/:p1(/:p2(/:p3(/:p4(/:p5)))))", function ($id, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) use ($routeName, $customCRUDFunction, $tableName, $controller) {
 
                 // MUST INIT FIRST
                 $this->init($tableName, $routeName, $p1, $p2, $p3, $p4, $p5);
@@ -727,12 +750,10 @@ HTML;
                 }
 
                 // Custom Global Function
-                if ($customCRUDFunction != null) {
-                    $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
+                $result = $this->loadMainClosure($customCRUDFunction, $controller, $p1, $p2, $p3, $p4, $p5);
 
-                    if ($result === false) {
-                        return;
-                    }
+                if ($result === false) {
+                    return;
                 }
 
                 // Custom Delete Function
