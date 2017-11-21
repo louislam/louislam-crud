@@ -19,10 +19,25 @@ abstract class BaseCRUDController
      */
     protected $crud;
 
-    public abstract function main(LouisCRUD $crud);
-    public abstract function listView(LouisCRUD $crud);
-    public abstract function create(LouisCRUD $crud);
-    public abstract function edit(LouisCRUD $crud);
+    /**
+     * @param LouisCRUD $crud
+     */
+    public abstract function main($crud);
+
+    /**
+     * @param LouisCRUD $crud
+     */
+    public abstract function listView($crud);
+
+    /**
+     * @param LouisCRUD $crud
+     */
+    public abstract function create($crud);
+
+    /**
+     * @param LouisCRUD $crud
+     */
+    public abstract function edit($crud);
 
     /**
      * @return LouisCRUD
