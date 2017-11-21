@@ -88,7 +88,7 @@ class SlimLouisCRUD extends LouisCRUD
             if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
 
             } else {
-                $result["url"] = \LouisLam\Util::fullURL($result["url"]);
+                $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
 
 
@@ -131,7 +131,7 @@ HTML;
             if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
 
             } else {
-                $result["url"] = \LouisLam\Util::fullURL($result["url"]);
+                $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
 
 
