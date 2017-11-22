@@ -232,7 +232,12 @@ HTML;
 
     }
 
-    private function loadMainClosure($customCRUDFunction, BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+    /**
+     * @param $customCRUDFunction
+     * @param BaseCRUDController $controller
+     * @return bool
+     */
+    private function loadMainClosure($customCRUDFunction, $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         $result = true;
 
         if ($customCRUDFunction != null) {
@@ -251,7 +256,11 @@ HTML;
         return $result;
     }
 
-    private function loadListViewClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+    /**
+     * @param BaseCRUDController $controller
+     * @return bool
+     */
+    private function loadListViewClosure($controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         $result = true;
 
         if ($controller != null) {
@@ -271,7 +280,11 @@ HTML;
         return $result;
     }
 
-    private function loadCreateClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+    /**
+     * @param BaseCRUDController $controller
+     * @return bool
+     */
+    private function loadCreateClosure($controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         $result = true;
 
         if ($controller != null) {
@@ -291,7 +304,11 @@ HTML;
         return $result;
     }
 
-    private function loadEditClosure(BaseCRUDController $controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
+    /**
+     * @param BaseCRUDController $controller
+     * @return bool
+     */
+    private function loadEditClosure($controller, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
         $result = true;
 
         if ($controller != null) {
