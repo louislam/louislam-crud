@@ -594,18 +594,11 @@ HTML;
                 return 100000;
             }
 
-        } elseif ($keyword != null && trim($keyword) != "") {            // For Custom Searching
-
-            if ($this->searchResultCountClosure != null) {
-                $c = $this->searchResultCountClosure;
-                return $c($keyword);
-
-            } else {
-                return 1;
-            }
-
+        } elseif ($this->searchResultCountClosure != null) {            // For Custom Searching
+            $c = $this->searchResultCountClosure;
+            return $c($keyword);
+            
         } else {
-
             $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
 
                 // For RedBean Case
