@@ -11,8 +11,8 @@ use LouisLam\CRUD\Exception\TableNameException;
 use LouisLam\CRUD\FieldType\CheckboxManyToMany;
 use LouisLam\CRUD\FieldType\DropdownManyToOne;
 use LouisLam\Util;
-use PHPSQL\Creator;
-use PHPSQL\Parser;
+use PHPSQLParser\PHPSQLCreator;
+use PHPSQLParser\PHPSQLParser;
 use RedBeanPHP\OODBBean;
 use RedBeanPHP\R;
 use Stringy\Stringy;
@@ -126,7 +126,7 @@ class LouisCRUD
     private $tableDisplayName = null;
 
     /** @var array Data for layout */
-    private $data = "";
+    private $data = [];
 
     private $ajaxListView = true;
 
@@ -180,6 +180,18 @@ class LouisCRUD
     protected $editName = "Edit";
     protected $deleteName = "Delete";
     protected $createName = "New";
+
+
+    /**
+     * First Priority Closure for getListViewData()
+     * @var callable
+     */
+    protected $listViewDataClosure = null;
+
+    /**
+     * @var callable
+     */
+    protected $countListViewDataClosure = null;
 
     /**
      * @var callable
@@ -252,9 +264,13 @@ class LouisCRUD
             "cacheVersion" => $this->cacheVersion
         ]);
 
+        // Keep old name
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
-        $this->setCurrentTheme("adminlte");
-        
+
+        $this->addTheme("AdminLTE", "vendor/$this->packageName/view/theme/AdminLTE");
+        $this->addTheme("AdminBSB", "vendor/$this->packageName/view/theme/AdminBSB");
+
+        $this->setCurrentTheme("AdminLTE");
 
         // Enable helper?
         if (defined("ENABLE_CRUD_HELPER") && ENABLE_CRUD_HELPER) {
@@ -302,6 +318,9 @@ class LouisCRUD
      */
     public function addField($name, $dataType = "varchar(255)")
     {
+        if ($name == "") {
+            throw new Exception("Field name cannot be empty.");
+        }
 
         // Check if the name whether is satisfied
         if (ctype_upper($name[0])) {
@@ -566,8 +585,16 @@ HTML;
     protected function countTotalListViewData($keyword = null) {
         $count = 0;
 
-        // For Custom Searching
-        if ($keyword != null && trim($keyword) != "") {
+        if ($this->listViewDataClosure != null) {
+
+            if ($this->countListViewDataClosure != null) {
+                $c = $this->countListViewDataClosure;
+                return  $c($keyword);
+            } else {
+                return 100000;
+            }
+
+        } elseif ($keyword != null && trim($keyword) != "") {            // For Custom Searching
 
             if ($this->searchResultCountClosure != null) {
                 $c = $this->searchResultCountClosure;
@@ -612,11 +639,14 @@ HTML;
     protected function getListViewData($start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null) {
         $list = [];
 
+        if ($this->listViewDataClosure != null) {
+            $c = $this->listViewDataClosure;
+            $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
 
-        // For Custom Searching
-        if ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {
+        } elseif ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {         // For Custom Searching
             $c = $this->searchClosure;
             $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
+
         } else {
             $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
 
@@ -699,7 +729,7 @@ HTML;
                 if ($sortField != null) {
                     $fakeSelect = "SELECT * FROM louislamcrud_fake_table WHERE ";
 
-                    $parser = new Parser($fakeSelect . $findClause);
+                    $parser = new PHPSQLParser($fakeSelect . $findClause);
 
                     $sqlArray = $parser->parsed;
 
@@ -708,7 +738,7 @@ HTML;
                     $sqlArray["ORDER"][0]["sub_tree"] = null;
                     $sqlArray["ORDER"][0]["direction"] = $sortOrder;
 
-                    $findClause = str_replace($fakeSelect, "", (new Creator($sqlArray))->created);
+                    $findClause = str_replace($fakeSelect, "", (new PHPSQLCreator($sqlArray))->created);
                 }
 
                 $callbackRedBean($this->tableName, $findClause, $limit, $bindingData);
@@ -2000,6 +2030,22 @@ HTML;
     public function setSearchResultCountClosure($searchResultCountClosure)
     {
         $this->searchResultCountClosure = $searchResultCountClosure;
+    }
+
+    /**
+     * @param callable $listViewDataClosure
+     */
+    public function setListViewDataClosure($listViewDataClosure)
+    {
+        $this->listViewDataClosure = $listViewDataClosure;
+    }
+
+    /**
+     * @param callable $countListViewDataClosure
+     */
+    public function setCountListViewDataClosure($countListViewDataClosure)
+    {
+        $this->countListViewDataClosure = $countListViewDataClosure;
     }
 
 
