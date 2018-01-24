@@ -100,7 +100,7 @@ class LouisCRUD {
 
             // Active Menu Item
             $(".main-sidebar ul li").each(function () {
-                if (location.href.indexOf($(this).find("a").attr("href")) >= 0) {
+                if (location.pathname.indexOf($(this).find("a").attr("href")) >= 0) {
                     $(this).addClass("active");
                 }
             });

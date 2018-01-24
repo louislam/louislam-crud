@@ -10,7 +10,7 @@ window.alert2 = function (msg) {
 window.alertError = function (msg) {
     swal("Error!", msg, "error");
 };
-var LouisCRUD = (function () {
+var LouisCRUD = /** @class */ (function () {
     function LouisCRUD() {
         this.validateFunctions = [];
         this.errorMsgs = [];
@@ -68,7 +68,7 @@ var LouisCRUD = (function () {
             });
             // Active Menu Item
             $(".main-sidebar ul li").each(function () {
-                if (location.href.indexOf($(this).find("a").attr("href")) >= 0) {
+                if (location.pathname.indexOf($(this).find("a").attr("href")) >= 0) {
                     $(this).addClass("active");
                 }
             });
