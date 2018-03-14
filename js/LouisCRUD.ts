@@ -162,11 +162,20 @@ class LouisCRUD {
 
         }
 
-        $(document).ready(function () {
-            self.table = $('#louis-crud-table').DataTable(data);
+        $(document).ready(() => {
+            this.table = $('#louis-crud-table').DataTable(data);
+
+            // Go to the first page if out of range after searching
+            this.table.on("xhr", (e, settings, json, xhr) => {
+                let info = this.table.page.info();
+
+                if (info.pages < info.page) {
+                    this.table.page(1).draw(1);
+                }
+            });
 
             // Column Filter
-            self.columnFilter();
+            this.columnFilter();
         });
     }
 
