@@ -43,14 +43,14 @@ class LouisCRUD
      * TODO: Read from composer.json?
      * @var string Package Name
      */
-    private $packageName = "louislam/louislam-crud";
+    protected $packageName = "louislam/louislam-crud";
 
     /**
      * @var string Table Name
      */
-    private $tableName = null;
-
-    private $fieldsInfoFromDatabase = null;
+    protected $tableName = null;
+    
+    protected $fieldsInfoFromDatabase = null;
 
 
 
@@ -77,105 +77,105 @@ class LouisCRUD
     protected $editSubmitMethod = "put";
 
     /** @var Field[] */
-    private $fieldList = [];
+    protected $fieldList = [];
 
     /**
      * @var callable
      */
-    private $actionClosure = null;
-
-    private $findClause = null;
-    private $findAllClause = null;
-    private $bindingData = [];
+    protected $actionClosure = null;
+    
+    protected $findClause = null;
+    protected $findAllClause = null;
+    protected $bindingData = [];
 
     /** @var string This will highest priority to use */
-    private $sql = null;
+    protected $sql = null;
 
     /**
      * Current Bean for edit or delete
      * @var OODBBean
      */
-    private $currentBean = null;
+    protected $currentBean = null;
 
     /*
      * Flag for controlling the function enable/disable
      */
-    private $enableListView = true;
-    private $enableEdit = true;
-    private $enableDelete = true;
-    private $enableCreate = true;
-    private $enableSearch = true;
-    private $enableSorting = true;
+    protected $enableListView = true;
+    protected $enableEdit = true;
+    protected $enableDelete = true;
+    protected $enableCreate = true;
+    protected $enableSearch = true;
+    protected $enableSorting = true;
 
     /** @var Engine */
-    private $template;
+    protected $template;
     protected $theme;
 
     /**
      * @var string $layout
      */
-    private $layout = null;
+    protected $layout = null;
 
     /*
      *  Template (please use getter to get the template name)
      */
-    private $listViewTemplate = null;
-    private $editTemplate = null;
-    private $createTemplate = null;
-
-    private $tableDisplayName = null;
+    protected $listViewTemplate = null;
+    protected $editTemplate = null;
+    protected $createTemplate = null;
+    
+    protected $tableDisplayName = null;
 
     /** @var array Data for layout */
-    private $data = [];
-
-    private $ajaxListView = true;
-
-    private $exportFilename = null;
-
-    private $cacheVersion = 2;
-
-    private $bodyEndHTML = "";
-    private $headHTML = "";
-
-    /**
-     * @var callable
-     */
-    private $afterUpdateBean = null;
+    protected $data = [];
+    
+    protected $ajaxListView = true;
+    
+    protected $exportFilename = null;
+    
+    protected $cacheVersion = 2;
+    
+    protected $bodyEndHTML = "";
+    protected $headHTML = "";
 
     /**
      * @var callable
      */
-    private $afterInsertBean = null;
+    protected $afterUpdateBean = null;
 
     /**
      * @var callable
      */
-    private $beforeUpdateBean = null;
+    protected $afterInsertBean = null;
 
     /**
      * @var callable
      */
-    private $beforeInsertBean = null;
+    protected $beforeUpdateBean = null;
 
     /**
      * @var callable
      */
-    private $beforeStoreEachField = null;
+    protected $beforeInsertBean = null;
+
+    /**
+     * @var callable
+     */
+    protected $beforeStoreEachField = null;
 
     /**
      * @var string
      */
-    private $duplicateEntryErrorMsg = null;
+    protected $duplicateEntryErrorMsg = null;
 
     /**
      * @var bool
      */
-    private $enableFieldGroup = false;
+    protected $enableFieldGroup = false;
 
     /**
      * @var FieldGroup[]
      */
-    private $fieldGroupList = [];
+    protected $fieldGroupList = [];
 
     protected $editName = "Edit";
     protected $deleteName = "Delete";
@@ -211,7 +211,7 @@ class LouisCRUD
     /**
      * @var \Closure This will be called if error.
      */
-    private $onUpdateError;
+    protected $onUpdateError;
 
     /**
      * @return string
