@@ -123,7 +123,7 @@ class LouisCRUD
     protected $editTemplate = null;
     protected $createTemplate = null;
     
-    protected $tableDisplayName = null;
+    private $tableDisplayName = null;
 
     /** @var array Data for layout */
     protected $data = [];
