@@ -55,7 +55,7 @@ class SlimLouisCRUD extends LouisCRUD
 
     protected $firstPageURL = "";
     
-    protected $pageLayout = "page";
+    protected $pageLayout;
     
     /**
      * @return string
@@ -83,8 +83,6 @@ class SlimLouisCRUD extends LouisCRUD
      */
     public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null)
     {
-        
-
         if(session_id() == '') {
             session_start();
         }
@@ -92,6 +90,7 @@ class SlimLouisCRUD extends LouisCRUD
         parent::__construct();
         $this->groupName = $groupName;
         $this->apiGroupName = $apiGroupName;
+        $this->pageLayout = $this->getThemeName() . "::page";
 
         if ($slim == null) {
             $this->slim = new Slim();
@@ -999,7 +998,7 @@ HTML;
         $this->getSlim()->get($route, function () use ($crud, $callback) {
             $content = $callback();
             
-            $this->render($crud->getThemeName() . "::" . $this->pageLayout, [
+            $this->render($this->pageLayout, [
                 "content" => $content
             ], true);
         });
