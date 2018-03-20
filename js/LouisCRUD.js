@@ -10,7 +10,7 @@ window.alert2 = function (msg) {
 window.alertError = function (msg) {
     swal("Error!", msg, "error");
 };
-var LouisCRUD = (function () {
+var LouisCRUD = /** @class */ (function () {
     function LouisCRUD() {
         this.validateFunctions = [];
         this.errorMsgs = [];
@@ -68,7 +68,7 @@ var LouisCRUD = (function () {
             });
             // Active Menu Item
             $(".main-sidebar ul li").each(function () {
-                if (location.href.indexOf($(this).find("a").attr("href")) >= 0) {
+                if (location.pathname.indexOf($(this).find("a").attr("href")) >= 0) {
                     $(this).addClass("active");
                 }
             });
@@ -95,6 +95,7 @@ var LouisCRUD = (function () {
      * @param enableSorting
      */
     LouisCRUD.prototype.initListView = function (isAjax, tableURL, enableSearch, enableSorting) {
+        var _this = this;
         if (enableSearch === void 0) { enableSearch = true; }
         if (enableSorting === void 0) { enableSorting = true; }
         var self = this;
@@ -126,9 +127,16 @@ var LouisCRUD = (function () {
             };
         }
         $(document).ready(function () {
-            self.table = $('#louis-crud-table').DataTable(data);
+            _this.table = $('#louis-crud-table').DataTable(data);
+            // Go to the first page if out of range after searching
+            _this.table.on("xhr", function (e, settings, json, xhr) {
+                var info = _this.table.page.info();
+                if (info.pages < info.page) {
+                    _this.table.page(1).draw(1);
+                }
+            });
             // Column Filter
-            self.columnFilter();
+            _this.columnFilter();
         });
     };
     LouisCRUD.prototype.columnFilter = function () {

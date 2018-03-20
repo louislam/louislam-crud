@@ -100,7 +100,7 @@ class LouisCRUD {
 
             // Active Menu Item
             $(".main-sidebar ul li").each(function () {
-                if (location.href.indexOf($(this).find("a").attr("href")) >= 0) {
+                if (location.pathname.indexOf($(this).find("a").attr("href")) >= 0) {
                     $(this).addClass("active");
                 }
             });
@@ -162,11 +162,20 @@ class LouisCRUD {
 
         }
 
-        $(document).ready(function () {
-            self.table = $('#louis-crud-table').DataTable(data);
+        $(document).ready(() => {
+            this.table = $('#louis-crud-table').DataTable(data);
+
+            // Go to the first page if out of range after searching
+            this.table.on("xhr", (e, settings, json, xhr) => {
+                let info = this.table.page.info();
+
+                if (info.pages < info.page) {
+                    this.table.page(1).draw(1);
+                }
+            });
 
             // Column Filter
-            self.columnFilter();
+            this.columnFilter();
         });
     }
 

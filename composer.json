@@ -18,7 +18,7 @@
         "datatables/datatables": "1.10.*",
         "components/jquery": "1.11.*",
         "almasaeed2010/adminlte": "2.3.*",
-        "fortawesome/font-awesome": "4.4.*",
+        "fortawesome/font-awesome": "4.*",
         "phpoffice/phpexcel": "1.8.*",
         "components/jqueryui": "1.11.*",
         "ckeditor/ckeditor": "4.7.*",
