@@ -1288,9 +1288,9 @@ HTML;
                 }
             }
 
-            if($fieldType->getCustomSaveBeanClosure() != null) {
-                $customSaveBeanClosure = $fieldType->getCustomSaveBeanClosure();
-                $customSaveBeanClosure($bean, $field->getStoreValue($data));
+            if($fieldType->getBeforeSaveBeanClosure() != null) {
+                $beforeSaveBeanClosure = $fieldType->getBeforeSaveBeanClosure();
+                $beforeSaveBeanClosure($bean, $field->getStoreValue($data));
             } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
                 // 1. Many to many
 
@@ -1388,6 +1388,17 @@ HTML;
             }
 
             $id = R::store($bean);
+            $needStore = false;
+            foreach ($fields as $field) {
+                $fieldType = $field->getFieldType();
+                if($fieldType->getAfterSaveBeanClosure() != null) {
+                    $afterSaveBeanClosure = $fieldType->getAfterSaveBeanClosure();
+                    $needStore |= !!$afterSaveBeanClosure($bean, $field->getStoreValue($data));
+                }
+            }
+            if($needStore) {
+                $id = R::store($bean);
+            }
             $result->id = $id;
             $result->redirect_url = Stringy::create($this->getCreateSuccURL())->replace("{id}", $id)->__toString();
         } catch (\Exception $ex) {

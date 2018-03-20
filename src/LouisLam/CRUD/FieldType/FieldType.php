@@ -22,7 +22,8 @@ abstract class FieldType
     protected $classList = [];
 
     private $fieldRelation = Field::NORMAL;
-    protected $customSaveBeanClosure = null;
+    protected $beforeSaveBeanClosure = null;
+    protected $afterSaveBeanClosure = null;
 
     public abstract function render($echo = false);
 
@@ -36,6 +37,22 @@ abstract class FieldType
 
     public function renderCell($value) {
        return htmlspecialchars($value);
+    }
+
+    /**
+     * @return callable
+     */
+    public function getAfterSaveBeanClosure()
+    {
+        return $this->afterSaveBeanClosure;
+    }
+
+    /**
+     * @param callable $afterSaveBeanClosure
+     */
+    public function setAfterSaveBeanClosure($afterSaveBeanClosure)
+    {
+        $this->afterSaveBeanClosure = $afterSaveBeanClosure;
     }
 
     protected function getReadOnlyString() {
@@ -123,17 +140,17 @@ abstract class FieldType
     /**
      * @return callable
      */
-    public function getCustomSaveBeanClosure()
+    public function getBeforeSaveBeanClosure()
     {
-        return $this->customSaveBeanClosure;
+        return $this->beforeSaveBeanClosure;
     }
 
     /**
-     * @param callable $customSaveBeanClosure
+     * @param callable $beforeSaveBeanClosure
      */
-    public function setCustomSaveBeanClosure($customSaveBeanClosure)
+    public function setBeforeSaveBeanClosure($beforeSaveBeanClosure)
     {
-        $this->customSaveBeanClosure = $customSaveBeanClosure;
+        $this->beforeSaveBeanClosure = $beforeSaveBeanClosure;
     }
   
 }
