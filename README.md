@@ -14,7 +14,7 @@
 
 ## Docmentation
 
-https://github.com/louislam/louislam-crud/wiki/Quick-API-and-Reference
+https://github.com/louislam/louislam-crud/wiki
 
 ## Installation
 
