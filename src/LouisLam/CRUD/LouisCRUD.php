@@ -1263,7 +1263,7 @@ HTML;
      * @param $data array
      * @return Result
      */
-    private function saveBean($bean, $data)
+    protected function saveBean($bean, $data)
     {
         // Handle File Field that may not in the $data, because Filename always go into $_FILES.
         foreach ($_FILES as $fieldName => $file) {
@@ -1274,7 +1274,7 @@ HTML;
         $fields = $this->getShowFields();
 
         foreach ($fields as $field) {
-
+            $fieldType = $field->getFieldType();
 
             // Check is unique
             if ($field->isUnique()) {
@@ -1288,7 +1288,10 @@ HTML;
                 }
             }
 
-            if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
+            if($fieldType->getCustomSaveBeanClosure() != null) {
+                $customSaveBeanClosure = $fieldType->getCustomSaveBeanClosure();
+                $customSaveBeanClosure($bean, $field->getStoreValue($data));
+            } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
                 // 1. Many to many
 
                 // http://www.redbeanphp.com/many_to_many

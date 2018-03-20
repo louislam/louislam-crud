@@ -22,6 +22,7 @@ abstract class FieldType
     protected $classList = [];
 
     private $fieldRelation = Field::NORMAL;
+    protected $customSaveBeanClosure = null;
 
     public abstract function render($echo = false);
 
@@ -119,5 +120,20 @@ abstract class FieldType
         return $valueFromDatabase;
     }
 
+    /**
+     * @return callable
+     */
+    public function getCustomSaveBeanClosure()
+    {
+        return $this->customSaveBeanClosure;
+    }
+
+    /**
+     * @param callable $customSaveBeanClosure
+     */
+    public function setCustomSaveBeanClosure($customSaveBeanClosure)
+    {
+        $this->customSaveBeanClosure = $customSaveBeanClosure;
+    }
   
 }
