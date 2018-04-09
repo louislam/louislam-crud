@@ -264,12 +264,13 @@ HTML;
 
         if ($customCRUDFunction != null) {
             if ($controller != null) {
-                $result = $controller->main($this);
                 $controller->setParam(0, $p1);
                 $controller->setParam(1, $p2);
                 $controller->setParam(2, $p3);
                 $controller->setParam(3, $p4);
                 $controller->setParam(4, $p5);
+                $result = $controller->main($this);
+
             } else {
                 $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
             }
@@ -286,12 +287,13 @@ HTML;
         $result = true;
 
         if ($controller != null) {
-            $result = $controller->listView($this);
             $controller->setParam(0, $p1);
             $controller->setParam(1, $p2);
             $controller->setParam(2, $p3);
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
+            $result = $controller->listView($this);
+
 
         } elseif ($this->listviewFunction != null) {
             $listviewFunction = $this->listviewFunction;
@@ -310,12 +312,13 @@ HTML;
         $result = true;
 
         if ($controller != null) {
-            $result = $controller->create($this);
             $controller->setParam(0, $p1);
             $controller->setParam(1, $p2);
             $controller->setParam(2, $p3);
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
+            $result = $controller->create($this);
+
 
         } elseif ($this->createFunction != null) {
             $func = $this->createFunction;
@@ -334,12 +337,13 @@ HTML;
         $result = true;
 
         if ($controller != null) {
-            $result = $controller->edit($this);
             $controller->setParam(0, $p1);
             $controller->setParam(1, $p2);
             $controller->setParam(2, $p3);
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
+            $result = $controller->edit($this);
+
 
         } elseif ($this->editFunction != null) {
             $func = $this->editFunction;
