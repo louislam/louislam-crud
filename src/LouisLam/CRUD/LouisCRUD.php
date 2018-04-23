@@ -609,7 +609,7 @@ HTML;
                 // For SQL Case
                 $count = R::getRow("SELECT COUNT(*) AS `count` FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
 
-            });
+            }, null, null, $keyword);
 
         }
 
