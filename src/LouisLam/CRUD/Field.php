@@ -9,7 +9,7 @@ use LouisLam\CRUD\FieldType\Password;
 use LouisLam\CRUD\FieldType\PasswordWithConfirm;
 use LouisLam\CRUD\FieldType\TextArea;
 use LouisLam\CRUD\FieldType\TextField;
-use LouisLam\String;
+use LouisLam\LouisString;
 use LouisLam\Util;
 
 /**
