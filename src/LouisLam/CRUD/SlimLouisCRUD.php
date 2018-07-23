@@ -57,6 +57,8 @@ class SlimLouisCRUD extends LouisCRUD
     
     protected $pageLayout = null;
     
+    protected $loginViewName = "adminlte::login";
+    
     /**
      * @return string
      */
@@ -191,8 +193,9 @@ HTML;
 
         });
 
-        $this->slim->get("/auth/login", function () {
-            echo $this->getTemplateEngine()->render("adminlte::login");
+        $crud = $this;
+        $this->slim->get("/auth/login", function () use ($crud) {
+            echo $this->getTemplateEngine()->render($crud->loginViewName);
         });
 
         $app = $this->slim;
@@ -1053,6 +1056,22 @@ HTML;
     {
         $this->firstPageURL = $firstPageURL;
     }
-
-
+    
+    /**
+     * @return string
+     */
+    public function getLoginViewName()
+    {
+        return $this->loginViewName;
+    }
+    
+    /**
+     * @param string $loginViewName
+     */
+    public function setLoginViewName($loginViewName)
+    {
+        $this->loginViewName = $loginViewName;
+    }
+    
+    
 }
