@@ -28,14 +28,14 @@ class IPType extends FieldType
         $html  = <<< HTML
 
         <div class="form-group">
-                    <label  for="field-$name">$display</label>
-                    <div class="input-group">
-                      <div class="input-group-addon">
-                        <i class="fa fa-laptop"></i>
-                      </div>
-                      <input id="field-$name" type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="$name" value="$value" $readOnly $required >
-                    </div>
-                  </div>
+            <label  for="field-$name">$display</label>
+            <div class="input-group">
+              <div class="input-group-addon">
+                <i class="fa fa-laptop"></i>
+              </div>
+              <input id="field-$name" type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask="" name="$name" value="$value" $readOnly $required >
+            </div>
+        </div>
 
 HTML;
 
