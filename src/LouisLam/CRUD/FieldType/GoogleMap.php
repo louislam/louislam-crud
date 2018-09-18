@@ -59,7 +59,7 @@ HTML;
     $(document).ready(function () {
         var latitude =  $("#field-$name").val();
         var longitude = $("#field-$longitudeFieldName").val();
-        var zoom = 12;
+        var zoom = 14;
         var LatLng = new google.maps.LatLng(latitude, longitude);
 
         var mapOptions = {
