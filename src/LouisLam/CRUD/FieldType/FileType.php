@@ -80,7 +80,7 @@ class FileType extends FieldType
 
    <a id="image-remove-$name" href="javascript:void(0)" class="btn btn-danger" $hideRemoveButton>Remove File</a>
    <br/><br/>
-
+</div>
 HTML;
 
         $crud->addScript(<<< HTML
