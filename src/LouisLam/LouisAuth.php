@@ -28,13 +28,12 @@ class LouisAuth extends AuthBasic
         ));
 
         if ($row != null && password_verify($password, $row["password"]) ) {
-
             $_SESSION["username"] = $username;
-            $_SESSION["password"] = $password;
+            $_SESSION["password"] = $row["password"];
             return true;
         } else {
-            unset( $_SESSION["username"]);
-            unset($_SESSION["password"] );
+            unset($_SESSION["username"]);
+            unset($_SESSION["password"]);
             return false;
         }
     }
@@ -52,7 +51,7 @@ class LouisAuth extends AuthBasic
                 $_SESSION["username"]
             ));
 
-            if ($bean != null && password_verify($_SESSION["password"], $bean->password) ) {
+            if ($bean != null && $_SESSION["password"] === $bean->password ) {
                 $this->user = $bean;
                 return $this->user;
             } else {
