@@ -266,9 +266,7 @@ class LouisCRUD
 
         // Keep old name
         $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
-
         $this->addTheme("AdminLTE", "vendor/$this->packageName/view/theme/AdminLTE");
-        $this->addTheme("AdminBSB", "vendor/$this->packageName/view/theme/AdminBSB");
 
         $this->setCurrentTheme("AdminLTE");
 
