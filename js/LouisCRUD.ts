@@ -122,17 +122,25 @@ class LouisCRUD {
         return this.table;
     }
 
+    public mergeObject(obj1, obj2) {
+        var obj3 = {};
+        for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
+        for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
+        return obj3;
+    }
+
     /**
      *
      * @param isAjax
      * @param tableURL
      * @param enableSearch
      * @param enableSorting
+     * @param {} customData
      */
-    public initListView(isAjax : boolean, tableURL : string, enableSearch : boolean = true , enableSorting : boolean = true) {
+    public initListView(isAjax : boolean, tableURL : string, enableSearch : boolean = true , enableSorting : boolean = true, customData = null) {
         let self = this;
 
-        let data = {
+        let data : {} = {
             "pageLength": 25,
             "paging": true,
             "ordering": enableSorting,
@@ -150,6 +158,10 @@ class LouisCRUD {
                 return JSON.parse( localStorage.getItem('DataTables_'+window.location.pathname) );
             }
         };
+
+        if (customData != null) {
+            data = this.mergeObject(data, customData);
+        }
 
         if (isAjax) {
             data.serverSide = true;

@@ -87,17 +87,29 @@ var LouisCRUD = /** @class */ (function () {
     LouisCRUD.prototype.getDataTable = function () {
         return this.table;
     };
+    LouisCRUD.prototype.mergeObject = function (obj1, obj2) {
+        var obj3 = {};
+        for (var attrname in obj1) {
+            obj3[attrname] = obj1[attrname];
+        }
+        for (var attrname in obj2) {
+            obj3[attrname] = obj2[attrname];
+        }
+        return obj3;
+    };
     /**
      *
      * @param isAjax
      * @param tableURL
      * @param enableSearch
      * @param enableSorting
+     * @param {} customData
      */
-    LouisCRUD.prototype.initListView = function (isAjax, tableURL, enableSearch, enableSorting) {
+    LouisCRUD.prototype.initListView = function (isAjax, tableURL, enableSearch, enableSorting, customData) {
         var _this = this;
         if (enableSearch === void 0) { enableSearch = true; }
         if (enableSorting === void 0) { enableSorting = true; }
+        if (customData === void 0) { customData = null; }
         var self = this;
         var data = {
             "pageLength": 25,
@@ -117,6 +129,9 @@ var LouisCRUD = /** @class */ (function () {
                 return JSON.parse(localStorage.getItem('DataTables_' + window.location.pathname));
             }
         };
+        if (customData != null) {
+            data = this.mergeObject(data, customData);
+        }
         if (isAjax) {
             data.serverSide = true;
             data.processing = true;
