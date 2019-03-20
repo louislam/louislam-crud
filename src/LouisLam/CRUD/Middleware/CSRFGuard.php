@@ -104,7 +104,7 @@ class CSRFGuard extends \Slim\Middleware
         self::$token = $token;
     }
     
-    public function setActive($v) {
+    public static function setActive($v) {
         self::$active = $v;
     }
 }
