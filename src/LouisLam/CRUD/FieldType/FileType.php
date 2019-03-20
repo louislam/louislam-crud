@@ -60,7 +60,7 @@ class FileType extends FieldType
 
         if ($value != "" && $value != null) {
             $fileURL = htmlspecialchars(Util::res($value));
-            $previewHTML = Stringy::create($previewTemplate)->replace("{fileURL}", $fileURL);
+            $previewHTML = Stringy::create($previewTemplate)->replace("{fileURL}", htmlspecialchars($fileURL));
             $hideRemoveButton = "";
         } else {
             $previewHTML = "";
@@ -118,6 +118,7 @@ HTML;
             
             //add custom path
             data.append("uploadpath", "$this->uploadPath");
+            data.append("csrf_token", csrfToken);
 
             crud.setUploading(true);
              $.ajax({
