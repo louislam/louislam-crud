@@ -19,6 +19,7 @@ class CSRFGuard extends \Slim\Middleware
 {
     
     public static $token = null;
+    protected static $active = true;
     
     /**
      * CSRF token key name.
@@ -66,6 +67,10 @@ class CSRFGuard extends \Slim\Middleware
      * @throws \Exception
      */
     public function check() {
+        if (! self::$active) {
+            return;
+        }
+        
         // Check sessions are enabled.
         if (session_id() === '') {
             throw new \Exception('Sessions are required to use the CSRF Guard middleware.');
@@ -97,5 +102,9 @@ class CSRFGuard extends \Slim\Middleware
         }
         // Assign CSRF token key and value to view.
         self::$token = $token;
+    }
+    
+    public function setActive($v) {
+        self::$active = $v;
     }
 }
