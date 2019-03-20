@@ -12,6 +12,7 @@ namespace LouisLam\CRUD;
 use PHPExcel;
 use PHPExcel_Shared_Font;
 use PHPExcel_Writer_Excel2007;
+use Stringy\Stringy;
 
 class ExcelHelper
 {
@@ -48,7 +49,13 @@ class ExcelHelper
         foreach ($list as $bean) {
             $i = 0;
             foreach($fields as $field) {
-                $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit(strip_tags($field->cellValue($bean)));
+                $value = strip_tags($field->cellValue($bean));
+                
+                if (Stringy::create($value)->startsWith("=")) {
+                    $value = " $value";
+                }
+                
+                $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit($value);
                 $i++;
             }
             $j++;
