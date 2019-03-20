@@ -1,6 +1,7 @@
 <?php
 use LouisLam\CRUD\LouisCRUD;
 use LouisLam\CRUD\Field;
+use LouisLam\CRUD\Middleware\CSRFGuard;
 
 /** @var Field[] $fields */
 /** @var array $list */
@@ -26,7 +27,8 @@ $this->layout($layoutName, [
 ?>
 
 <form id="louis-form" action="<?=$crud->getCreateSubmitLink() ?>" data-method="post" class="ajax">
-
+    <?=CSRFGuard::inputTag() ?>
+    
     <div class="row">
 
         <div class="col-md-10">
