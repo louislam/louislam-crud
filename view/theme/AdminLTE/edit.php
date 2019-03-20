@@ -1,6 +1,7 @@
 <?php
 use LouisLam\CRUD\Field;
 use LouisLam\CRUD\LouisCRUD;
+use LouisLam\CRUD\Middleware\CSRFGuard;
 
 /** @var Field[] $fields */
 /** @var array $list */
@@ -31,7 +32,7 @@ $this->layout($layoutName, [
 ?>
 
 <form id="louis-form" action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="<?=$crud->getEditSubmitMethod() ?>" class="ajax">
-
+    <?=CSRFGuard::inputTag() ?>
     <?=$crud->getData("header") ?>
 
     <div class="row">

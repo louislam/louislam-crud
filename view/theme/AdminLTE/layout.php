@@ -1,6 +1,6 @@
 <?php
 use LouisLam\CRUD\LouisCRUD;
-use LouisLam\Util;
+use LouisLam\CRUD\Middleware\CSRFGuard;use LouisLam\Util;
 /** @var LouisCRUD $crud */
 $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 ?><!DOCTYPE html>
@@ -101,8 +101,9 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 
 <script>
     var crud = new LouisCRUD();
-    var BASE_URL = "<?="http://" . $_SERVER['SERVER_NAME'] ?>";
-    var RES_URL = "<?=Util::res("") ?>";
+    var BASE_URL = <?= json_encode(Util::fullRes(""))  ?>;
+    var RES_URL = <?=json_encode(Util::res("")) ?>;
+    var csrfToken = <?=json_encode(CSRFGuard::$token) ?>;
 </script>
 
 <?=$crud->getBodyEndHTML(); ?>

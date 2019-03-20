@@ -1,6 +1,7 @@
 <?php
 use LouisLam\CRUD\Field;
 use LouisLam\CRUD\LouisCRUD;
+use LouisLam\CRUD\Middleware\CSRFGuard;
 
 /**
  * TODO
@@ -38,6 +39,7 @@ $fieldGroupList = $crud->getFieldGroupList();
 ?>
 
 <form id="louis-form" action="<?= $crud->getEditSubmitLink($crud->getBean()->id) ?>" data-method="<?=$crud->getEditSubmitMethod() ?>" class="ajax">
+    <?=CSRFGuard::inputTag() ?>
 
     <?=$crud->getData("header") ?>
 

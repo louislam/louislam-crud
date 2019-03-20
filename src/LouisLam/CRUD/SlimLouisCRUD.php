@@ -3,6 +3,7 @@ namespace LouisLam\CRUD;
 
 use League\Plates\Engine;
 use LouisLam\Auth;
+use LouisLam\CRUD\Middleware\CSRFGuard;
 use LouisLam\Util;
 use Slim\Slim;
 
@@ -106,6 +107,8 @@ class SlimLouisCRUD extends LouisCRUD
         } else {
             $this->slim = $slim;
         }
+    
+        $this->slim->add(new CSRFGuard());
 
         // Upload function
         $this->slim->post("/louislam-crud/upload/:type", function ($type) {
@@ -121,9 +124,7 @@ class SlimLouisCRUD extends LouisCRUD
             } else {
                 $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
-
-
-
+            
             if ($type == "js") {
                 $url = $result["url"];
 

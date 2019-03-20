@@ -55,10 +55,12 @@ var LouisCRUD = /** @class */ (function () {
                 // Create Form Data from the form.
                 // if ($(this).attr("enctype") !== "undefined") {
                 //data = new FormData($(this)[0]);
+                var reqData = $(this).serialize();
+                reqData["csrf_token"] = (csrfToken) ? csrfToken : "";
                 $.ajax({
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
-                    data: $(this).serialize()
+                    data: reqData
                 }).done(function (result) {
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);
@@ -138,7 +140,10 @@ var LouisCRUD = /** @class */ (function () {
             //data.searching = true;
             data.ajax = {
                 url: tableURL,
-                type: "POST"
+                type: "POST",
+                data: {
+                    "csrf_token": (csrfToken) ? csrfToken : "",
+                }
             };
         }
         $(document).ready(function () {
@@ -176,9 +181,12 @@ var LouisCRUD = /** @class */ (function () {
             if (result) {
                 var btn_1 = $(this);
                 var deleteLink = $(this).data("url");
+                var reqData = {};
+                reqData["csrf_token"] = (csrfToken) ? csrfToken : "";
                 $.ajax({
                     url: deleteLink,
-                    type: "DELETE"
+                    type: "DELETE",
+                    data: reqData
                 }).done(function (data) {
                     btn_1.parents('tr').remove();
                     // self.table.ajax.reload();
@@ -201,4 +209,3 @@ var LouisCRUD = /** @class */ (function () {
     };
     return LouisCRUD;
 }());
-//# sourceMappingURL=LouisCRUD.js.map

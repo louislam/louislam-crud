@@ -1,4 +1,6 @@
 <?php
+
+use LouisLam\CRUD\Middleware\CSRFGuard;
 use LouisLam\Util;
 ?>
 
@@ -32,6 +34,8 @@ use LouisLam\Util;
 
 
         <form action="<?=Util::url("auth/login") ?>" method="post">
+            <?=CSRFGuard::inputTag() ?>
+            
             <div class="form-group has-feedback">
                 <input type="text" class="form-control" placeholder="Username" name="username"/>
                 <span class="glyphicon glyphicon-user form-control-feedback"></span>

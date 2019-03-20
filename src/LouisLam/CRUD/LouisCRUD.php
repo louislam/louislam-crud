@@ -212,6 +212,10 @@ class LouisCRUD
      * @var \Closure This will be called if error.
      */
     protected $onUpdateError;
+    
+    protected $allowExt = [
+        "jpg", "jpeg", "gif", "png", "apng", "svg", "pdf", "doc", "docx", "ppt", "pptx", "xls", "xlsx", "mp4"
+    ];
 
     /**
      * @return string
@@ -1611,6 +1615,16 @@ HTML;
                 $ext = $filenameArray[count($filenameArray) - 1];
             } else {
                 $ext = "";
+            }
+            
+            if (! in_array($ext, $this->allowExt)) {
+                return  [
+                    "fileName" => "",
+                    "uploaded" => 0,
+                    "url" => "",
+                    "status" => "FAIL",
+                    "msg" => "Format is not allowed."
+                ];
             }
 
             $filename = dechex(rand(1, 99999999)) . "-" . time() . "." . $ext;

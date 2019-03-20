@@ -85,11 +85,13 @@ class LouisCRUD {
                // if ($(this).attr("enctype") !== "undefined") {
                     //data = new FormData($(this)[0]);
 
+                var reqData = $(this).serialize();
+               reqData["csrf_token"] =  (csrfToken) ? csrfToken : "";
 
                 $.ajax({
                     url: $(this).attr("action"),
                     type: $(this).data("method"),
-                    data: $(this).serialize()
+                    data: reqData
                 }).done(function (result) {
                     if (self.ajaxFormCallback != null) {
                         self.ajaxFormCallback(result);
@@ -169,7 +171,10 @@ class LouisCRUD {
             //data.searching = true;
             data.ajax = {
                 url: tableURL,
-                type: "POST"
+                type: "POST",
+                data: {
+                    "csrf_token" : (csrfToken) ? csrfToken : "",
+                }
             }
 
         }
@@ -221,9 +226,13 @@ class LouisCRUD {
                 let btn = $(this);
                 let deleteLink = $(this).data("url");
 
+                var reqData = {};
+                reqData["csrf_token"] =  (csrfToken) ? csrfToken : "";
+
                 $.ajax({
                     url: deleteLink,
-                    type: "DELETE"
+                    type: "DELETE",
+                    data: reqData
                 }).done(function (data) {
                     btn.parents('tr').remove();
                    // self.table.ajax.reload();
