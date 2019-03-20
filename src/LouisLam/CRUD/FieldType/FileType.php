@@ -59,7 +59,7 @@ class FileType extends FieldType
         $previewTemplateEncoded = json_encode($previewTemplate);
 
         if ($value != "" && $value != null) {
-            $fileURL = Util::res($value);
+            $fileURL = htmlspecialchars(Util::res($value));
             $previewHTML = Stringy::create($previewTemplate)->replace("{fileURL}", $fileURL);
             $hideRemoveButton = "";
         } else {
@@ -169,7 +169,7 @@ HTML
 
     public function renderCell($value)
     {
-        $imgURL = Util::res($value);
+        $imgURL = htmlspecialchars(Util::res($value));
 
         if ($value != null && $value != "") {
             return <<< HTML

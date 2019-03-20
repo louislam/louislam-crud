@@ -84,6 +84,8 @@ TAG;
             if ($this->field->isRequired() && $v == LouisCRUD::NULL) {
                 $v = "";
             }
+    
+            $optionName = htmlspecialchars($optionName);
 
             $html  .= <<< EOF
      <option value="$v" $selected> $optionName</option>
