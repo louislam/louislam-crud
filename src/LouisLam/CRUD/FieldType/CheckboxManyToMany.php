@@ -14,11 +14,12 @@ use RedBeanPHP\R;
 
 class CheckboxManyToMany extends CheckboxList
 {
-
+    
     /**
      * @param string $tableName
      * @param callable $nameClosure function ($bean) {}
      * @param string $valueField The field name that used to be value. The default field is "id".
+     * @param string $relationTable
      */
     public function __construct($tableName, callable $nameClosure = null, $valueField = "id") {
         $beans = R::findAll($tableName);
