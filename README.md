@@ -25,7 +25,7 @@ Note: The library is under development and not tested very well currently.
 1. Require the library.
     ```json
     "require": {
-        "louislam/louislam-crud": "1.0.*"
+        "louislam/louislam-crud": "3.x-dev"
     }
     ```
     
