@@ -16,12 +16,12 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
     <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/dist/css/AdminLTE.min.css") ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/dist/css/skins/_all-skins.min.css") ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/datatables/datatables/media/css/dataTables.bootstrap.min.css") ?>">
-    <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/css/louis-crud.css"); ?>">
+    <link rel="stylesheet" href="<?= LouisCRUD::vendorRes("css/louis-crud.css"); ?>">
     <link rel="stylesheet" type="text/css" href="<?=Util::res("vendor/almasaeed2010/adminlte/plugins/select2/select2.min.css") ?>" />
     <link rel="stylesheet" type="text/css" href="<?=Util::res("vendor/bootstrap-select/bootstrap-select/dist/css/bootstrap-select.min.css") ?>" />
 
-    <script src="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
-    <link rel="stylesheet" href="<?= Util::res("vendor/louislam/louislam-crud/node_modules/sweetalert/dist/sweetalert.css") ?>">
+    <script src="<?= LouisCRUD::vendorRes("modules/sweetalert/dist/sweetalert.min.js") ?>"></script>
+    <link rel="stylesheet" href="<?= LouisCRUD::vendorRes("modules/sweetalert/dist/sweetalert.css") ?>">
 
     <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/plugins/daterangepicker/daterangepicker.css"); ?>">
     <link rel="stylesheet" href="<?= Util::res("vendor/almasaeed2010/adminlte/plugins/datepicker/datepicker3.css"); ?>">
@@ -87,7 +87,7 @@ $adminLTESetting = \LouisLam\CRUD\AdminLTESetting::getInstance();
 <script src="<?= Util::res("vendor/almasaeed2010/adminlte/bootstrap/js/bootstrap.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/jquery.dataTables.min.js") ?>"></script>
 <script src="<?=Util::res("vendor/datatables/datatables/media/js/dataTables.bootstrap.min.js") ?>"></script>
-<script src="<?=Util::res("vendor/louislam/louislam-crud/js/LouisCRUD.js") ?>?v=2"></script>
+<script src="<?=LouisCRUD::vendorRes("js/LouisCRUD.js") ?>?v=2"></script>
 <script src="<?=Util::res("vendor/louislam/louislam-utilities/js/L.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/ckeditor.js") ?>"></script>
 <script src="<?=Util::res("vendor/ckeditor/ckeditor/adapters/jquery.js") ?>"></script>

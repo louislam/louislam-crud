@@ -6,11 +6,9 @@
  * Date: 2/3/2016
  * Time: 4:07 PM
  */
-class LouisCRUDTest extends PHPUnit_Framework_TestCase
-{
+class LouisCRUDTest extends  \PHPUnit\Framework\TestCase {
 
-    public function testGetBean()
-    {
+    public function testGetBean() {
         $crud = new \LouisLam\CRUD\LouisCRUD();
         $this->assertEquals(null, $crud->getBean());
     }

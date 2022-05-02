@@ -51,7 +51,7 @@ class SlimLouisCRUD extends LouisCRUD
     private $routeNameList = [];
     private $tableDisplayName = [];
 
-    private $currentRouteName = "";
+    private string $currentRouteName = "";
 
     protected $firstPageURL = "";
     
@@ -74,7 +74,7 @@ class SlimLouisCRUD extends LouisCRUD
     /**
      * @param string $pageLayout
      */
-    public function setPageLayout($pageLayout)
+    public function setPageLayout(string $pageLayout) : void
     {
         $this->pageLayout = $pageLayout;
     }
@@ -93,11 +93,15 @@ class SlimLouisCRUD extends LouisCRUD
      */
     public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null)
     {
-        if(session_id() == '') {
+        if (session_id() == '') {
             session_start();
         }
 
         parent::__construct();
+        
+        // Need polyfill for Slim 2.6.3
+        polyfill();
+        
         $this->groupName = $groupName;
         $this->apiGroupName = $apiGroupName;
 

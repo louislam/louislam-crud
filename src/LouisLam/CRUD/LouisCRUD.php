@@ -34,21 +34,26 @@ function s($str) {
  * Date: 8/13/2015
  * Time: 9:33 AM
  */
-class LouisCRUD
-{
+class LouisCRUD {
+    
+    /**
+     * Set it to true, if you want to develop this project
+     * @var bool
+     */
+    public static bool $isDev = false;
+    
     const NULL = "--louislam-crud-null";
 
     /**
-     * For those who would like to fork my project, please update the composer name.
-     * TODO: Read from composer.json?
+     * For those who would like to fork this project, please update the composer name.
      * @var string Package Name
      */
-    protected $packageName = "louislam/louislam-crud";
+    protected string $packageName = "louislam/louislam-crud";
 
     /**
-     * @var string Table Name
+     * @var ?string Table Name
      */
-    protected $tableName = null;
+    protected ?string $tableName = null;
     
     protected $fieldsInfoFromDatabase = null;
 
@@ -264,10 +269,13 @@ class LouisCRUD
             "cacheVersion" => $this->cacheVersion
         ]);
 
-        // Keep old name
-        $this->addTheme("adminlte", "vendor/$this->packageName/view/theme/AdminLTE");
-        $this->addTheme("AdminLTE", "vendor/$this->packageName/view/theme/AdminLTE");
-
+        $adminLTEPath = "view/theme/AdminLTE";
+        
+        if (!self::$isDev) {
+            $adminLTEPath = "vendor/$this->packageName/$adminLTEPath";
+        }
+        
+        $this->addTheme("AdminLTE", $adminLTEPath);
         $this->setCurrentTheme("AdminLTE");
 
         // Enable helper?
@@ -1603,7 +1611,7 @@ HTML;
             $folder = "upload" . DIRECTORY_SEPARATOR;
         }
 
-        if (isset($_FILES[$fieldName])) { 
+        if (isset($_FILES[$fieldName])) {
 
             $filenameArray = explode(".", $_FILES[$fieldName]["name"]);
 
@@ -2052,7 +2060,12 @@ HTML;
     {
         $this->countListViewDataClosure = $countListViewDataClosure;
     }
-
-
-
+    
+    public static function vendorRes(string $path) : string {
+        if (self::$isDev) {
+            return Util::res($path);
+        } else {
+            return Util::res("vendor/louislam/louislam-crud/" . $path);
+        }
+    }
 }
