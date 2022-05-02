@@ -12,7 +12,7 @@
 * Support MySQL/MariaDB, SQLite, PostgreSQL and CUBRID.
 
 
-## Docmentation
+## Documentation
 
 https://github.com/louislam/louislam-crud/wiki
 
