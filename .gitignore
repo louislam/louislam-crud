@@ -56,3 +56,5 @@ crashlytics-build.properties
 /components/
 
 /tmp
+
+.php-cs-fixer.cache

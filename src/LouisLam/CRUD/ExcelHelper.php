@@ -8,14 +8,11 @@
 
 namespace LouisLam\CRUD;
 
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-use PHPExcel;
-use PHPExcel_Shared_Font;
-use PHPExcel_Writer_Excel2007;
-
-class ExcelHelper
-{
-
+class ExcelHelper {
     private $headerClosure;
 
     public function __construct() {
@@ -25,21 +22,15 @@ class ExcelHelper
     }
 
     public function genExcel(LouisCRUD $crud, array $list, $filename = null) {
-       // PHPExcel_Shared_Font::setAutoSizeMethod(PHPExcel_Shared_Font::AUTOSIZE_METHOD_EXACT);
-        $excel = new PHPExcel();
-
+        $excel = new Spreadsheet();
         $sheet = $excel->getActiveSheet();
-
-
-
         $fields = $crud->getShowFields();
 
         // Header
         $i = 0;
-        foreach($fields as $field) {
+        foreach ($fields as $field) {
             $sheet->setCellValueByColumnAndRow($i, 1, $field->getDisplayName());
             $sheet->getColumnDimensionByColumn($i)->setAutoSize(true);
-
             $i++;
         }
 
@@ -47,18 +38,18 @@ class ExcelHelper
         $j = 2;
         foreach ($list as $bean) {
             $i = 0;
-            foreach($fields as $field) {
-                $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit(strip_tags($field->cellValue($bean)));
+            foreach ($fields as $field) {
+                $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit(
+                    strip_tags($field->cellValue($bean)),
+                    DataType::TYPE_STRING
+                );
                 $i++;
             }
             $j++;
         }
 
-
         // Save
-        $objWriter = new PHPExcel_Writer_Excel2007($excel);
-
-        //$rand = dechex(rand(0, 99999999));
+        $objWriter = new Xlsx($excel);
 
         if ($filename == null) {
             $name = $crud->getTableName();
@@ -67,9 +58,9 @@ class ExcelHelper
         }
 
         $headers = [
-            'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'Content-Disposition' => 'attachment;filename="' . $filename . '"',
-            'Cache-Control' => 'max-age=0'
+            "Content-Type" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "Content-Disposition" => 'attachment;filename="' . $filename . '"',
+            "Cache-Control" => "max-age=0"
         ];
 
         foreach ($headers as $key => $value) {
@@ -78,16 +69,12 @@ class ExcelHelper
         }
 
         $objWriter->save("php://output");
-
     }
 
     /**
      * @param \Closure $headerClosure
      */
-    public function setHeaderClosure($headerClosure)
-    {
+    public function setHeaderClosure($headerClosure) {
         $this->headerClosure = $headerClosure;
     }
-
-
 }

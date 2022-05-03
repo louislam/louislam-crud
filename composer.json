@@ -6,12 +6,13 @@
     "authors": [
         {
             "name": "Louis Lam",
-            "email": "info@louislam.net"
+            "email": "info@crud.louislam.net"
         }
     ],
     "scripts": {
         "test": "phpunit --bootstrap phpunit_bootstrap.php --no-configuration src",
-        "example-server": "@php -S localhost:3000"
+        "example-server": "@php -S localhost:3000",
+        "test-php-cs-fixer": "php-cs-fixer fix example.php"
     },
     "minimum-stability": "stable",
     "require": {
@@ -25,12 +26,12 @@
         "components/jquery": "^3.6.0",
         "almasaeed2010/adminlte": "2.3.*",
         "fortawesome/font-awesome": "4.*",
-        "phpoffice/phpexcel": "1.8.*",
+        "phpoffice/phpspreadsheet": "^1.23.0",
         "components/jqueryui": "^1.12.1",
         "ckeditor/ckeditor": "^4.18.0",
         "greenlion/php-sql-parser": "4.*",
         "ircmaxell/password-compat" : "1.0.*",
-        "danielstjules/stringy": "3.*",
+        "voku/stringy": "^6.5.3",
         "bootstrap-select/bootstrap-select": "1.12.*",
         "moment/moment": "^2.29.3",
         "electrolinux/phpquery": "0.9.6"
@@ -38,10 +39,7 @@
     "autoload": {
         "psr-4": {
             "LouisLam\\" : "src/LouisLam"
-        },
-        "files": [
-            "src/polyfill.php"
-        ]
+        }
     },
     "config": {
         "allow-plugins": {

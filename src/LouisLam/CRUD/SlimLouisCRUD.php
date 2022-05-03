@@ -94,9 +94,6 @@ class SlimLouisCRUD extends LouisCRUD {
 
         parent::__construct();
 
-        // Need polyfill for Slim 2.6.3
-        polyfill();
-
         $this->groupName = $groupName;
         $this->apiGroupName = $apiGroupName;
 

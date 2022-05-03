@@ -9,7 +9,7 @@ use RedBeanPHP\R;
 
 SlimLouisCRUD::$isDev = true;
 
-R::setup('sqlite:tmp/dbfile.db');
+R::setup("sqlite:tmp/dbfile.db");
 
 $crud = new SlimLouisCRUD();
 

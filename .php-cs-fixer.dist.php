@@ -3,18 +3,17 @@
 use GD75\DoubleQuoteFixer\DoubleQuoteFixer;
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude("somedir")
-    ->notPath("src/Symfony/Component/Translation/Tests/fixtures/resources.php")
+    ->notPath("js")
+    ->notPath("css")
     ->in(__DIR__);
 
-$config = new PhpCsFixer\Config()
-;
+$config = new PhpCsFixer\Config();
 
 return $config->registerCustomFixers([
     new DoubleQuoteFixer()
 ])->setRules([
     "@PSR12" => true,
-    "no_mixed_echo_print" => "echo",
+    "no_mixed_echo_print" => true,
     "array_syntax" => [
         "syntax" => "short"
     ],
@@ -32,4 +31,8 @@ return $config->registerCustomFixers([
     "no_empty_statement" => true,
     "no_singleline_whitespace_before_semicolons" => true,
     "semicolon_after_instruction" => true,
+    "no_extra_blank_lines" => [
+        "default"
+    ]
 ])->setFinder($finder);
+
