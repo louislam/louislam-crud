@@ -1,0 +1,28 @@
+<?php
+
+use GD75\DoubleQuoteFixer\DoubleQuoteFixer;
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude("somedir")
+    ->notPath("src/Symfony/Component/Translation/Tests/fixtures/resources.php")
+    ->in(__DIR__);
+
+$config = new PhpCsFixer\Config();
+
+return $config->registerCustomFixers([
+    new DoubleQuoteFixer()
+])->setRules([
+    "@PSR12" => true,
+    "no_mixed_echo_print" => "echo",
+    "array_syntax" => [
+        "syntax" => "short"
+    ],
+    "encoding" => true,
+    "single_quote" => false,
+    "GD75/double_quote_fixer" => true,
+    "no_trailing_comma_in_singleline_array" => true,
+    "trim_array_spaces" => true,
+    "braces" => [
+        "position_after_functions_and_oop_constructs" => "same"
+    ]
+])->setFinder($finder);

@@ -1,4 +1,5 @@
 <?php
+
 namespace LouisLam\CRUD;
 
 use League\Plates\Engine;
@@ -14,9 +15,7 @@ use Slim\Slim;
  * Time: 10:37 AM
  * @package LouisLam\CRUD
  */
-class SlimLouisCRUD extends LouisCRUD
-{
-    
+class SlimLouisCRUD extends LouisCRUD {
     /**
      * @var bool
      */
@@ -54,54 +53,50 @@ class SlimLouisCRUD extends LouisCRUD
     private string $currentRouteName = "";
 
     protected $firstPageURL = "";
-    
+
     protected $pageLayout = null;
-    
+
     protected $loginViewName = "adminlte::login";
-    
+
     /**
      * @return string
      */
-    public function getPageLayout()
-    {
+    public function getPageLayout() {
         if ($this->pageLayout == null) {
             return $this->getThemeName() . "::page";
         } else {
             return $this->pageLayout;
         }
     }
-    
+
     /**
      * @param string $pageLayout
      */
-    public function setPageLayout(string $pageLayout) : void
-    {
+    public function setPageLayout(string $pageLayout): void {
         $this->pageLayout = $pageLayout;
     }
-    
-    public function setCurrentTheme($theme)
-    {
+
+    public function setCurrentTheme($theme) {
         parent::setCurrentTheme($theme);
     }
-    
-    
+
+
     /**
      * SlimCRUD constructor.
      * @param string $groupName
      * @param string $apiGroupName
      * @param Slim $slim
      */
-    public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null)
-    {
-        if (session_id() == '') {
+    public function __construct($groupName = "crud", $apiGroupName = "api", $slim = null) {
+        if (session_id() == "") {
             session_start();
         }
 
         parent::__construct();
-        
+
         // Need polyfill for Slim 2.6.3
         polyfill();
-        
+
         $this->groupName = $groupName;
         $this->apiGroupName = $apiGroupName;
 
@@ -113,15 +108,13 @@ class SlimLouisCRUD extends LouisCRUD
 
         // Upload function
         $this->slim->post("/louislam-crud/upload/:type", function ($type) {
-
-            if (!empty($_POST['uploadpath'])) {
-                $result = $this->upload("upload", $_POST['uploadpath']);
+            if (!empty($_POST["uploadpath"])) {
+                $result = $this->upload("upload", $_POST["uploadpath"]);
             } else {
                 $result = $this->upload();
             }
 
             if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
-
             } else {
                 $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
@@ -132,8 +125,7 @@ class SlimLouisCRUD extends LouisCRUD
                 $url = $result["url"];
 
                 if ($result["uploaded"]) {
-
-                    $funcNum = isset($_GET['CKEditorFuncNum']) ? $_GET['CKEditorFuncNum'] : 0;
+                    $funcNum = isset($_GET["CKEditorFuncNum"]) ? $_GET["CKEditorFuncNum"] : 0;
 
                     echo <<< HTML
 <script type="text/javascript">
@@ -143,20 +135,16 @@ HTML;
                 } else {
                     $msg = $result["msg"];
 
-                        echo <<< HTML
+                    echo <<< HTML
 <script type="text/javascript">
     alert("$msg");
 </script>
 HTML;
                 }
-
-
-
             } else {
                 $this->enableJSONResponse();
                 echo json_encode($result);
             }
-
         });
 
         // Upload Image function
@@ -164,7 +152,6 @@ HTML;
             $result = $this->uploadImage("upload", "upload/", 1000);
 
             if (isset($_GET["fullpath"]) && $_GET["fullpath"] == "no") {
-
             } else {
                 $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
@@ -189,12 +176,10 @@ HTML;
 </script>
 HTML;
                 }
-
             } else {
                 $this->enableJSONResponse();
                 echo json_encode($result);
             }
-
         });
 
         $crud = $this;
@@ -208,16 +193,13 @@ HTML;
             $result=  Auth::login($_POST["username"], $_POST["password"]);
 
             if ($result) {
-
                 if (isset($_SESSION["redirect"])) {
-                    $app->redirect(Util::fullURL($_SESSION["redirect"]) );
+                    $app->redirect(Util::fullURL($_SESSION["redirect"]));
                 } else {
                     $app->redirect($this->getFirstPageURL());
                 }
-
-
             } else {
-                $_SESSION['msg'] = "Username or password invalid";
+                $_SESSION["msg"] = "Username or password invalid";
                 $app->redirect(Util::fullURL("auth/login"));
             }
         });
@@ -226,10 +208,6 @@ HTML;
             Auth::logout();
             $app->redirect(Util::fullURL("auth/login"));
         });
-
-
-
-
     }
 
     private function init($tableName, $routeName, $p1 = null, $p2 = null, $p3 = null, $p4 = null, $p5 = null) {
@@ -265,7 +243,6 @@ HTML;
         $this->setListViewJSONLink(Util::url($this->apiGroupName . "/" . $routeName . "/datatables" . $params));
         $this->setEditSubmitLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id" . $params));
         $this->setDeleteLink(Util::url($this->apiGroupName . "/" . $routeName . "/:id" . $params));
-
     }
 
     /**
@@ -284,7 +261,6 @@ HTML;
                 $controller->setParam(3, $p4);
                 $controller->setParam(4, $p5);
                 $result = $controller->main($this);
-
             } else {
                 $result = $customCRUDFunction($p1, $p2, $p3, $p4, $p5);
             }
@@ -307,12 +283,9 @@ HTML;
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
             $result = $controller->listView($this);
-
-
         } elseif ($this->listviewFunction != null) {
             $listviewFunction = $this->listviewFunction;
             $result = $listviewFunction($p1, $p2, $p3, $p4, $p5);
-
         }
 
         return $result;
@@ -332,12 +305,9 @@ HTML;
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
             $result = $controller->create($this);
-
-
         } elseif ($this->createFunction != null) {
             $func = $this->createFunction;
             $result = $func($p1, $p2, $p3, $p4, $p5);
-
         }
 
         return $result;
@@ -357,12 +327,9 @@ HTML;
             $controller->setParam(3, $p4);
             $controller->setParam(4, $p5);
             $result = $controller->edit($this);
-
-
         } elseif ($this->editFunction != null) {
             $func = $this->editFunction;
             $result = $func($p1, $p2, $p3, $p4, $p5);
-
         }
 
         return $result;
@@ -374,8 +341,7 @@ HTML;
      * @param callable|BaseCRUDController $customCRUDFunction
      * @param string $displayName
      */
-    public function add($routeName, $customCRUDFunction = null, $tableName = null, $displayName = null)
-    {
+    public function add($routeName, $customCRUDFunction = null, $tableName = null, $displayName = null) {
 
         /**
          * @var BaseCRUDController
@@ -399,8 +365,7 @@ HTML;
          * Page Group (ListView, CreateView, EditView)
          */
         $this->slim->group("/" . $this->groupName . "/" . $routeName, function () use ($routeName, $customCRUDFunction, $tableName, $controller) {
-
-            $this->slim->get("/", function () use ($routeName)  {
+            $this->slim->get("/", function () use ($routeName) {
                 $this->slim->redirectTo("_louisCRUD_" . $routeName);
             });
 
@@ -436,7 +401,6 @@ HTML;
                 if ($this->isEnabledListView()) {
                     $this->renderListView();
                 }
-
             })->name("_louisCRUD_" . $routeName);
 
             /*
@@ -559,9 +523,7 @@ HTML;
 
                 // TODO: isEnabledExport();
                 $this->renderExcel();
-
-            })->via('GET', 'POST');
-
+            })->via("GET", "POST");
         });
 
         /*
@@ -603,7 +565,7 @@ HTML;
                     $this->getJSONList();
                 }
                 return;
-            })->via('GET', 'POST');
+            })->via("GET", "POST");
 
             /*
              * For Datatables
@@ -639,7 +601,7 @@ HTML;
                     $this->getListViewJSONString();
                 }
                 return;
-            })->via('GET', 'POST');
+            })->via("GET", "POST");
 
 
             /*
@@ -681,9 +643,7 @@ HTML;
 
                 // Insert into database
                 if ($this->isEnabledEdit()) {
-
-
-                   $json = $this->getJSON(false);
+                    $json = $this->getJSON(false);
 
                     $this->enableJSONResponse();
                     echo $json;
@@ -734,7 +694,6 @@ HTML;
                     // TODO: Should be json object
                     echo "No permission";
                 }
-
             });
 
             /*
@@ -831,11 +790,8 @@ HTML;
 
                     echo json_encode($result);
                 }
-
             });
-
         });
-
     }
 
     /**
@@ -848,53 +804,46 @@ HTML;
     /**
      * @param callable $func
      */
-    public function listView($func)
-    {
+    public function listView($func) {
         $this->listviewFunction = $func;
     }
 
     /**
      * @param callable $func
      */
-    public function create($func)
-    {
+    public function create($func) {
         $this->createFunction = $func;
     }
 
     /**
      * @param callable $func
      */
-    public function edit($func)
-    {
+    public function edit($func) {
         $this->editFunction = $func;
     }
 
     /**
      * @param callable $func
      */
-    public function delete($func)
-    {
+    public function delete($func) {
         $this->deleteFunction = $func;
     }
 
     /**
      * @param callable $func
      */
-    public function export($func)
-    {
+    public function export($func) {
         $this->exportFunction = $func;
     }
 
     /**
      * @return Slim
      */
-    public function getSlim()
-    {
+    public function getSlim() {
         return $this->slim;
     }
 
-    public function run()
-    {
+    public function run() {
         $this->enableMenu();
         $this->slim->run();
     }
@@ -902,9 +851,8 @@ HTML;
     /**
      * Please make sure you return a valid JSON.
      */
-    public function enableJSONResponse()
-    {
-        $this->slim->response->header('Content-Type', 'application/json');
+    public function enableJSONResponse() {
+        $this->slim->response->header("Content-Type", "application/json");
     }
 
     /**
@@ -971,7 +919,7 @@ HTML;
     }
 
     public function getTableDisplayName($routeName = null) {
-        if (isset($this->tableDisplayName[$routeName] ) && $this->tableDisplayName[$routeName] != null) {
+        if (isset($this->tableDisplayName[$routeName]) && $this->tableDisplayName[$routeName] != null) {
             return $this->tableDisplayName[$routeName];
         } else {
             return Util::displayName($routeName);
@@ -982,13 +930,12 @@ HTML;
      * Override render Excel function
      * @throws Exception\NoFieldException
      */
-    public function renderExcel()
-    {
+    public function renderExcel() {
         $this->beforeRender();
         $list = $this->getListViewData();
 
         $helper = new ExcelHelper();
- 
+
         $helper->setHeaderClosure(function ($key, $value) {
             $this->getSlim()->response()->header($key, $value);
         });
@@ -1012,10 +959,10 @@ HTML;
         }
 
         $crud = $this;
-        
+
         $this->getSlim()->get($route, function () use ($crud, $callback) {
             $content = $callback();
-            
+
             $this->render($this->getPageLayout(), [
                 "content" => $content
             ], true);
@@ -1040,7 +987,7 @@ HTML;
             $resourceUri = $req->getResourceUri();
 
             $_SESSION["redirect"] = $resourceUri;
-           header("Location: " . Util::fullURL("auth/login"));
+            header("Location: " . Util::fullURL("auth/login"));
             die();
         });
     }
@@ -1048,34 +995,28 @@ HTML;
     /**
      * @return string
      */
-    public function getFirstPageURL()
-    {
+    public function getFirstPageURL() {
         return $this->firstPageURL;
     }
 
     /**
      * @param string $firstPageURL
      */
-    public function setFirstPageURL($firstPageURL)
-    {
+    public function setFirstPageURL($firstPageURL) {
         $this->firstPageURL = $firstPageURL;
     }
-    
+
     /**
      * @return string
      */
-    public function getLoginViewName()
-    {
+    public function getLoginViewName() {
         return $this->loginViewName;
     }
-    
+
     /**
      * @param string $loginViewName
      */
-    public function setLoginViewName($loginViewName)
-    {
+    public function setLoginViewName($loginViewName) {
         $this->loginViewName = $loginViewName;
     }
-    
-    
 }
