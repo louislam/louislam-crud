@@ -8,9 +8,7 @@
 
 namespace LouisLam\CRUD\FieldType;
 
-
-class CKEditor extends FieldType
-{
+class CKEditor extends FieldType {
     // TODO: Check 777 for uploading images
 
 
@@ -21,8 +19,7 @@ class CKEditor extends FieldType
      * @param bool|true $echo
      * @return string
      */
-    public function render($echo = false)
-    {
+    public function render($echo = false) {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
         $defaultValue = $this->field->getDefaultValue();
@@ -41,8 +38,8 @@ HTML;
 
         $fullFeatures = ($this->fullFeatures) ? "true" : "false";
 
-        $crud->addScript(<<< HTML
-
+        $crud->addScript(
+            <<< HTML
         <script>
         $(document).ready(function () {
                 var element = $( 'textarea.editor[name=$name]' );
@@ -96,10 +93,11 @@ HTML;
 
         </script>
 HTML
-);
+        );
 
-        if ($echo)
+        if ($echo) {
             echo $html;
+        }
 
         return $html;
     }
@@ -110,8 +108,7 @@ HTML
     }
 
 
-    public function renderCell($value)
-    {
+    public function renderCell($value) {
         $value = trim(strip_tags($value));
         return mb_strimwidth($value, 0, 60, "...", "UTF-8");
     }

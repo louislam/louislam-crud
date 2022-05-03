@@ -28,7 +28,7 @@
         "fortawesome/font-awesome": "4.*",
         "phpoffice/phpspreadsheet": "^1.23.0",
         "components/jqueryui": "^1.12.1",
-        "ckeditor/ckeditor": "^4.18.0",
+        "ckeditor/ckeditor": "^4.12.1",
         "greenlion/php-sql-parser": "4.*",
         "ircmaxell/password-compat" : "1.0.*",
         "voku/stringy": "^6.5.3",
