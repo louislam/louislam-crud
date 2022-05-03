@@ -8,23 +8,18 @@
 
 namespace LouisLam\CRUD;
 
-
-class AdminLTESetting
-{
-
-    const Blue = "skin-blue";
-    const Black = "skin-black";
-    const Purple = "skin-purple";
+class AdminLTESetting {
+    public const Blue = "skin-blue";
+    public const Black = "skin-black";
+    public const Purple = "skin-purple";
 
     private static $instance = null;
 
     private $fixedLayout = false;
     private $boxedLayout = false;
     private $skin = AdminLTESetting::Blue;
-
-
-
-    public static function  getInstance() {
+    
+    public static function getInstance() {
         if (self::$instance == null) {
             self::$instance = new AdminLTESetting();
         }
@@ -34,51 +29,42 @@ class AdminLTESetting
     /**
      * @return boolean
      */
-    public function isFixedLayout()
-    {
+    public function isFixedLayout() {
         return $this->fixedLayout;
     }
 
     /**
      * @param boolean $fixedLayout
      */
-    public function setFixedLayout($fixedLayout)
-    {
+    public function setFixedLayout($fixedLayout) {
         $this->fixedLayout = $fixedLayout;
     }
 
     /**
      * @return boolean
      */
-    public function isBoxedLayout()
-    {
+    public function isBoxedLayout() {
         return $this->boxedLayout;
     }
 
     /**
      * @param boolean $boxedLayout
      */
-    public function setBoxedLayout($boxedLayout)
-    {
+    public function setBoxedLayout($boxedLayout) {
         $this->boxedLayout = $boxedLayout;
     }
 
     /**
      * @return string
      */
-    public function getSkin()
-    {
+    public function getSkin() {
         return $this->skin;
     }
 
     /**
      * @param string $skin
      */
-    public function setSkin($skin)
-    {
+    public function setSkin($skin) {
         $this->skin = $skin;
     }
-
-
-
 }

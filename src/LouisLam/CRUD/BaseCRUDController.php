@@ -8,10 +8,7 @@
 
 namespace LouisLam\CRUD;
 
-
-abstract class BaseCRUDController
-{
-
+abstract class BaseCRUDController {
     protected $params = [];
 
     /**
@@ -22,38 +19,35 @@ abstract class BaseCRUDController
     /**
      * @param LouisCRUD $crud
      */
-    public abstract function main($crud);
+    abstract public function main($crud);
 
     /**
      * @param LouisCRUD $crud
      */
-    public abstract function listView($crud);
+    abstract public function listView($crud);
 
     /**
      * @param LouisCRUD $crud
      */
-    public abstract function create($crud);
+    abstract public function create($crud);
 
     /**
      * @param LouisCRUD $crud
      */
-    public abstract function edit($crud);
+    abstract public function edit($crud);
 
     /**
      * @return LouisCRUD
      */
-    public function getCRUD()
-    {
+    public function getCRUD() {
         return $this->crud;
     }
 
-    public function setCRUD(LouisCRUD $crud)
-    {
+    public function setCRUD(LouisCRUD $crud) {
         $this->crud = $crud;
     }
 
     public function setParam($i, $value) {
         $this->params[$i] = $value;
     }
-
 }

@@ -2,12 +2,7 @@
 
 namespace LouisLam;
 
-use RedBeanPHP\R;
-
-class Auth
-{
-
-
+class Auth {
     /**
      * @var AuthBasic
      */
@@ -16,8 +11,7 @@ class Auth
     /**
      * @return AuthBasic
      */
-    public static function getAuthLogic()
-    {
+    public static function getAuthLogic() {
         if (self::$authLogic == null) {
             self::$authLogic = new LouisAuth();
         }
@@ -28,8 +22,7 @@ class Auth
     /**
      * @param AuthBasic $authLogic
      */
-    public static function setAuthLogic($authLogic)
-    {
+    public static function setAuthLogic($authLogic) {
         self::$authLogic = $authLogic;
     }
 

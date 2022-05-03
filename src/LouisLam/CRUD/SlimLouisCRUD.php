@@ -116,8 +116,6 @@ class SlimLouisCRUD extends LouisCRUD {
                 $result["url"] = \LouisLam\Util::fullRes($result["url"]);
             }
 
-
-
             if ($type == "js") {
                 $url = $result["url"];
 

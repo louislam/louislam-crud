@@ -8,9 +8,7 @@
 
 namespace LouisLam\CRUD;
 
-
-class AjaxResult
-{
+class AjaxResult {
     public $draw = 1;
     public $recordsTotal = 1;
     public $recordsFiltered = 1;

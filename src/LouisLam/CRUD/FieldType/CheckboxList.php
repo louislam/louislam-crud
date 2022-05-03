@@ -8,13 +8,10 @@
 
 namespace LouisLam\CRUD\FieldType;
 
-
 use LouisLam\CRUD\Field;
 use RedBeanPHP\R;
 
-class CheckboxList extends FieldType
-{
-
+class CheckboxList extends FieldType {
     /**
      * @var string[]
      */
@@ -39,8 +36,7 @@ class CheckboxList extends FieldType
      * @param bool|true $echo
      * @return string
      */
-    public function render($echo = false)
-    {
+    public function render($echo = false) {
         $name = $this->field->getName();
         $display = $this->field->getDisplayName();
         $bean = $this->field->getBean();
@@ -58,7 +54,6 @@ TAG;
 TAG;
 
         foreach ($this->options as $v =>$optionName) {
-
             if (isset($valueList[$v])) {
                 $selected  = "checked";
             } else {
@@ -78,21 +73,18 @@ HTML;
 
         $html .= " </div><br />";
 
-        if ($echo)
+        if ($echo) {
             echo $html;
+        }
 
         return $html;
     }
 
     public function renderCell($value) {
-
         try {
             return $this->options[$value];
         } catch (\ErrorException $ex) {
             return $value;
         }
     }
-
-
-
 }

@@ -8,10 +8,7 @@
 
 namespace LouisLam\CRUD;
 
-
-class FieldGroup
-{
-
+class FieldGroup {
     private $groupName;
 
     /**
@@ -24,21 +21,18 @@ class FieldGroup
     /**
      * @return mixed
      */
-    public function getGroupName()
-    {
+    public function getGroupName() {
         return $this->groupName;
     }
 
     /**
      * @param mixed $groupName
      */
-    public function setGroupName($groupName)
-    {
+    public function setGroupName($groupName) {
         $this->groupName = $groupName;
     }
 
-    public function addField(Field $field, $width)
-    {
+    public function addField(Field $field, $width) {
         $this->fieldList[$field->getName()] = $field;
         $this->widthList[$field->getName()] = $width;
     }
@@ -51,13 +45,10 @@ class FieldGroup
     }
 
     public function getWidth($fieldName) {
-
         if (isset($this->widthList[$fieldName])) {
             return $this->widthList[$fieldName];
         } else {
             return 6;
         }
-
     }
-
 }

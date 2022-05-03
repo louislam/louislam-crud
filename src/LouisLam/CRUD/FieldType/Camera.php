@@ -8,11 +8,6 @@
 
 namespace LouisLam\CRUD\FieldType;
 
-
-use LouisLam\CRUD\Exception\DirectoryPermissionException;
-use LouisLam\Util;
-
-class Camera extends Image
-{
+class Camera extends Image {
     protected $additionalAttr = "accept=\"image/*;capture=camera\"";
 }

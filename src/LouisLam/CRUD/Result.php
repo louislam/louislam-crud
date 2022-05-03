@@ -8,9 +8,7 @@
 
 namespace LouisLam\CRUD;
 
-
-class Result
-{
+class Result {
     public $ok = true;
     public $id;
     public $msg = "";

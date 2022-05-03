@@ -35,14 +35,13 @@ function s($str) {
  * Time: 9:33 AM
  */
 class LouisCRUD {
-    
     /**
      * Set it to true, if you want to develop this project
      * @var bool
      */
     public static bool $isDev = false;
-    
-    const NULL = "--louislam-crud-null";
+
+    public const NULL = "--louislam-crud-null";
 
     /**
      * For those who would like to fork this project, please update the composer name.
@@ -54,10 +53,8 @@ class LouisCRUD {
      * @var ?string Table Name
      */
     protected ?string $tableName = null;
-    
+
     protected $fieldsInfoFromDatabase = null;
-
-
 
     /*
      * URLs
@@ -88,7 +85,7 @@ class LouisCRUD {
      * @var callable
      */
     protected $actionClosure = null;
-    
+
     protected $findClause = null;
     protected $findAllClause = null;
     protected $bindingData = [];
@@ -127,18 +124,18 @@ class LouisCRUD {
     protected $listViewTemplate = null;
     protected $editTemplate = null;
     protected $createTemplate = null;
-    
+
     private $tableDisplayName = null;
 
     /** @var array Data for layout */
     protected $data = [];
-    
+
     protected $ajaxListView = true;
-    
+
     protected $exportFilename = null;
-    
+
     protected $cacheVersion = 2;
-    
+
     protected $bodyEndHTML = "";
     protected $headHTML = "";
 
@@ -221,16 +218,14 @@ class LouisCRUD {
     /**
      * @return string
      */
-    public function getDuplicateEntryErrorMsg()
-    {
+    public function getDuplicateEntryErrorMsg() {
         return $this->duplicateEntryErrorMsg;
     }
 
     /**
      * @param string $duplicateEntryErrorMsg
      */
-    public function setDuplicateEntryErrorMsg($duplicateEntryErrorMsg)
-    {
+    public function setDuplicateEntryErrorMsg($duplicateEntryErrorMsg) {
         $this->duplicateEntryErrorMsg = $duplicateEntryErrorMsg;
     }
 
@@ -241,9 +236,8 @@ class LouisCRUD {
      * @throws TableNameException
      * @throws \RedBeanPHP\RedException
      */
-    public function __construct($tableName = null, $viewDir = "view")
-    {
-        R::ext('xdispense', function ($type) {
+    public function __construct($tableName = null, $viewDir = "view") {
+        R::ext("xdispense", function ($type) {
             return R::getRedBean()->dispense($type);
         });
 
@@ -253,7 +247,7 @@ class LouisCRUD {
 
         try {
             $this->template = new Engine($viewDir);
-        } catch(\LogicException $ex) {
+        } catch (\LogicException $ex) {
             mkdir("view");
 
             try {
@@ -270,11 +264,11 @@ class LouisCRUD {
         ]);
 
         $adminLTEPath = "view/theme/AdminLTE";
-        
+
         if (!self::$isDev) {
             $adminLTEPath = "vendor/$this->packageName/$adminLTEPath";
         }
-        
+
         $this->addTheme("AdminLTE", $adminLTEPath);
         $this->setCurrentTheme("AdminLTE");
 
@@ -293,11 +287,9 @@ class LouisCRUD {
      * @param $msg
      */
     public function log($msg) {
-
     }
 
-    public function setViewDirectory($viewDir)
-    {
+    public function setViewDirectory($viewDir) {
         $this->template->setDirectory($viewDir);
     }
 
@@ -307,8 +299,7 @@ class LouisCRUD {
      * @return Field The field object
      * @throws Exception
      */
-    public function field($name)
-    {
+    public function field($name) {
         if (!isset($this->fieldList[$name])) {
             $this->addField($name);
         }
@@ -322,8 +313,7 @@ class LouisCRUD {
      * @param string $dataType it can be varchar/int/text
      * @throws Exception
      */
-    public function addField($name, $dataType = "varchar(255)")
-    {
+    public function addField($name, $dataType = "varchar(255)") {
         if ($name == "") {
             throw new Exception("Field name cannot be empty.");
         }
@@ -340,8 +330,7 @@ class LouisCRUD {
      * Get an array of Field(s) which is/are going to be shown.
      * @return Field[]
      */
-    public function getShowFields()
-    {
+    public function getShowFields() {
         $fields = [];
 
         foreach ($this->fieldList as $field) {
@@ -359,15 +348,13 @@ class LouisCRUD {
      * Show and order field(s)
      * @param string[] $fieldNameList An array of field name(s).
      */
-    public function showFields($fieldNameList)
-    {
+    public function showFields($fieldNameList) {
         $nameList = [];
         $newOrderList = [];
 
         if (is_array($fieldNameList)) {
             // Array Style
             $nameList = $fieldNameList;
-
         } else {
             // Grocery CRUD style
             $numargs = func_num_args();
@@ -375,7 +362,7 @@ class LouisCRUD {
 
             // For each parameters (field name)
             for ($i = 0; $i < $numargs; $i++) {
-              $nameList[] = $fieldNames[$i];
+                $nameList[] = $fieldNames[$i];
             }
         }
 
@@ -391,17 +378,13 @@ class LouisCRUD {
         // now $this->fieldList remains fields that user do not input.
         // Use user's order and append remaining fields to the back.
         $this->fieldList = array_merge($newOrderList, $this->fieldList);
-
-
     }
 
     /**
      * Hide fields, useful if you want to keep the field in the database but not show on the curd page.
      * @param string[] $fieldNameList An array of field name(s).
      */
-    public function hideFields($fieldNameList)
-    {
-
+    public function hideFields($fieldNameList) {
         if (is_array($fieldNameList)) {
             foreach ($fieldNameList as $name) {
                 $this->field($name)->hide();
@@ -429,8 +412,7 @@ class LouisCRUD {
      *
      * @param string[]|string $fieldNameList
      */
-    public function requiredFields($fieldNameList)
-    {
+    public function requiredFields($fieldNameList) {
         if (is_array($fieldNameList)) {
             foreach ($fieldNameList as $name) {
                 $this->field($name)->required();
@@ -445,8 +427,7 @@ class LouisCRUD {
         }
     }
 
-    public function readOnlyFields()
-    {
+    public function readOnlyFields() {
         $numArgs = func_num_args();
         $fieldNames = func_get_args();
 
@@ -455,20 +436,17 @@ class LouisCRUD {
         }
     }
 
-    public function allReadOnly()
-    {
-        foreach($this->fieldList as $field) {
+    public function allReadOnly() {
+        foreach ($this->fieldList as $field) {
             $field->setReadOnly(true);
         }
     }
 
-    public function setCurrentTheme($theme)
-    {
+    public function setCurrentTheme($theme) {
         $this->theme = $theme;
     }
 
-    public function addTheme($themeName, $path)
-    {
+    public function addTheme($themeName, $path) {
         $this->template->addFolder($themeName, $path);
     }
 
@@ -476,8 +454,7 @@ class LouisCRUD {
         return $this->theme;
     }
 
-    protected function setTable($tableName)
-    {
+    protected function setTable($tableName) {
         if ($this->tableName != null) {
             throw new TableNameException();
         }
@@ -493,36 +470,31 @@ class LouisCRUD {
         return $this->tableName;
     }
 
-    private function initFields()
-    {
+    private function initFields() {
         $this->loadFieldsInfoFromDatabase();
 
-        foreach ($this->fieldsInfoFromDatabase as $showField => $dataType)
-        {
+        foreach ($this->fieldsInfoFromDatabase as $showField => $dataType) {
             if (!isset($this->fieldList[$showField])) {
                 $this->addField($showField, $dataType);
             }
         }
     }
 
-    public function find($clause, $data = [])
-    {
+    public function find($clause, $data = []) {
         $this->findAllClause = null;
 
         $this->findClause = $clause;
         $this->bindingData = $data;
     }
 
-    public function findAll($clause, $data = [])
-    {
+    public function findAll($clause, $data = []) {
         $this->findClause = null;
 
         $this->findAllClause = $clause;
         $this->bindingData = $data;
     }
 
-    private function loadFieldsInfoFromDatabase()
-    {
+    private function loadFieldsInfoFromDatabase() {
         try {
             $this->fieldsInfoFromDatabase = R::inspect($this->tableName);
         } catch (Exception $ex) {
@@ -538,15 +510,13 @@ class LouisCRUD {
      * Problem: The first ID is always start from 2.
      * TODO: Create table with pure SQL, but be careful it may not support for all databases.
      */
-    public function createTable()
-    {
+    public function createTable() {
         $bean = R::xdispense($this->tableName);
         R::store($bean);
         R::trash($bean);
     }
 
-    protected function getAction($bean)
-    {
+    protected function getAction($bean) {
         $html = "";
 
         if ($this->isEnabledEdit()) {
@@ -555,7 +525,6 @@ class LouisCRUD {
             $html .= <<< HTML
 <a href="$url" class="btn btn-default">$editName</a>
 HTML;
-
         }
 
         if ($this->isEnabledDelete()) {
@@ -574,8 +543,7 @@ HTML;
         return $html;
     }
 
-    protected function beforeRender()
-    {
+    protected function beforeRender() {
         // if there is a ID field only, no other fields, then throw an Exception
         if (count($this->fieldList) <= 1) {
             throw new NoFieldException();
@@ -592,31 +560,25 @@ HTML;
         $count = 0;
 
         if ($this->listViewDataClosure != null) {
-
             if ($this->countListViewDataClosure != null) {
                 $c = $this->countListViewDataClosure;
                 return  $c($keyword);
             } else {
                 return 100000;
             }
-
         } elseif ($this->searchResultCountClosure != null) {            // For Custom Searching
             $c = $this->searchResultCountClosure;
             return $c($keyword);
-            
         } else {
             $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$count) {
 
                 // For RedBean Case
                 $count = R::getCell("SELECT COUNT(*) FROM `$tableName` WHERE $findClause $limit", $bindingData);
-
             }, function ($sql, $limit, $bindingData) use (&$count) {
 
                 // For SQL Case
                 $count = R::getRow("SELECT COUNT(*) AS `count` FROM (" . $sql . $limit . ") AS user_defined_query", $bindingData)["count"];
-
             }, null, null, $keyword);
-
         }
 
 
@@ -641,17 +603,14 @@ HTML;
         if ($this->listViewDataClosure != null) {
             $c = $this->listViewDataClosure;
             $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
-
         } elseif ($keyword != null && trim($keyword) != "" && $this->searchClosure != null) {         // For Custom Searching
             $c = $this->searchClosure;
             $list = $c($start, $rowPerPage, $keyword, $sortField, $sortOrder);
-
         } else {
             $this->beforeGetListViewData(function ($tableName, $findClause, $limit, $bindingData) use (&$list) {
 
                 // For RedBean Case
                 $list = R::find($tableName, $findClause . $limit, $bindingData);
-
             }, function ($sql, $limit, $bindingData) use (&$list) {
 
                 // For SQL Case
@@ -660,9 +619,7 @@ HTML;
                 try {
                     $list = R::convertToBeans($this->tableName, $list);
                 } catch (\Exception $ex) {
-
                 }
-
             }, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
         }
 
@@ -683,8 +640,7 @@ HTML;
      * @param callable $callbackSQL
      * @throws \RedBeanPHP\RedException\SQL
      */
-    protected function beforeGetListViewData($callbackRedBean, $callbackSQL, $start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null)
-    {
+    protected function beforeGetListViewData($callbackRedBean, $callbackSQL, $start = null, $rowPerPage = null, $keyword = null, $sortField = null, $sortOrder = null) {
         try {
 
             // Paging
@@ -700,13 +656,12 @@ HTML;
                 $list = [];
                 $callbackSQL($this->sql, $limit, $this->bindingData);
             } else {
-
                 $bindingData = $this->bindingData;
 
                 // For Find All Clause
                 if ($this->findAllClause != null) {
                     $findClause = " 1 = 1 " . $this->findAllClause;
-                } else if ($this->findClause != null) {
+                } elseif ($this->findClause != null) {
                     $findClause = $this->findClause;
                 } else {
                     $findClause = " 1 = 1 ";
@@ -743,16 +698,14 @@ HTML;
                 $callbackRedBean($this->tableName, $findClause, $limit, $bindingData);
             }
         } catch (\RedBeanPHP\RedException\SQL $ex) {
-
-                throw $ex;
-        } catch(\Exception $ex) {
+            throw $ex;
+        } catch (\Exception $ex) {
             // TODO: This should be for not existing table only, not other exceptions.
 
             // If the table is not existing create one, create the table and run this function again.
             $this->createTable();
             $this->beforeGetListViewData($callbackRedBean, $callbackSQL, $start, $rowPerPage, $keyword, $sortField, $sortOrder);
         }
-
     }
 
     protected function buildSearchingClause() {
@@ -769,8 +722,8 @@ HTML;
                 }
 
                 $fieldSearhingClosure = $searchField->getSearchingClosure();
-                if($fieldSearhingClosure != null) {
-                    $searchClause .= $fieldSearhingClosure($searchField) . ' ';
+                if ($fieldSearhingClosure != null) {
+                    $searchClause .= $fieldSearhingClosure($searchField) . " ";
                 } else {
                     $searchClause .= "UPPER(`" . $searchField->getName() . "`)" . " LIKE BINARY UPPER(?) ";
                 }
@@ -791,7 +744,7 @@ HTML;
         foreach ($searchFields as $searchField) {
             if ($searchField->isSearchable()) {
                 $fieldSearhingDataClosure = $searchField->getSearchingDataClosure();
-                if($fieldSearhingDataClosure != null) {
+                if ($fieldSearhingDataClosure != null) {
                     $searchData[] = $fieldSearhingDataClosure($searchField, $keyword);
                 } else {
                     $searchData[] = "%$keyword%";
@@ -802,16 +755,14 @@ HTML;
         return R::flat($searchData);
     }
 
-    public function renderExcel()
-    {
+    public function renderExcel() {
         $this->beforeRender();
         $list = $this->getListViewData();
 
         (new ExcelHelper())->genExcel($this, $list, $this->getExportFilename());
     }
 
-    public function renderListView($echo = true)
-    {
+    public function renderListView($echo = true) {
         $this->beforeRender();
 
         if ($this->ajaxListView) {
@@ -864,7 +815,7 @@ HTML;
         }
 
         if (isset($_POST["order"][0]["column"])) {
-           $fieldIndex = $_POST["order"][0]["column"] - 1;
+            $fieldIndex = $_POST["order"][0]["column"] - 1;
 
             if ($fieldIndex >= 0) {
                 $orderField = $this->getShowFields()[$fieldIndex]->getName();
@@ -873,8 +824,6 @@ HTML;
                 $orderField = null;
                 $order = null;
             }
-
-
         } else {
             $orderField = null;
             $order = null;
@@ -992,8 +941,7 @@ HTML;
      * @param bool|true $echo
      * @return string
      */
-    public function renderCreateView($echo = true)
-    {
+    public function renderCreateView($echo = true) {
         $this->beforeRender();
 
         $html = $this->template->render($this->getCreateTemplate(), [
@@ -1024,8 +972,7 @@ HTML;
     }
 
 
-    public function renderEditView($echo = true)
-    {
+    public function renderEditView($echo = true) {
         $this->beforeRender();
 
         if ($this->currentBean == null) {
@@ -1048,24 +995,21 @@ HTML;
     /**
      * @return string
      */
-    public function getListViewLink()
-    {
+    public function getListViewLink() {
         return $this->listViewLink;
     }
 
     /**
      * @param string $listViewLink
      */
-    public function setListViewLink($listViewLink)
-    {
+    public function setListViewLink($listViewLink) {
         $this->listViewLink = $listViewLink;
     }
 
     /**
      * @return string
      */
-    public function getEditLink($id)
-    {
+    public function getEditLink($id) {
         return str_replace(":id", $id, $this->editLink);
     }
 
@@ -1073,8 +1017,7 @@ HTML;
      * Example: http://localhost/user/edit/:id
      * @param string $editLink
      */
-    public function setEditLink($editLink)
-    {
+    public function setEditLink($editLink) {
         $this->editLink = $editLink;
     }
 
@@ -1082,8 +1025,7 @@ HTML;
      * @param $id
      * @return string
      */
-    public function getEditSubmitLink($id)
-    {
+    public function getEditSubmitLink($id) {
         return str_replace(":id", $id, $this->editSubmitLink);
     }
 
@@ -1091,8 +1033,7 @@ HTML;
      * @param string $editSubmitLink
      * @param string $method
      */
-    public function setEditSubmitLink($editSubmitLink, $method = "put")
-    {
+    public function setEditSubmitLink($editSubmitLink, $method = "put") {
         $this->editSubmitLink = $editSubmitLink;
         $this->editSubmitMethod = $method;
     }
@@ -1100,8 +1041,7 @@ HTML;
     /**
      * @return string
      */
-    public function getDeleteLink($id)
-    {
+    public function getDeleteLink($id) {
         return str_replace(":id", $id, $this->deleteLink);
     }
 
@@ -1109,40 +1049,35 @@ HTML;
      * Example: http://localhost/user/delete/:id
      * @param string $deleteLInk
      */
-    public function setDeleteLink($deleteLInk)
-    {
+    public function setDeleteLink($deleteLInk) {
         $this->deleteLink = $deleteLInk;
     }
 
     /**
      * @return string
      */
-    public function getCreateLink()
-    {
+    public function getCreateLink() {
         return $this->createLink;
     }
 
     /**
      * @param string $createLink
      */
-    public function setCreateLink($createLink)
-    {
+    public function setCreateLink($createLink) {
         $this->createLink = $createLink;
     }
 
     /**
      * @return string
      */
-    public function getCreateSubmitLink()
-    {
+    public function getCreateSubmitLink() {
         return $this->createSubmitLink;
     }
 
     /**
      * @param string $createSubmitLink
      */
-    public function setCreateSubmitLink($createSubmitLink)
-    {
+    public function setCreateSubmitLink($createSubmitLink) {
         $this->createSubmitLink = $createSubmitLink;
     }
 
@@ -1153,8 +1088,7 @@ HTML;
      * @param $id
      * @throws BeanNotNullException You can load one time only.
      */
-    public function loadBean($id)
-    {
+    public function loadBean($id) {
         if ($this->currentBean != null) {
             throw new BeanNotNullException();
         }
@@ -1168,8 +1102,7 @@ HTML;
      * @param $data
      * @return int|string
      */
-    public function insertBean($data)
-    {
+    public function insertBean($data) {
         $bean = R::xdispense($this->tableName);
 
 
@@ -1183,7 +1116,6 @@ HTML;
         } else {
             $result->ok = false;
             $result->class = "callout-danger";
-
         }
 
         if ($this->afterInsertBean != null) {
@@ -1197,23 +1129,20 @@ HTML;
     /**
      * @param callable $afterUpdateBean
      */
-    public function afterUpdate($afterUpdateBean)
-    {
+    public function afterUpdate($afterUpdateBean) {
         $this->afterUpdateBean = $afterUpdateBean;
     }
 
     /**
      * @param callable $afterInsertBean
      */
-    public function afterInsert($afterInsertBean)
-    {
+    public function afterInsert($afterInsertBean) {
         $this->afterInsertBean = $afterInsertBean;
     }
 
     /**
      */
-    public function beforeUpdate($beforeUpdateBean)
-    {
+    public function beforeUpdate($beforeUpdateBean) {
         $this->beforeUpdateBean = $beforeUpdateBean;
     }
 
@@ -1221,14 +1150,12 @@ HTML;
     /**
      * @param $beforeInsertBean
      */
-    public function beforeInsert($beforeInsertBean)
-    {
+    public function beforeInsert($beforeInsertBean) {
         $this->beforeInsertBean = $beforeInsertBean;
     }
 
 
-    public function beforeStoreEachField($closure)
-    {
+    public function beforeStoreEachField($closure) {
         $this->beforeStoreEachField = $closure;
     }
 
@@ -1238,8 +1165,7 @@ HTML;
      * @return Result
      * @throws NoBeanException
      */
-    public function updateBean($data)
-    {
+    public function updateBean($data) {
         if ($this->currentBean ==null) {
             throw new NoBeanException();
         }
@@ -1269,8 +1195,7 @@ HTML;
      * @param $data array
      * @return Result
      */
-    protected function saveBean($bean, $data)
-    {
+    protected function saveBean($bean, $data) {
         // Handle File Field that may not in the $data, because Filename always go into $_FILES.
         foreach ($_FILES as $fieldName => $file) {
             $data[$fieldName] = $file["name"];
@@ -1287,17 +1212,17 @@ HTML;
 
                 // Try to find duplicate beans
                 $fieldName = $field->getName();
-                $duplicateBeans = R::find($bean->getMeta('type'), " $fieldName = ? ", [$data[$field->getName()]]);
+                $duplicateBeans = R::find($bean->getMeta("type"), " $fieldName = ? ", [$data[$field->getName()]]);
 
                 if (count($duplicateBeans) > 0) {
                     // TODO
                 }
             }
 
-            if($fieldType->getBeforeSaveBeanClosure() != null) {
+            if ($fieldType->getBeforeSaveBeanClosure() != null) {
                 $beforeSaveBeanClosure = $fieldType->getBeforeSaveBeanClosure();
                 $beforeSaveBeanClosure($bean, $field->getStoreValue($data));
-            } else if ($field->getFieldRelation() == Field::MANY_TO_MANY) {
+            } elseif ($field->getFieldRelation() == Field::MANY_TO_MANY) {
                 // 1. Many to many
 
                 // http://www.redbeanphp.com/many_to_many
@@ -1329,15 +1254,12 @@ HTML;
                         $bean->{$keyName}[] = $relatedBean;
                     }
                 }
-
-            } else if ($field->getFieldRelation() == Field::ONE_TO_MANY) {
+            } elseif ($field->getFieldRelation() == Field::ONE_TO_MANY) {
                 // TODO One to many
-
-            } else if (! $field->isStorable()) {
+            } elseif (! $field->isStorable()) {
 
                 // 2. If not storable, skip
                 continue;
-
             } elseif ($field->getFieldRelation() == Field::NORMAL) {
                 // 3.Normal data field
 
@@ -1348,9 +1270,9 @@ HTML;
                 }
 
                 // Validate the value
-                if ($field->isStorable())
+                if ($field->isStorable()) {
                     $validateResult = $field->validate($value, $data);
-                else {
+                } else {
                     // TODO: check non-storable?
                     $validateResult = true;
                 }
@@ -1367,7 +1289,6 @@ HTML;
 
                 // Set the value to the current bean directly
                 $bean->{$field->getName()} = $value;
-
             }
         }
 
@@ -1376,33 +1297,28 @@ HTML;
         $result = new Result();
 
         try {
-
             if ($bean->id > 0) {
-
                 if ($this->beforeUpdateBean != null) {
                     $callable = $this->beforeUpdateBean;
                     $callable($this->currentBean);
                 }
-
             } else {
-
                 if ($this->beforeInsertBean != null) {
                     $callable = $this->beforeInsertBean;
                     $callable($bean);
                 }
-
             }
 
             $id = R::store($bean);
             $needStore = false;
             foreach ($fields as $field) {
                 $fieldType = $field->getFieldType();
-                if($fieldType->getAfterSaveBeanClosure() != null) {
+                if ($fieldType->getAfterSaveBeanClosure() != null) {
                     $afterSaveBeanClosure = $fieldType->getAfterSaveBeanClosure();
                     $needStore |= !!$afterSaveBeanClosure($bean, $field->getStoreValue($data));
                 }
             }
-            if($needStore) {
+            if ($needStore) {
                 $id = R::store($bean);
             }
             $result->id = $id;
@@ -1419,7 +1335,6 @@ HTML;
                 $callback = $this->onInsertError;
                 $result->msg = $callback($ex->getMessage());
             }
-
         }
 
         return $result;
@@ -1430,7 +1345,6 @@ HTML;
      * @throws NoBeanException
      */
     public function deleteBean() {
-
         if ($this->currentBean == null) {
             throw new NoBeanException();
         }
@@ -1449,8 +1363,7 @@ HTML;
      *
      * @return string Layout Name
      */
-    private function getLayoutName()
-    {
+    private function getLayoutName() {
         if ($this->layout != null) {
             return $this->layout;
         }
@@ -1465,74 +1378,66 @@ HTML;
     /**
      * @param boolean $bool
      */
-    public function enableListView($bool)
-    {
+    public function enableListView($bool) {
         $this->enableListView = $bool;
     }
 
     /**
      * @return boolean
      */
-    public function isEnabledListView()
-    {
+    public function isEnabledListView() {
         return $this->enableListView;
     }
 
     /**
      * @param boolean $bool
      */
-    public function enableEdit($bool)
-    {
+    public function enableEdit($bool) {
         $this->enableEdit = $bool;
     }
 
     /**
      * @return boolean
      */
-    public function isEnabledEdit()
-    {
+    public function isEnabledEdit() {
         return $this->enableEdit;
     }
 
     /**
      * @return boolean
      */
-    public function isEnabledDelete()
-    {
+    public function isEnabledDelete() {
         return $this->enableDelete;
     }
 
     /**
      * @return boolean
      */
-    public function isEnabledCreate()
-    {
+    public function isEnabledCreate() {
         return $this->enableCreate;
     }
 
     /**
      * @param boolean $showDelete
      */
-    public function enableDelete($showDelete)
-    {
+    public function enableDelete($showDelete) {
         $this->enableDelete = $showDelete;
     }
 
     /**
      * @param boolean $showCreate
      */
-    public function enableCreate($showCreate)
-    {
+    public function enableCreate($showCreate) {
         $this->enableCreate = $showCreate;
     }
 
     /**
      * @return string
      */
-    public function getListViewTemplate()
-    {
-        if ($this->listViewTemplate != null)
+    public function getListViewTemplate() {
+        if ($this->listViewTemplate != null) {
             return $this->listViewTemplate;
+        }
 
         return $this->theme . "::listing";
     }
@@ -1540,18 +1445,17 @@ HTML;
     /**
      * @param null $listViewTemplate
      */
-    public function setListViewTemplate($listViewTemplate)
-    {
+    public function setListViewTemplate($listViewTemplate) {
         $this->listViewTemplate = $listViewTemplate;
     }
 
     /**
      * @return null
      */
-    public function getEditTemplate()
-    {
-        if ($this->editTemplate != null)
+    public function getEditTemplate() {
+        if ($this->editTemplate != null) {
             return $this->editTemplate;
+        }
 
         if ($this->enableFieldGroup) {
             return $this->theme . "::edit2";
@@ -1563,18 +1467,17 @@ HTML;
     /**
      * @param null $editTemplate
      */
-    public function setEditTemplate($editTemplate)
-    {
+    public function setEditTemplate($editTemplate) {
         $this->editTemplate = $editTemplate;
     }
 
     /**
      * @return null
      */
-    public function getCreateTemplate()
-    {
-        if ($this->createTemplate != null)
+    public function getCreateTemplate() {
+        if ($this->createTemplate != null) {
             return $this->createTemplate;
+        }
 
         return $this->theme . "::create";
     }
@@ -1582,16 +1485,14 @@ HTML;
     /**
      * @param null $createTemplate
      */
-    public function setCreateTemplate($createTemplate)
-    {
+    public function setCreateTemplate($createTemplate) {
         $this->createTemplate = $createTemplate;
     }
 
     /**
      * @return callable
      */
-    public function getRowAction()
-    {
+    public function getRowAction() {
         return $this->actionClosure;
     }
 
@@ -1600,19 +1501,16 @@ HTML;
      * @param callable $actionClosure Closure Format: function($bean) { }
      *
      */
-    public function rowAction($actionClosure)
-    {
+    public function rowAction($actionClosure) {
         $this->actionClosure = $actionClosure;
     }
 
     public function upload($fieldName = "upload", $folder = null) {
-
         if ($folder == null) {
             $folder = "upload" . DIRECTORY_SEPARATOR;
         }
 
         if (isset($_FILES[$fieldName])) {
-
             $filenameArray = explode(".", $_FILES[$fieldName]["name"]);
 
             if (count($filenameArray) >=2) {
@@ -1677,8 +1575,7 @@ HTML;
     /**
      * @return string
      */
-    public function getTableDisplayName()
-    {
+    public function getTableDisplayName() {
         if (($this->tableDisplayName == null)) {
             return "";
         } else {
@@ -1689,14 +1586,12 @@ HTML;
     /**
      * @param string $tableDisplayName
      */
-    public function setTableDisplayName($tableDisplayName)
-    {
+    public function setTableDisplayName($tableDisplayName) {
         $this->tableDisplayName = $tableDisplayName;
     }
 
 
-    public function setData($key, $value = null)
-    {
+    public function setData($key, $value = null) {
         $this->data[$key] = $value;
     }
 
@@ -1707,8 +1602,7 @@ HTML;
         return $this->data[$key];
     }
 
-    public function loadView($dataName, $viewName = null, $data = [])
-    {
+    public function loadView($dataName, $viewName = null, $data = []) {
         if ($viewName == null) {
             $viewName = $dataName;
         }
@@ -1716,16 +1610,14 @@ HTML;
         $this->setData($dataName, $this->render($viewName, $data, false));
     }
 
-    public function isAjaxListView()
-    {
+    public function isAjaxListView() {
         return $this->ajaxListView;
     }
 
     /**
      * @return mixed
      */
-    public function getListViewJSONLink()
-    {
+    public function getListViewJSONLink() {
         if (! empty($_SERVER["QUERY_STRING"])) {
             return $this->listViewJSONLink . "?" . $_SERVER["QUERY_STRING"];
         } else {
@@ -1736,8 +1628,7 @@ HTML;
     /**
      * @param mixed $listViewJSONLink
      */
-    public function setListViewJSONLink($listViewJSONLink)
-    {
+    public function setListViewJSONLink($listViewJSONLink) {
         $this->listViewJSONLink = $listViewJSONLink;
     }
 
@@ -1746,7 +1637,6 @@ HTML;
     }
 
     public function msg($msg, $title = null) {
-
         $title = ($title == null) ? "Message" : $title;
 
         $this->render($this->theme . "::msg", [
@@ -1771,37 +1661,32 @@ HTML;
     /**
      * @return string
      */
-    public function getExportLink()
-    {
+    public function getExportLink() {
         return $this->exportLink;
     }
 
     /**
      * @param string $exportLink
      */
-    public function setExportLink($exportLink)
-    {
+    public function setExportLink($exportLink) {
         $this->exportLink = $exportLink;
     }
 
     /**
      * @return null
      */
-    public function getExportFilename()
-    {
+    public function getExportFilename() {
         return $this->exportFilename;
     }
 
     /**
      * @param null $exportFilename
      */
-    public function setExportFilename($exportFilename)
-    {
+    public function setExportFilename($exportFilename) {
         $this->exportFilename = $exportFilename;
     }
 
-    public function manyToMany($tableName, $nameFormatClosure)
-    {
+    public function manyToMany($tableName, $nameFormatClosure) {
         $field = $this->field($tableName);
         $field->setFieldType(new CheckboxManyToMany($tableName, $nameFormatClosure));
         return $field;
@@ -1813,8 +1698,7 @@ HTML;
         return $field;
     }
 
-    public function getEditSubmitMethod()
-    {
+    public function getEditSubmitMethod() {
         return $this->editSubmitMethod;
     }
 
@@ -1822,27 +1706,25 @@ HTML;
     /**
      * @param string $layout
      */
-    public function setLayout($layout)
-    {
+    public function setLayout($layout) {
         $this->layout = $layout;
     }
 
     /**
      * @return string
      */
-    public function getCreateSuccURL()
-    {
-        if ($this->createSuccURL != null)
+    public function getCreateSuccURL() {
+        if ($this->createSuccURL != null) {
             return $this->createSuccURL;
-        else
+        } else {
             return $this->getListViewLink();
+        }
     }
 
     /**
      * @param string $createSuccURL
      */
-    public function setCreateSuccURL($createSuccURL)
-    {
+    public function setCreateSuccURL($createSuccURL) {
         $this->createSuccURL = $createSuccURL;
     }
 
@@ -1850,8 +1732,7 @@ HTML;
      * @deprecated
      * @return null
      */
-    public function getBodyEndAssets()
-    {
+    public function getBodyEndAssets() {
         return null;
     }
 
@@ -1859,8 +1740,7 @@ HTML;
      * @deprecated
      * @return null
      */
-    public function getHeadAssets()
-    {
+    public function getHeadAssets() {
         return null;
     }
 
@@ -1904,164 +1784,144 @@ HTML;
     /**
      * @return string
      */
-    public function getEditName()
-    {
+    public function getEditName() {
         return $this->editName;
     }
 
     /**
      * @param string $editName
      */
-    public function setEditName($editName)
-    {
+    public function setEditName($editName) {
         $this->editName = $editName;
     }
 
     /**
      * @return string
      */
-    public function getDeleteName()
-    {
+    public function getDeleteName() {
         return $this->deleteName;
     }
 
     /**
      * @param string $deleteName
      */
-    public function setDeleteName($deleteName)
-    {
+    public function setDeleteName($deleteName) {
         $this->deleteName = $deleteName;
     }
 
     /**
      * @return string
      */
-    public function getCreateName()
-    {
+    public function getCreateName() {
         return $this->createName;
     }
 
     /**
      * @param string $createName
      */
-    public function setCreateName($createName)
-    {
+    public function setCreateName($createName) {
         $this->createName = $createName;
     }
 
     /**
      * @return \Closure
      */
-    public function getOnInsertError()
-    {
+    public function getOnInsertError() {
         return $this->onInsertError;
     }
 
     /**
      * @param \Closure $onInsertError
      */
-    public function setOnInsertError($onInsertError)
-    {
+    public function setOnInsertError($onInsertError) {
         $this->onInsertError = $onInsertError;
     }
 
     /**
      * @return \Closure
      */
-    public function getOnUpdateError()
-    {
+    public function getOnUpdateError() {
         return $this->onUpdateError;
     }
 
     /**
      * @param \Closure $onUpdateError
      */
-    public function setOnUpdateError($onUpdateError)
-    {
+    public function setOnUpdateError($onUpdateError) {
         $this->onUpdateError = $onUpdateError;
     }
 
     /**
      * @return bool
      */
-    public function isEnabledSearch()
-    {
+    public function isEnabledSearch() {
         return $this->enableSearch;
     }
 
     /**
      * @param bool $enableSearch
      */
-    public function enableSearch($enableSearch)
-    {
+    public function enableSearch($enableSearch) {
         $this->enableSearch = $enableSearch;
     }
 
     /**
      * @return bool
      */
-    public function isEnabledSorting()
-    {
+    public function isEnabledSorting() {
         return $this->enableSorting;
     }
 
     /**
      * @param bool $enableSorting
      */
-    public function enableSorting($enableSorting)
-    {
+    public function enableSorting($enableSorting) {
         $this->enableSorting = $enableSorting;
     }
 
     /**
      * @return callable
      */
-    public function getSearchClosure()
-    {
+    public function getSearchClosure() {
         return $this->searchClosure;
     }
 
     /**
      * @param callable $searchClosure  function ()
      */
-    public function setSearchClosure($searchClosure)
-    {
+    public function setSearchClosure($searchClosure) {
         $this->searchClosure = $searchClosure;
     }
 
     /**
      * @return callable
      */
-    public function getSearchResultCountClosure()
-    {
+    public function getSearchResultCountClosure() {
         return $this->searchResultCountClosure;
     }
 
     /**
      * @param callable $searchResultCountClosure
      */
-    public function setSearchResultCountClosure($searchResultCountClosure)
-    {
+    public function setSearchResultCountClosure($searchResultCountClosure) {
         $this->searchResultCountClosure = $searchResultCountClosure;
     }
 
     /**
      * @param callable $listViewDataClosure
      */
-    public function setListViewDataClosure($listViewDataClosure)
-    {
+    public function setListViewDataClosure($listViewDataClosure) {
         $this->listViewDataClosure = $listViewDataClosure;
     }
 
     /**
      * @param callable $countListViewDataClosure
      */
-    public function setCountListViewDataClosure($countListViewDataClosure)
-    {
+    public function setCountListViewDataClosure($countListViewDataClosure) {
         $this->countListViewDataClosure = $countListViewDataClosure;
     }
-    
-    public static function vendorRes(string $path) : string {
+
+    public static function vendorRes(string $path): string {
         if (self::$isDev) {
             return Util::res($path);
         } else {

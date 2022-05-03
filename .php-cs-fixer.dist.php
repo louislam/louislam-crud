@@ -31,8 +31,5 @@ return $config->registerCustomFixers([
     "no_empty_statement" => true,
     "no_singleline_whitespace_before_semicolons" => true,
     "semicolon_after_instruction" => true,
-    "no_extra_blank_lines" => [
-        "default"
-    ]
 ])->setFinder($finder);
 

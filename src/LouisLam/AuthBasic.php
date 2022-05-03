@@ -8,9 +8,7 @@
 
 namespace LouisLam;
 
-
-abstract class AuthBasic
-{
+abstract class AuthBasic {
     /**
      * @var callable
      */
@@ -21,32 +19,31 @@ abstract class AuthBasic
      * @param string $password
      * @return mixed
      */
-    public abstract function login($username, $password);
+    abstract public function login($username, $password);
 
     /**
      * @param bool $force
      * @return mixed
      */
-    public abstract function getUser($force = false);
+    abstract public function getUser($force = false);
 
     /**
      * @return boolean
      */
-    public abstract function isLoggedIn();
+    abstract public function isLoggedIn();
 
     /**
      * @param callable $callback
      * @return void
      */
-    public abstract function checkLogin($callback);
+    abstract public function checkLogin($callback);
 
     /**
      * @return void
      */
-    public abstract function logout();
+    abstract public function logout();
 
     public function setEncryptPasswordFunction($func) {
         $this->encryptPasswordFunction = $func;
     }
-
 }
