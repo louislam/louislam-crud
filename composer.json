@@ -23,7 +23,7 @@
         "gabordemooij/redbean": "^5.7.2",
         "louislam/louislam-utilities": "1.0.*",
         "datatables/datatables": "1.10.*",
-        "components/jquery": "^3.6.0",
+        "components/jquery": "^1.11.0",
         "almasaeed2010/adminlte": "2.3.*",
         "fortawesome/font-awesome": "4.*",
         "phpoffice/phpspreadsheet": "^1.23.0",
