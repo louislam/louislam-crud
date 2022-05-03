@@ -1,4 +1,7 @@
 <?php
+/*
+ * http://localhost:3000/example.php/crud/book
+ */
 require "vendor/autoload.php";
 
 use LouisLam\CRUD\SlimLouisCRUD;

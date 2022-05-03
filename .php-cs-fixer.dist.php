@@ -7,7 +7,8 @@ $finder = PhpCsFixer\Finder::create()
     ->notPath("src/Symfony/Component/Translation/Tests/fixtures/resources.php")
     ->in(__DIR__);
 
-$config = new PhpCsFixer\Config();
+$config = new PhpCsFixer\Config()
+;
 
 return $config->registerCustomFixers([
     new DoubleQuoteFixer()
@@ -24,5 +25,11 @@ return $config->registerCustomFixers([
     "trim_array_spaces" => true,
     "braces" => [
         "position_after_functions_and_oop_constructs" => "same"
-    ]
+    ],
+    "multiline_whitespace_before_semicolons" => [
+        "strategy" => "no_multi_line"
+    ],
+    "no_empty_statement" => true,
+    "no_singleline_whitespace_before_semicolons" => true,
+    "semicolon_after_instruction" => true,
 ])->setFinder($finder);

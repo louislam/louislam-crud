@@ -17,7 +17,7 @@
     "require": {
         "ext-mbstring": "*",
         "php": ">=8.1.0",
-        "slim/slim": "2.6.*",
+        "gammadia/slim-2.x": "2.6.*",
         "league/plates": "^3.4.0",
         "gabordemooij/redbean": "^5.7.2",
         "louislam/louislam-utilities": "1.0.*",
