@@ -27,7 +27,7 @@ class ExcelHelper {
         $fields = $crud->getShowFields();
 
         // Header
-        $i = 0;
+        $i = 1;
         foreach ($fields as $field) {
             $sheet->setCellValueByColumnAndRow($i, 1, $field->getDisplayName());
             $sheet->getColumnDimensionByColumn($i)->setAutoSize(true);
@@ -37,7 +37,7 @@ class ExcelHelper {
         // Data
         $j = 2;
         foreach ($list as $bean) {
-            $i = 0;
+            $i = 1;
             foreach ($fields as $field) {
                 $sheet->getCellByColumnAndRow($i, $j)->setValueExplicit(
                     strip_tags($field->cellValue($bean)),
