@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "044f1fe053877bbe068f5c2b154c1625",
+    "content-hash": "8ab0b5613847fec1c0cfe5805ac175a3",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -96,16 +96,16 @@
         },
         {
             "name": "ckeditor/ckeditor",
-            "version": "4.12.1",
+            "version": "4.17.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ckeditor/ckeditor-releases.git",
-                "reference": "b1a25e93ae0b038f45dcba458f4c2c18bd7318e5"
+                "url": "https://github.com/ckeditor/ckeditor4-releases.git",
+                "reference": "1690c8f35eec3c939fc0f941436d6fbd85d2ea2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ckeditor/ckeditor-releases/zipball/b1a25e93ae0b038f45dcba458f4c2c18bd7318e5",
-                "reference": "b1a25e93ae0b038f45dcba458f4c2c18bd7318e5",
+                "url": "https://api.github.com/repos/ckeditor/ckeditor4-releases/zipball/1690c8f35eec3c939fc0f941436d6fbd85d2ea2e",
+                "reference": "1690c8f35eec3c939fc0f941436d6fbd85d2ea2e",
                 "shasum": ""
             },
             "type": "library",
@@ -118,13 +118,14 @@
             "authors": [
                 {
                     "name": "CKSource",
-                    "homepage": "http://cksource.com"
+                    "homepage": "https://cksource.com"
                 }
             ],
             "description": "JavaScript WYSIWYG web text editor.",
-            "homepage": "http://ckeditor.com",
+            "homepage": "https://ckeditor.com/ckeditor-4/",
             "keywords": [
                 "CKEditor",
+                "ckeditor4",
                 "editor",
                 "fckeditor",
                 "html",
@@ -134,12 +135,12 @@
                 "wysiwyg"
             ],
             "support": {
-                "forum": "http://ckeditor.com/forums",
-                "issues": "http://dev.ckeditor.com",
-                "source": "http://github.com/ckeditor/ckeditor-dev",
-                "wiki": "http://docs.ckeditor.com"
+                "forum": "https://stackoverflow.com/tags/ckeditor",
+                "issues": "https://github.com/ckeditor/ckeditor4/issues",
+                "source": "https://github.com/ckeditor/ckeditor4",
+                "wiki": "https://ckeditor.com/docs/ckeditor4/latest/"
             },
-            "time": "2019-06-28T10:41:23+00:00"
+            "time": "2021-11-17T10:54:44+00:00"
         },
         {
             "name": "components/jquery",
@@ -6710,5 +6711,5 @@
         "php": ">=8.1.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
